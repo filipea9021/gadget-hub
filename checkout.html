@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout â Gadget Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0f; color: #e0e0e0; line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* Navbar */
+        .navbar {
+            background-color: #111118; padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .navbar .logo { font-size: 24px; font-weight: bold; color: #00d4ff; letter-spacing: 2px; }
+        .navbar .logo span { color: #7c3aed; }
+        .secure-badge { font-size: 13px; color: #4ade80; display: flex; align-items: center; gap: 6px; }
+
+        /* Stepper */
+        .stepper {
+            max-width: 600px; margin: 30px auto 10px; padding: 0 20px;
+            display: flex; justify-content: center; align-items: center; gap: 0;
+        }
+        .step-item {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .step-circle {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: bold;
+            background: #1a1a2e; color: #606070; border: 2px solid #2a2a3e;
+            transition: all 0.3s;
+        }
+        .step-circle.active { background: #7c3aed; color: white; border-color: #7c3aed; }
+        .step-circle.done { background: #4ade80; color: #0a0a0f; border-color: #4ade80; }
+        .step-label { font-size: 13px; color: #606070; }
+        .step-label.active { color: #e0e0e0; }
+        .step-line {
+            width: 60px; height: 2px; background: #2a2a3e; margin: 0 10px;
+        }
+        .step-line.done { background: #4ade80; }
+
+        /* Layout Principal */
+        .checkout-layout {
+            max-width: 1000px; margin: 30px auto; padding: 0 40px;
+            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px;
+        }
+
+        /* FormulÃ¡rios */
+        .form-section {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 14px;
+            padding: 30px;
+        }
+        .form-section h2 { font-size: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block; font-size: 13px; color: #808090;
+            margin-bottom: 6px;
+        }
+        .form-group input, .form-group select {
+            width: 100%; background: #1a1a2e; border: 1px solid #2a2a3e;
+            color: #e0e0e0; padding: 12px 16px; border-radius: 10px;
+            font-size: 14px; outline: none; transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: #7c3aed; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* MÃ©todos de pagamento */
+        .payment-methods { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .payment-option {
+            background: #1a1a2e; border: 2px solid #2a2a3e; border-radius: 10px;
+            padding: 14px 18px; cursor: pointer; display: flex; align-items: center;
+            gap: 12px; transition: all 0.3s; font-size: 14px;
+        }
+        .payment-option:hover { border-color: #7c3aed; }
+        .payment-option.selected { border-color: #7c3aed; background: #1a0a2e; }
+        .payment-icon { font-size: 22px; }
+        .payment-label { flex: 1; }
+        .payment-check {
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 2px solid #2a2a3e; display: flex; align-items: center;
+            justify-content: center; font-size: 12px; color: transparent;
+        }
+        .payment-option.selected .payment-check {
+            border-color: #7c3aed; background: #7c3aed; color: white;
+        }
+
+        /* Resumo */
+        .order-summary {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 14px;
+            padding: 30px; align-self: start; position: sticky; top: 80px;
+        }
+        .order-summary h2 { font-size: 20px; margin-bottom: 20px; }
+        .summary-item {
+            display: flex; gap: 12px; padding: 12px 0;
+            border-bottom: 1px solid #1a1a2e; align-items: center;
+        }
+        .summary-emoji { font-size: 32px; }
+        .summary-details { flex: 1; }
+        .summary-name { font-size: 14px; font-weight: bold; }
+        .summary-meta { font-size: 12px; color: #808090; }
+        .summary-price { font-size: 15px; font-weight: bold; color: #00d4ff; }
+
+        .summary-totals { margin-top: 15px; }
+        .summary-row {
+            display: flex; justify-content: space-between;
+            font-size: 14px; padding: 6px 0; color: #a0a0b0;
+        }
+        .summary-row.total {
+            font-size: 20px; font-weight: bold; color: #e0e0e0;
+            border-top: 1px solid #1a1a2e; padding-top: 12px; margin-top: 8px;
+        }
+        .summary-row.total span:last-child { color: #00d4ff; }
+
+        .btn-confirm {
+            width: 100%; margin-top: 20px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white; border: none; padding: 16px; border-radius: 12px;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+        }
+        .btn-confirm:disabled {
+            opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none;
+        }
+
+        .trust-badges {
+            display: flex; justify-content: center; gap: 20px;
+            margin-top: 15px; font-size: 11px; color: #606070;
+        }
+
+        /* Passo de ConfirmaÃ§Ã£o */
+        .confirmation-screen {
+            display: none; text-align: center; padding: 60px 20px;
+            max-width: 600px; margin: 0 auto;
+        }
+        .confirmation-screen.show { display: block; }
+        .confirm-icon { font-size: 80px; margin-bottom: 20px; }
+        .confirm-title { font-size: 28px; margin-bottom: 10px; color: #4ade80; }
+        .confirm-subtitle { font-size: 15px; color: #808090; margin-bottom: 30px; }
+        .confirm-order-id {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 10px;
+            padding: 15px 25px; display: inline-block; font-size: 18px;
+            font-weight: bold; color: #00d4ff; letter-spacing: 2px; margin-bottom: 30px;
+        }
+        .btn-home {
+            background: #7c3aed; color: white; border: none; padding: 14px 40px;
+            border-radius: 10px; font-size: 15px; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-home:hover { background: #6d28d9; }
+
+        /* Ocultar seÃ§Ãµes nos steps */
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+
+        /* Footer */
+        .footer {
+            background: #0a0a0f; border-top: 1px solid #1a1a2e;
+            padding: 30px; text-align: center; margin-top: 60px;
+        }
+        .footer p { color: #505060; font-size: 13px; }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .checkout-layout { grid-template-columns: 1fr; padding: 0 20px; }
+            .order-summary { position: static; }
+            .navbar { padding: 15px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .stepper { gap: 0; }
+            .step-label { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">GADGET<span>HUB</span></a>
+        <div class="secure-badge">&#128274; Checkout Seguro</div>
+    </nav>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+        <div class="step-item">
+            <div class="step-circle active" id="stepCircle1">1</div>
+            <span class="step-label active" id="stepLabel1">Dados</span>
+        </div>
+        <div class="step-line" id="stepLine1"></div>
+        <div class="step-item">
+            <div class="step-circle" id="stepCircle2">2</div>
+            <span class="step-label" id="stepLabel2">Pagamento</span>
+        </div>
+        <div class="step-line" id="stepLine2"></div>
+        <div class="step-item">
+            <div class="step-circle" id="stepCircle3">3</div>
+            <span class="step-label" id="stepLabel3">ConfirmaÃ§Ã£o</span>
+        </div>
+    </div>
+
+    <!-- Layout Principal -->
+    <div class="checkout-layout" id="checkoutLayout">
+
+        <!-- Coluna Esquerda: FormulÃ¡rios -->
+        <div>
+            <!-- PASSO 1: Dados de Envio -->
+            <div class="form-section step-content active" id="step1">
+                <h2>&#128230; Dados de Envio</h2>
+                <div class="form-group">
+                    <label>Nome completo</label>
+                    <input type="text" id="nome" placeholder="Seu nome completo">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="email" placeholder="seu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>CEP / CÃ³digo Postal</label>
+                        <input type="text" id="cep" placeholder="00000-000">
+                    </div>
+                    <div class="form-group">
+                        <label>PaÃ­s</label>
+                        <select id="pais">
+                            <option value="BR">Brasil</option>
+                            <option value="PT">Portugal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Morada / EndereÃ§o</label>
+                    <input type="text" id="morada" placeholder="Rua, nÃºmero, complemento">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cidade</label>
+                        <input type="text" id="cidade" placeholder="Sua cidade">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado / Distrito</label>
+                        <input type="text" id="estado" placeholder="Estado">
+                    </div>
+                </div>
+                <button class="btn-confirm" onclick="irParaPasso(2)">Continuar para Pagamento &#8594;</button>
+            </div>
+
+            <!-- PASSO 2: Pagamento -->
+            <div class="form-section step-content" id="step2">
+                <h2>&#128179; MÃ©todo de Pagamento</h2>
+                <div class="payment-methods">
+                    <div class="payment-option selected" onclick="selectPayment(this, 'mbway')">
+                        <span class="payment-icon">&#128241;</span>
+                        <span class="payment-label">MBWay</span>
+                        <span class="payment-check">&#10003;</span>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment(this, 'cartao')">
+                        <span class="payment-icon">&#128179;</span>
+                        <span class="payment-label">CartÃ£o de CrÃ©dito/DÃ©bito</span>
+                        <span class="payment-check">&#10003;</span>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment(this, 'paypal')">
+                        <span class="payment-icon">&#127760;</span>
+                        <span class="payment-label">PayPal</span>
+                        <span class="payment-check">&#10003;</span>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment(this, 'multibanco')">
+                        <span class="payment-icon">&#127974;</span>
+                        <span class="payment-label">Multibanco</span>
+                        <span class="payment-check">&#10003;</span>
+                    </div>
+                </div>
+
+                <div id="cardFields" style="display:none;">
+                    <div class="form-group">
+                        <label>NÃºmero do cartÃ£o</label>
+                        <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Validade</label>
+                            <input type="text" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" placeholder="000" maxlength="4">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px;">
+                    <button class="btn-confirm" style="background:#1a1a2e; flex:0.4;" onclick="irParaPasso(1)">&#8592; Voltar</button>
+                    <button class="btn-confirm" style="flex:0.6;" onclick="finalizarCompra()">Confirmar Pedido &#10003;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna Direita: Resumo -->
+        <div class="order-summary">
+            <h2>Resumo do Pedido</h2>
+            <div id="summaryItems">
+                <!-- Gerado por JS -->
+            </div>
+            <div class="summary-totals">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Frete</span>
+                    <span id="frete" style="color:#4ade80;">GrÃ¡tis</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="totalFinal">R$ 0,00</span>
+                </div>
+            </div>
+            <div class="trust-badges">
+                <span>&#128274; SSL Seguro</span>
+                <span>&#9989; Garantia 30 dias</span>
+                <span>&#128666; RastreÃ¡vel</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASSO 3: ConfirmaÃ§Ã£o -->
+    <div class="confirmation-screen" id="confirmationScreen">
+        <div class="confirm-icon">&#9989;</div>
+        <div class="confirm-title">Pedido Confirmado!</div>
+        <div class="confirm-subtitle">Obrigado pela sua compra! VocÃª receberÃ¡ o cÃ³digo de rastreamento por e-mail assim que o produto for enviado.</div>
+        <div class="confirm-order-id" id="orderId">TZ-000000</div>
+        <br><br>
+        <button class="btn-home" onclick="window.location.href='index.html'">Voltar Ã  Loja</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Gadget Hub - Checkout Seguro - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // ===== PRODUTOS =====
+        const products = [
+            { id:1, name:"Headset Gamer RGB", price:189.90, emoji:"ð§", deliveryDays:8, supplier:"CJ Dropshipping" },
+            { id:2, name:"Mouse Gamer 12000 DPI", price:129.90, emoji:"ð±ï¸", deliveryDays:10, supplier:"AliExpress" },
+            { id:3, name:"Teclado MecÃ¢nico RGB", price:249.90, emoji:"â¨ï¸", deliveryDays:12, supplier:"CJ Dropshipping" },
+            { id:4, name:"Controle Wireless Pro", price:219.90, emoji:"ð®", deliveryDays:7, supplier:"Zendrop" },
+            { id:5, name:"Webcam Full HD 1080p", price:159.90, emoji:"ð·", deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:6, name:"Console PortÃ¡til Retro", price:299.90, emoji:"ð¹ï¸", deliveryDays:10, supplier:"AliExpress" },
+            { id:7, name:"Gift Card Digital R$100", price:100.00, emoji:"ð", deliveryDays:0, supplier:"Digital" },
+            { id:8, name:"Mousepad Gamer XL", price:69.90, emoji:"ð¼ï¸", deliveryDays:11, supplier:"AliExpress" },
+            { id:9, name:"Suporte para Headset", price:79.90, emoji:"ðï¸", deliveryDays:13, supplier:"CJ Dropshipping" },
+            { id:10, name:"Hub USB-C 7 em 1", price:149.90, emoji:"ð", deliveryDays:8, supplier:"Zendrop" },
+            { id:11, name:"Ring Light 10 Polegadas", price:89.90, emoji:"ð¡", deliveryDays:9, supplier:"AliExpress" },
+            { id:12, name:"Game Pass 3 Meses", price:119.90, emoji:"ð·ï¸", deliveryDays:0, supplier:"Digital" }
+        ];
+
+        // Ler ID da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id')) || 1;
+        const product = products.find(p => p.id === productId) || products[0];
+
+        let selectedPayment = 'mbway';
+
+        // ===== RENDERIZAR RESUMO =====
+        function renderSummary() {
+            const container = document.getElementById('summaryItems');
+            const delivery = product.deliveryDays === 0 ? 'Entrega instantÃ¢nea' : `Entrega: ${product.deliveryDays} dias`;
+
+            container.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-emoji">${product.emoji}</div>
+                    <div class="summary-details">
+                        <div class="summary-name">${product.name}</div>
+                        <div class="summary-meta">${delivery} Â· via ${product.supplier}</div>
+                    </div>
+                    <div class="summary-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                </div>
+            `;
+
+            document.getElementById('subtotal').textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('totalFinal').textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+        }
+
+        // ===== NAVEGAÃÃO ENTRE PASSOS =====
+        function irParaPasso(passo) {
+            // Esconder todos os steps
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+
+            if (passo === 1) {
+                document.getElementById('step1').classList.add('active');
+                updateStepper(1);
+            } else if (passo === 2) {
+                document.getElementById('step2').classList.add('active');
+                updateStepper(2);
+            }
+        }
+
+        function updateStepper(passo) {
+            for (let i = 1; i <= 3; i++) {
+                const circle = document.getElementById(`stepCircle${i}`);
+                const label = document.getElementById(`stepLabel${i}`);
+                circle.className = 'step-circle';
+                label.className = 'step-label';
+
+                if (i < passo) {
+                    circle.className = 'step-circle done';
+                    circle.innerHTML = '&#10003;';
+                } else if (i === passo) {
+                    circle.className = 'step-circle active';
+                    circle.textContent = i;
+                    label.className = 'step-label active';
+                } else {
+                    circle.textContent = i;
+                }
+            }
+
+            for (let i = 1; i <= 2; i++) {
+                const line = document.getElementById(`stepLine${i}`);
+                line.className = i < passo ? 'step-line done' : 'step-line';
+            }
+        }
+
+        // ===== PAGAMENTO =====
+        function selectPayment(el, method) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedPayment = method;
+            document.getElementById('cardFields').style.display = method === 'cartao' ? 'block' : 'none';
+        }
+
+        // ===== FINALIZAR =====
+        function finalizarCompra() {
+            const orderId = 'TZ-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            document.getElementById('checkoutLayout').style.display = 'none';
+            document.getElementById('stepper').style.display = 'none';
+            document.getElementById('confirmationScreen').classList.add('show');
+            document.getElementById('orderId').textContent = orderId;
+
+            updateStepper(3);
+        }
+
+        // ===== INICIALIZAR =====
+        renderSummary();
+    </script>
+
+</body>
+</html>
