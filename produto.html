@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto â Gadget Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background-color: #111118;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .navbar .logo { font-size: 24px; font-weight: bold; color: #00d4ff; letter-spacing: 2px; }
+        .navbar .logo span { color: #7c3aed; }
+        .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
+        .nav-links a { color: #b0b0b0; font-size: 15px; transition: color 0.3s; }
+        .nav-links a:hover { color: #00d4ff; }
+        .back-btn {
+            color: #b0b0b0; font-size: 14px; display: flex; align-items: center; gap: 6px;
+            transition: color 0.3s;
+        }
+        .back-btn:hover { color: #00d4ff; }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            padding: 15px 40px;
+            font-size: 13px;
+            color: #606070;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .breadcrumb a { color: #7c3aed; }
+        .breadcrumb a:hover { color: #00d4ff; }
+
+        /* ===== PRODUTO PRINCIPAL ===== */
+        .product-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 40px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        /* Galeria */
+        .gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .gallery-main {
+            background: #111118;
+            border: 1px solid #1a1a2e;
+            border-radius: 16px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .gallery-thumbs {
+            display: flex;
+            gap: 10px;
+        }
+        .gallery-thumb {
+            width: 80px;
+            height: 80px;
+            background: #111118;
+            border: 2px solid #1a1a2e;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .gallery-thumb:hover,
+        .gallery-thumb.active {
+            border-color: #7c3aed;
+        }
+
+        /* Info do Produto */
+        .product-details { display: flex; flex-direction: column; gap: 16px; }
+
+        .product-details .category-tag {
+            font-size: 12px; color: #7c3aed; text-transform: uppercase;
+            letter-spacing: 1.5px; font-weight: 600;
+        }
+        .product-details h1 { font-size: 32px; line-height: 1.3; }
+
+        .score-row {
+            display: flex; align-items: center; gap: 15px; flex-wrap: wrap;
+        }
+        .score-badge {
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white; padding: 6px 14px; border-radius: 8px;
+            font-size: 14px; font-weight: bold;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .rating-stars { color: #fbbf24; font-size: 16px; }
+        .rating-text { color: #808090; font-size: 13px; }
+        .orders-text { color: #606070; font-size: 13px; }
+
+        .price-section { display: flex; align-items: baseline; gap: 12px; }
+        .price-current { font-size: 36px; font-weight: bold; color: #00d4ff; }
+        .price-installments { font-size: 14px; color: #808090; }
+
+        .delivery-box {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 10px;
+            padding: 15px 20px; display: flex; align-items: center; gap: 12px;
+        }
+        .delivery-icon { font-size: 24px; }
+        .delivery-info .delivery-time { font-size: 14px; color: #4ade80; font-weight: 600; }
+        .delivery-info .delivery-source { font-size: 12px; color: #606070; }
+
+        .guarantee-badges {
+            display: flex; gap: 10px; flex-wrap: wrap;
+        }
+        .g-badge {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 8px;
+            padding: 8px 14px; font-size: 12px; color: #b0b0c0;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .product-description {
+            font-size: 14px; color: #a0a0b0; line-height: 1.7;
+            border-top: 1px solid #1a1a2e; padding-top: 16px;
+        }
+
+        .cta-section { display: flex; gap: 12px; margin-top: 8px; }
+        .btn-buy {
+            flex: 1; background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white; border: none; padding: 18px; border-radius: 12px;
+            font-size: 17px; font-weight: bold; cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+        }
+        .btn-cart {
+            background: #1a1a2e; color: #e0e0e0; border: 1px solid #2a2a3e;
+            padding: 18px 24px; border-radius: 12px; font-size: 17px;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .btn-cart:hover { border-color: #7c3aed; background: #111118; }
+
+        .trigger-banner {
+            background: linear-gradient(90deg, #1a0a2e, #0a1a2e);
+            border: 1px solid #2a1a3e;
+            border-radius: 10px; padding: 12px 18px;
+            font-size: 13px; color: #ff6b6b; font-weight: 600;
+            text-align: center;
+            animation: pulse-trigger 2s ease-in-out infinite;
+        }
+        @keyframes pulse-trigger {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* ===== AVALIAÃÃES ===== */
+        .reviews-section {
+            max-width: 1200px; margin: 0 auto; padding: 0 40px 60px;
+        }
+        .reviews-section h2 { font-size: 24px; margin-bottom: 25px; }
+        .reviews-grid { display: flex; flex-direction: column; gap: 15px; }
+        .review-card {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 12px;
+            padding: 20px;
+        }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .reviewer { font-size: 14px; font-weight: bold; }
+        .review-stars { color: #fbbf24; font-size: 14px; }
+        .review-date { font-size: 12px; color: #606070; }
+        .review-text { font-size: 13px; color: #a0a0b0; line-height: 1.6; }
+        .review-verified { font-size: 11px; color: #4ade80; margin-top: 8px; }
+
+        /* ===== PRODUTOS RELACIONADOS ===== */
+        .related-section {
+            max-width: 1200px; margin: 0 auto; padding: 0 40px 60px;
+        }
+        .related-section h2 { font-size: 24px; margin-bottom: 25px; }
+        .related-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .related-card {
+            background: #111118; border: 1px solid #1a1a2e; border-radius: 12px;
+            overflow: hidden; cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .related-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .related-img {
+            height: 140px; background: #1a1a2e; display: flex;
+            align-items: center; justify-content: center; font-size: 50px;
+        }
+        .related-info { padding: 15px; }
+        .related-name { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
+        .related-price { font-size: 18px; font-weight: bold; color: #00d4ff; }
+        .related-score { font-size: 11px; color: #7c3aed; margin-top: 4px; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #0a0a0f; border-top: 1px solid #1a1a2e;
+            padding: 40px; text-align: center;
+        }
+        .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap; }
+        .footer-links a { color: #808090; font-size: 14px; transition: color 0.3s; }
+        .footer-links a:hover { color: #00d4ff; }
+        .footer p { color: #505060; font-size: 13px; }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 768px) {
+            .product-page {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 30px;
+            }
+            .gallery-main { height: 280px; font-size: 80px; }
+            .product-details h1 { font-size: 24px; }
+            .price-current { font-size: 28px; }
+            .breadcrumb { padding: 15px 20px; }
+            .reviews-section, .related-section { padding: 0 20px 40px; }
+            .cta-section { flex-direction: column; }
+            .navbar { padding: 15px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">GADGET<span>HUB</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="back-btn">&#8592; Voltar ao catÃ¡logo</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="breadcrumb">
+        <a href="index.html">InÃ­cio</a> &rsaquo;
+        <a href="index.html#catalog">CatÃ¡logo</a> &rsaquo;
+        <span id="breadcrumbCategory">PerifÃ©ricos</span> &rsaquo;
+        <span id="breadcrumbProduct">Produto</span>
+    </div>
+
+    <!-- ===== PRODUTO ===== -->
+    <section class="product-page">
+        <!-- Galeria -->
+        <div class="gallery">
+            <div class="gallery-main" id="galleryMain">
+                <div class="gallery-badge" id="scoreBadge">&#9733; Score 0/100</div>
+                <span id="mainEmoji">ð§</span>
+            </div>
+            <div class="gallery-thumbs" id="galleryThumbs">
+                <!-- Thumbnails gerados por JS -->
+            </div>
+        </div>
+
+        <!-- Detalhes -->
+        <div class="product-details">
+            <div class="category-tag" id="detailCategory">PERIFÃRICOS</div>
+            <h1 id="detailName">Carregando produto...</h1>
+
+            <div class="score-row">
+                <div class="score-badge" id="detailScore">&#9733; Score 0/100</div>
+                <div class="rating-stars" id="detailStars">âââââ</div>
+                <div class="rating-text" id="detailRating">0.0 (0 avaliaÃ§Ãµes)</div>
+                <div class="orders-text" id="detailOrders">0 vendidos</div>
+            </div>
+
+            <div class="price-section">
+                <span class="price-current" id="detailPrice">R$ 0,00</span>
+                <span class="price-installments" id="detailInstallments">ou 3x de R$ 0,00</span>
+            </div>
+
+            <div class="delivery-box">
+                <div class="delivery-icon">&#128666;</div>
+                <div class="delivery-info">
+                    <div class="delivery-time" id="detailDelivery">Entrega em atÃ© 0 dias</div>
+                    <div class="delivery-source" id="detailSupplier">via Fornecedor</div>
+                </div>
+            </div>
+
+            <div class="guarantee-badges">
+                <div class="g-badge">&#128274; Compra segura</div>
+                <div class="g-badge">&#128260; 30 dias devoluÃ§Ã£o</div>
+                <div class="g-badge">&#9989; Produto verificado</div>
+            </div>
+
+            <div id="triggerBanner" class="trigger-banner" style="display:none;"></div>
+
+            <div class="product-description" id="detailDescription">
+                Carregando descriÃ§Ã£o...
+            </div>
+
+            <div class="cta-section">
+                <button class="btn-buy" onclick="comprarAgora()">Comprar Agora</button>
+                <button class="btn-cart" onclick="adicionarAoCarrinho()">&#128722; Carrinho</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AVALIAÃÃES ===== -->
+    <section class="reviews-section">
+        <h2>AvaliaÃ§Ãµes de Clientes</h2>
+        <div class="reviews-grid" id="reviewsGrid">
+            <!-- Gerado por JS -->
+        </div>
+    </section>
+
+    <!-- ===== PRODUTOS RELACIONADOS ===== -->
+    <section class="related-section">
+        <h2>Produtos Relacionados</h2>
+        <div class="related-grid" id="relatedGrid">
+            <!-- Gerado por JS -->
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="index.html">InÃ­cio</a>
+            <a href="#">PolÃ­tica de Privacidade</a>
+            <a href="#">Termos de Uso</a>
+            <a href="#">Trocas e DevoluÃ§Ãµes</a>
+            <a href="#">Contato</a>
+        </div>
+        <p>&copy; 2026 Gadget Hub - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // ===== BASE DE PRODUTOS (mesma do index.html) =====
+        const products = [
+            { id:1, name:"Smart Plug WiFi 16A", description:"Controla dispositivos pelo telemÃ³vel, compatÃ­vel com Alexa, Google Home e Apple HomeKit. ProgramaÃ§Ã£o por horÃ¡rios e temporizadores. MonitorizaÃ§Ã£o do consumo de energia em tempo real. FÃ¡cil instalaÃ§Ã£o sem ferramentas.", price:29.90, supplierPrice:8.00, category:"smart-home", emoji:"ð", rating:4.6, orders:8200, deliveryDays:8, supplier:"CJ Dropshipping" },
+            { id:2, name:"LÃ¢mpada RGB Smart E27", description:"16 milhÃµes de cores via app ou controlo por voz. 12W equivalente a 100W incandescente. CompatÃ­vel com Alexa, Google Home e Apple HomeKit. Cria cenas e automatizaÃ§Ãµes por horÃ¡rio.", price:24.90, supplierPrice:6.50, category:"smart-home", emoji:"ð¡", rating:4.5, orders:3500, deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:3, name:"CÃ¢mera WiFi 1080p", description:"VigilÃ¢ncia 360Â° com motor pan/tilt. VisÃ£o noturna a 10 metros. DeteÃ§Ã£o de movimento com alertas por app. Armazenamento local (cartÃ£o SD) ou cloud. Ãudio bidirecional.", price:49.90, supplierPrice:14.00, category:"smart-home", emoji:"ð·", rating:4.4, orders:3300, deliveryDays:10, supplier:"CJ Dropshipping" },
+            { id:4, name:"Fone TWS Bluetooth 5.3", description:"Cancelamento ativo de ruÃ­do (ANC) de 40dB. AtÃ© 30h de bateria com case. ResistÃªncia Ã  Ã¡gua IPX5. Modo de transparÃªncia para ouvir o ambiente. Driver de 10mm para baixos potentes.", price:69.90, supplierPrice:18.00, category:"audio", emoji:"ð§", rating:4.7, orders:9100, deliveryDays:7, supplier:"CJ Dropshipping" },
+            { id:5, name:"Coluna Bluetooth PortÃ¡til", description:"Som omnidirecional 360Â° com 20W de potÃªncia. ResistÃªncia Ã  Ã¡gua IPX7, ideal para exterior. Autonomia de 12 horas. Emparelhamento duplo (2 dispositivos simultÃ¢neos). Microfone integrado para chamadas.", price:59.90, supplierPrice:16.00, category:"audio", emoji:"ð", rating:4.5, orders:5700, deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:6, name:"Hub USB-C 7 em 1", description:"HDMI 4K@60Hz, 2x USB 3.0, leitor SD/TF, carregamento PD 100W passthrough. Corpo em alumÃ­nio para dissipaÃ§Ã£o de calor. Plug and play, sem drivers necessÃ¡rios. CompatÃ­vel com Mac, Windows, iPad Pro.", price:39.90, supplierPrice:11.00, category:"acessorios", emoji:"ð", rating:4.5, orders:2900, deliveryDays:8, supplier:"CJ Dropshipping" },
+            { id:7, name:"Carregador Wireless 15W", description:"Carregamento rÃ¡pido Qi 15W para Android e 15W MagSafe para iPhone. LED indicador de estado de carga. Base antiderrapante em silicone. CompatÃ­vel com todos os dispositivos Qi. Cabo USB-C incluÃ­do.", price:34.90, supplierPrice:9.00, category:"acessorios", emoji:"â¡", rating:4.6, orders:7300, deliveryDays:7, supplier:"CJ Dropshipping" },
+            { id:8, name:"Power Bank 20000mAh", description:"Carga rÃ¡pida 22.5W para smartphone. 3 portas de saÃ­da (USB-A x2, USB-C). Display LCD com percentagem de carga. Espessura ultra-slim de 1.5cm. Carga simultÃ¢nea de 3 dispositivos.", price:49.90, supplierPrice:14.00, category:"acessorios", emoji:"ð", rating:4.4, orders:3100, deliveryDays:10, supplier:"CJ Dropshipping" },
+            { id:9, name:"Aspirador RobÃ´ Smart", description:"Mapeamento LiDAR para percursos inteligentes. App WiFi com mapas interativos e zonas proibidas. CompatÃ­vel com Alexa e Google Home. Autonomia de 120 minutos. SucÃ§Ã£o de 2700Pa.", price:189.90, supplierPrice:55.00, category:"smart-home", emoji:"ð¤", rating:4.3, orders:1800, deliveryDays:12, supplier:"CJ Dropshipping" },
+            { id:10, name:"Rato Sem Fio Silencioso", description:"Cliques silenciosos a 99% sem ruÃ­do. Recetor 2.4GHz nano com alcance de 10m. 1600 DPI ajustÃ¡vel em 3 nÃ­veis. Bateria AAA com atÃ© 12 meses de autonomia. ErgonÃ³mico para uso prolongado.", price:29.90, supplierPrice:7.50, category:"acessorios", emoji:"ð±ï¸", rating:4.4, orders:4200, deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:11, name:"Teclado Bluetooth Ultra-slim", description:"Multidispositivo: troca entre 3 gadgets com um toque. CompatÃ­vel com Windows, Mac, iOS e Android. Recarga USB-C com autonomia de 3 meses. Design flat elegante com 1cm de espessura.", price:44.90, supplierPrice:12.00, category:"acessorios", emoji:"â¨ï¸", rating:4.3, orders:3100, deliveryDays:11, supplier:"CJ Dropshipping" },
+            { id:12, name:"Monitor PortÃ¡til 15.6\" FHD", description:"ResoluÃ§Ã£o Full HD 1920x1080, 60Hz. LigaÃ§Ã£o via USB-C (Ãºnico cabo para imagem e energia). Ãngulo de visÃ£o de 178Â°. Peso de apenas 800g com capa de proteÃ§Ã£o. Ideal para home office e trabalho remoto.", price:149.90, supplierPrice:48.00, category:"eletronicos", emoji:"ð¥ï¸", rating:4.6, orders:2200, deliveryDays:12, supplier:"CJ Dropshipping" }
+        ];
+
+        // ===== SKILL 1 â SCORE =====
+        function calcularScore(p) {
+            const margem = ((p.price - p.supplierPrice) / p.price) * 100;
+            const sA = (p.rating / 5) * 30;
+            const sM = Math.min((margem / 80) * 30, 30);
+            const sE = p.deliveryDays === 0 ? 20 : ((15 - p.deliveryDays) / 15) * 20;
+            const sP = Math.min((p.orders / 5000) * 20, 20);
+            return Math.round(sA + sM + sE + sP);
+        }
+        products.forEach(p => {
+            p.score = calcularScore(p);
+            p.margin = ((p.price - p.supplierPrice) / p.price) * 100;
+        });
+
+        // ===== SKILL 3 â GATILHO =====
+        function getGatilho(p) {
+            if (p.orders > 5000) return 'ð¥ Best-seller â ' + p.orders.toLocaleString('pt-BR') + ' vendidos!';
+            if (p.score >= 85) return 'â­ Top Score â Produto verificado!';
+            if (p.margin > 70) return 'ð PreÃ§o exclusivo por tempo limitado!';
+            if (p.deliveryDays <= 7) return 'â¡ Entrega express â atÃ© 7 dias!';
+            if (p.deliveryDays === 0) return 'ð© Entrega digital instantÃ¢nea!';
+            return null;
+        }
+
+        // ===== AVALIAÃÃES SIMULADAS =====
+        const reviewsData = [
+            { nome: "Carlos M.", estrelas: 5, data: "28 Mar 2026", texto: "Produto excelente! Chegou antes do prazo e a qualidade surpreendeu. Super recomendo a Gadget Hub." },
+            { nome: "Ana R.", estrelas: 4, data: "22 Mar 2026", texto: "Muito bom, funciona perfeitamente. A embalagem veio muito bem protegida. SÃ³ demorou um pouquinho mais do que esperava." },
+            { nome: "Pedro L.", estrelas: 5, data: "15 Mar 2026", texto: "JÃ¡ Ã© a terceira vez que compro na Gadget Hub. Qualidade sempre top e entrega dentro do prazo. Virei cliente fiel!" },
+            { nome: "Sofia T.", estrelas: 4, data: "10 Mar 2026", texto: "O produto corresponde exactamente Ã  descriÃ§Ã£o. O score do site ajudou muito na decisÃ£o de compra." }
+        ];
+
+        // ===== LER ID DO PRODUTO DA URL =====
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id')) || 1;
+        const product = products.find(p => p.id === productId) || products[0];
+
+        // ===== PREENCHER PÃGINA =====
+        function renderProduct() {
+            document.title = `${product.name} â Gadget Hub`;
+            // Breadcrumb
+            document.getElementById('breadcrumbCategory').textContent =
+                product.category.charAt(0).toUpperCase() + product.category.slice(1);
+            document.getElementById('breadcrumbProduct').textContent = product.name;
+            // Galeria
+            document.getElementById('mainEmoji').textContent = product.emoji;
+            document.getElementById('scoreBadge').innerHTML = `&#9733; Score ${product.score}/100`;
+            // Thumbnails simulados
+            const thumbs = document.getElementById('galleryThumbs');
+            for (let i = 0; i < 4; i++) {
+                const t = document.createElement('div');
+                t.className = `gallery-thumb ${i === 0 ? 'active' : ''}`;
+                t.textContent = product.emoji;
+                thumbs.appendChild(t);
+            }
+            // Detalhes
+            document.getElementById('detailCategory').textContent = product.category.toUpperCase();
+            document.getElementById('detailName').textContent = product.name;
+            document.getElementById('detailScore').innerHTML = `&#9733; Score ${product.score}/100`;
+            document.getElementById('detailStars').textContent = 'â'.repeat(Math.round(product.rating)) + 'â'.repeat(5 - Math.round(product.rating));
+            document.getElementById('detailRating').textContent = `${product.rating} (${Math.floor(product.orders * 0.12)} avaliaÃ§Ãµes)`;
+            document.getElementById('detailOrders').textContent = `${product.orders.toLocaleString('pt-BR')} vendidos`;
+            document.getElementById('detailPrice').textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('detailInstallments').textContent = `ou 3x de R$ ${(product.price / 3).toFixed(2).replace('.', ',')}`;
+            if (product.deliveryDays === 0) {
+                document.getElementById('detailDelivery').textContent = 'Entrega digital instantÃ¢nea';
+            } else {
+                document.getElementById('detailDelivery').textContent = `Entrega em atÃ© ${product.deliveryDays} dias Ãºteis`;
+            }
+            document.getElementById('detailSupplier').textContent = `via ${product.supplier}`;
+            document.getElementById('detailDescription').textContent = product.description;
+            // Gatilho de Marketing
+            const gatilho = getGatilho(product);
+            if (gatilho) {
+                const banner = document.getElementById('triggerBanner');
+                banner.textContent = gatilho;
+                banner.style.display = 'block';
+            }
+        }
+        // ===== AVALIAÃÃES =====
+        function renderReviews() {
+            const grid = document.getElementById('reviewsGrid');
+            reviewsData.forEach(r => {
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <div class="review-header">
+                        <div>
+                            <span class="reviewer">${r.nome}</span>
+                            <span class="review-stars"> ${'â'.repeat(r.estrelas)}${'â'.repeat(5 - r.estrelas)}</span>
+                        </div>
+                        <span class="review-date">${r.data}</span>
+                    </div>
+                    <div class="review-text">${r.texto}</div>
+                    <div class="review-verified">&#9989; Compra verificada</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        // ===== PRODUTOS RELACIONADOS@ =====
+        function renderRelated() {
+            const grid = document.getElementById('relatedGrid');
+            const related = products
+                .filter(p => p.category === product.category && p.id !== product.id)
+                .slice(0, 4);
+            if (related.length < 4) {
+                const extras = products.filter(p => p.id !== product.id && !related.includes(p)).slice(0, 4 - related.length);
+                related.push(...extras);
+            }
+            related.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'related-card';
+                card.onclick = () => window.location.href = `produto.html?id=${p.id}`;
+                card.innerHTML = `
+                    <div class="related-img">${p.emoji}</div>
+                    <div class="related-info">
+                        <div class="related-name">${p.name}</div>
+                        <div class="related-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                        <div class="related-score">&#9733; Score ${p.score}/100</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        // ===== AÃÃES =====
+        function comprarAgora() {
+            window.location.href = `checkout.html?id=${product.id}`;
+        }
+        function adicionarAoCarrinho() {
+            alert(`${product.emoji} ${product.name} adicionado ao carrinho!`);
+        }
+        // ===== INICIALIZAR =====
+        renderProduct();
+        renderReviews();
+        renderRelated();
+    </script>
+
+</body>
+</html>
