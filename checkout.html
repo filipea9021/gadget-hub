@@ -225,33 +225,36 @@
                 </div>
                 <div class="form-group">
                     <label>Telefone</label>
-                    <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+                    <input type="tel" id="telefone" placeholder="+351 912 345 678">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>CEP / CÃ³digo Postal</label>
-                        <input type="text" id="cep" placeholder="00000-000">
+                        <label>Código Postal</label>
+                        <input type="text" id="cep" placeholder="1000-001">
                     </div>
                     <div class="form-group">
-                        <label>PaÃ­s</label>
+                        <label>País</label>
                         <select id="pais">
+                            <option value="PT" selected>Portugal</option>
+                            <option value="ES">Espanha</option>
+                            <option value="FR">França</option>
+                            <option value="DE">Alemanha</option>
                             <option value="BR">Brasil</option>
-                            <option value="PT">Portugal</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Morada / EndereÃ§o</label>
-                    <input type="text" id="morada" placeholder="Rua, nÃºmero, complemento">
+                    <label>Morada</label>
+                    <input type="text" id="morada" placeholder="Rua, número, andar">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Cidade</label>
-                        <input type="text" id="cidade" placeholder="Sua cidade">
+                        <input type="text" id="cidade" placeholder="Lisboa">
                     </div>
                     <div class="form-group">
-                        <label>Estado / Distrito</label>
-                        <input type="text" id="estado" placeholder="Estado">
+                        <label>Distrito</label>
+                        <input type="text" id="estado" placeholder="Lisboa">
                     </div>
                 </div>
                 <button class="btn-confirm" onclick="irParaPasso(2)">Continuar para Pagamento &#8594;</button>
@@ -316,7 +319,7 @@
             <div class="summary-totals">
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span id="subtotal">R$ 0,00</span>
+                    <span id="subtotal">0,00 €</span>
                 </div>
                 <div class="summary-row">
                     <span>Frete</span>
@@ -324,7 +327,7 @@
                 </div>
                 <div class="summary-row total">
                     <span>Total</span>
-                    <span id="totalFinal">R$ 0,00</span>
+                    <span id="totalFinal">0,00 €</span>
                 </div>
             </div>
             <div class="trust-badges">
@@ -339,7 +342,7 @@
     <div class="confirmation-screen" id="confirmationScreen">
         <div class="confirm-icon">&#9989;</div>
         <div class="confirm-title">Pedido Confirmado!</div>
-        <div class="confirm-subtitle">Obrigado pela sua compra! VocÃª receberÃ¡ o cÃ³digo de rastreamento por e-mail assim que o produto for enviado.</div>
+        <div class="confirm-subtitle">Obrigado pela tua compra! Receberás o código de rastreamento por e-mail assim que o produto for enviado.</div>
         <div class="confirm-order-id" id="orderId">TZ-000000</div>
         <br><br>
         <button class="btn-home" onclick="window.location.href='index.html'">Voltar Ã  Loja</button>
@@ -350,48 +353,47 @@
         <p>&copy; 2026 Gadget Hub - Checkout Seguro - Todos os direitos reservados.</p>
     </footer>
 
-    <script>
+        <script>
         // ===== PRODUTOS =====
         const products = [
-            { id:1, name:"Headset Gamer RGB", price:189.90, emoji:"ð§", deliveryDays:8, supplier:"CJ Dropshipping" },
-            { id:2, name:"Mouse Gamer 12000 DPI", price:129.90, emoji:"ð±ï¸", deliveryDays:10, supplier:"AliExpress" },
-            { id:3, name:"Teclado MecÃ¢nico RGB", price:249.90, emoji:"â¨ï¸", deliveryDays:12, supplier:"CJ Dropshipping" },
-            { id:4, name:"Controle Wireless Pro", price:219.90, emoji:"ð®", deliveryDays:7, supplier:"Zendrop" },
-            { id:5, name:"Webcam Full HD 1080p", price:159.90, emoji:"ð·", deliveryDays:9, supplier:"CJ Dropshipping" },
-            { id:6, name:"Console PortÃ¡til Retro", price:299.90, emoji:"ð¹ï¸", deliveryDays:10, supplier:"AliExpress" },
-            { id:7, name:"Gift Card Digital R$100", price:100.00, emoji:"ð", deliveryDays:0, supplier:"Digital" },
-            { id:8, name:"Mousepad Gamer XL", price:69.90, emoji:"ð¼ï¸", deliveryDays:11, supplier:"AliExpress" },
-            { id:9, name:"Suporte para Headset", price:79.90, emoji:"ðï¸", deliveryDays:13, supplier:"CJ Dropshipping" },
-            { id:10, name:"Hub USB-C 7 em 1", price:149.90, emoji:"ð", deliveryDays:8, supplier:"Zendrop" },
-            { id:11, name:"Ring Light 10 Polegadas", price:89.90, emoji:"ð¡", deliveryDays:9, supplier:"AliExpress" },
-            { id:12, name:"Game Pass 3 Meses", price:119.90, emoji:"ð·ï¸", deliveryDays:0, supplier:"Digital" }
+            { id:1, name:"Tomada Inteligente WiFi 16A", price:29.90, image:"https://placehold.co/80x80/1a1a2e/00d4ff?text=Plug", deliveryDays:8, supplier:"CJ Dropshipping" },
+            { id:2, name:"Lâmpada RGB Smart E27", price:24.90, image:"https://placehold.co/80x80/1a1a2e/7c3aed?text=RGB", deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:3, name:"Câmara WiFi 1080p", price:49.90, image:"https://placehold.co/80x80/1a1a2e/4ade80?text=Cam", deliveryDays:10, supplier:"CJ Dropshipping" },
+            { id:4, name:"Fones TWS Bluetooth 5.3", price:69.90, image:"https://placehold.co/80x80/1a1a2e/00d4ff?text=TWS", deliveryDays:7, supplier:"CJ Dropshipping" },
+            { id:5, name:"Coluna Bluetooth Portátil", price:59.90, image:"https://placehold.co/80x80/1a1a2e/7c3aed?text=BT", deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:6, name:"Hub USB-C 7 em 1", price:39.90, image:"https://placehold.co/80x80/1a1a2e/00d4ff?text=Hub", deliveryDays:8, supplier:"CJ Dropshipping" },
+            { id:7, name:"Carregador Wireless 15W", price:34.90, image:"https://placehold.co/80x80/1a1a2e/4ade80?text=Qi", deliveryDays:7, supplier:"CJ Dropshipping" },
+            { id:8, name:"Power Bank 20000mAh", price:49.90, image:"https://placehold.co/80x80/1a1a2e/7c3aed?text=PWR", deliveryDays:10, supplier:"CJ Dropshipping" },
+            { id:9, name:"Aspirador Robô Smart", price:189.90, image:"https://placehold.co/80x80/1a1a2e/00d4ff?text=Robo", deliveryDays:12, supplier:"CJ Dropshipping" },
+            { id:10, name:"Rato Sem Fio Silencioso", price:29.90, image:"https://placehold.co/80x80/1a1a2e/4ade80?text=Rato", deliveryDays:9, supplier:"CJ Dropshipping" },
+            { id:11, name:"Teclado Bluetooth Ultra-slim", price:44.90, image:"https://placehold.co/80x80/1a1a2e/7c3aed?text=Key", deliveryDays:11, supplier:"CJ Dropshipping" },
+            { id:12, name:"Monitor Portátil 15.6" FHD", price:149.90, image:"https://placehold.co/80x80/1a1a2e/00d4ff?text=Mon", deliveryDays:12, supplier:"CJ Dropshipping" }
         ];
 
-        // Ler ID da URL
         const urlParams = new URLSearchParams(window.location.search);
         const productId = parseInt(urlParams.get('id')) || 1;
         const product = products.find(p => p.id === productId) || products[0];
 
         let selectedPayment = 'mbway';
 
-        // ===== RENDERIZAR RESUMO =====
         function renderSummary() {
             const container = document.getElementById('summaryItems');
-            const delivery = product.deliveryDays === 0 ? 'Entrega instantÃ¢nea' : `Entrega: ${product.deliveryDays} dias`;
+            const delivery = product.deliveryDays === 0 ? 'Entrega instantânea' : `Entrega: ${product.deliveryDays} dias`;
 
             container.innerHTML = `
                 <div class="summary-item">
-                    <div class="summary-emoji">${product.emoji}</div>
+                    <img src="${product.image}" alt="${product.name}" style="width:50px;height:50px;border-radius:8px;">
                     <div class="summary-details">
                         <div class="summary-name">${product.name}</div>
-                        <div class="summary-meta">${delivery} Â· via ${product.supplier}</div>
+                        <div class="summary-meta">${delivery} · via ${product.supplier}</div>
                     </div>
-                    <div class="summary-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                    <div class="summary-price">${product.price.toFixed(2).replace('.', ',')} €</div>
                 </div>
             `;
 
-            document.getElementById('subtotal').textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
-            document.getElementById('totalFinal').textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('subtotal').textContent = `${product.price.toFixed(2).replace('.', ',')} €`;
+            document.getElementById('totalFinal').textContent = `${product.price.toFixed(2).replace('.', ',')} €`;
+        }`;
         }
 
         // ===== NAVEGAÃÃO ENTRE PASSOS =====
