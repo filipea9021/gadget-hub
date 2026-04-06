@@ -1,0 +1,32 @@
+[project]
+name = "cerebro-centram"
+version = "0.1.0"
+description = "Sistema autônomo de skills com IA - Startup automatizada"
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.40.0",
+    "openai>=1.50.0",
+    "langchain-core>=0.3.0",
+    "langgraph>=0.2.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "rich>=13.0.0",
+    "typer>=0.12.0",
+    "jinja2>=3.1.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+ollama = ["ollama>=0.3.0"]
+dev = ["pytest>=8.0.0", "ruff>=0.6.0", "mypy>=1.11.0"]
+
+[project.scripts]
+cerebro = "core.cli:app"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
