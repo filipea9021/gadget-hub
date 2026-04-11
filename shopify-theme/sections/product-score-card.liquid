@@ -1,0 +1,183 @@
+{% comment %}
+  ============================================================
+  Gadget Hub — Score Card Section
+  Exibe o Score do produto (Avaliação, Margem, Entrega, Pedidos)
+  na página de produto do Shopify.
+
+  Como usar:
+  1. Copie para: themes/SEU-TEMA/sections/product-score-card.liquid
+  2. No editor de temas → Páginas de Produto → "Add section"
+     → "Product Score Card"
+  ============================================================
+{% endcomment %}
+
+{%- assign product = section.settings.product | default: product -%}
+
+{%- comment %} Calcular score a partir dos metafields do produto {%- endcomment %}
+{%- assign rating     = product.metafields.gadgethub.rating | times: 1.0 | default: 4.5 -%}
+{%- assign orders     = product.metafields.gadgethub.orders | times: 1 | default: 1000 -%}
+{%- assign custo      = product.metafields.gadgethub.supplier_price | times: 1.0 | default: 0 -%}
+{%- assign entrega    = product.metafields.gadgethub.delivery_days | times: 1 | default: 10 -%}
+{%- assign fornecedor = product.metafields.gadgethub.supplier | default: "CJ Dropshipping" -%}
+
+{%- comment %} Score aproximado via liquid (sem aritmética avançada) {%- endcomment %}
+{%- assign score = product.metafields.gadgethub.score | times: 1 | default: 75 -%}
+
+<div class="gh-score-card" id="gh-score-{{ product.id }}">
+  <div class="gh-score-header">
+    <div class="gh-score-badge">
+      ★ Score {{ score }}/100
+    </div>
+    <div class="gh-score-title">Avaliação Gadget Hub</div>
+  </div>
+
+  <div class="gh-score-bars">
+    <div class="gh-bar-row">
+      <span class="gh-bar-label">Avaliação</span>
+      <div class="gh-bar-track">
+        <div class="gh-bar-fill" style="width: {{ rating | divided_by: 5.0 | times: 100 | round }}%"></div>
+      </div>
+      <span class="gh-bar-value">{{ rating }}★</span>
+    </div>
+
+    <div class="gh-bar-row">
+      <span class="gh-bar-label">Entrega</span>
+      <div class="gh-bar-track">
+        {%- assign entrega_pct = 15 | minus: entrega | divided_by: 15.0 | times: 100 | round -%}
+        {%- if entrega_pct < 0 %}{%- assign entrega_pct = 0 -%}{%- endif -%}
+        <div class="gh-bar-fill" style="width: {{ entrega_pct }}%"></div>
+      </div>
+      <span class="gh-bar-value">{{ entrega }} dias</span>
+    </div>
+
+    <div class="gh-bar-row">
+      <span class="gh-bar-label">Popularidade</span>
+      <div class="gh-bar-track">
+        {%- assign orders_pct = orders | divided_by: 50.0 | round -%}
+        {%- if orders_pct > 100 %}{%- assign orders_pct = 100 -%}{%- endif -%}
+        <div class="gh-bar-fill" style="width: {{ orders_pct }}%"></div>
+      </div>
+      <span class="gh-bar-value">{{ orders }} pedidos</span>
+    </div>
+  </div>
+
+  <div class="gh-score-badges">
+    <span class="gh-badge gh-badge-secure">🔒 Compra segura</span>
+    <span class="gh-badge gh-badge-return">🔄 30 dias devolução</span>
+    <span class="gh-badge gh-badge-verified">✅ Verificado</span>
+  </div>
+
+  <div class="gh-delivery-box">
+    <span class="gh-delivery-icon">🚚</span>
+    <div>
+      <div class="gh-delivery-time">Entrega em até {{ entrega }} dias úteis</div>
+      <div class="gh-delivery-source">via {{ fornecedor }}</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gh-score-card {
+    background: #111118;
+    border: 1px solid #1a1a2e;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 16px 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: #e0e0e0;
+  }
+  .gh-score-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .gh-score-badge {
+    background: linear-gradient(135deg, #7c3aed, #00d4ff);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .gh-score-title {
+    font-size: 13px;
+    color: #808090;
+  }
+  .gh-score-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .gh-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .gh-bar-label {
+    font-size: 12px;
+    color: #808090;
+    width: 80px;
+    flex-shrink: 0;
+  }
+  .gh-bar-track {
+    flex: 1;
+    height: 6px;
+    background: #1a1a2e;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .gh-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7c3aed, #00d4ff);
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+  .gh-bar-value {
+    font-size: 12px;
+    color: #a0a0b0;
+    width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .gh-score-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .gh-badge {
+    background: #1a1a2e;
+    border: 1px solid #2a2a3e;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    color: #b0b0c0;
+  }
+  .gh-delivery-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #0a0a15;
+    border: 1px solid #1a1a2e;
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .gh-delivery-icon { font-size: 20px; }
+  .gh-delivery-time { font-size: 13px; color: #4ade80; font-weight: 600; }
+  .gh-delivery-source { font-size: 11px; color: #606070; }
+</style>
+
+{% schema %}
+{
+  "name": "Score Card — Gadget Hub",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Score Card — Gadget Hub",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

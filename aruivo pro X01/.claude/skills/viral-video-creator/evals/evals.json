@@ -1,0 +1,23 @@
+{
+  "skill_name": "viral-video-creator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Quero criar um YouTube Short viral para promover meu app de meditação. Algo com visual de floresta mística com energia e luz. Estilo parecido com os vídeos do @airon_ia.",
+      "expected_output": "A complete production document (PROMPT_VIDEO_FOREST.md or similar) with: 3 prompt variants for image generation, a timed script/roteiro for ~26s, text overlays in Portuguese, engagement strategy with CTA, post-production notes, and tool recommendations.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Create a viral TikTok video concept about cryptocurrency and blockchain. I want something cyberpunk-themed, neon city vibes. Make it look cinematic and futuristic.",
+      "expected_output": "A complete production document in English with: 3 cyberpunk-themed prompt variants, a timed script for 20-30s, text overlays about crypto/blockchain, engagement strategy adapted for TikTok, and free tool recommendations.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Faz um vídeo curto viral pra mim. Tema: oceano profundo com criaturas bioluminescentes e tecnologia subaquática. É pro meu canal de ciência.",
+      "expected_output": "A complete production document in Portuguese with: 3 deep-ocean themed prompt variants, a timed script, science-channel appropriate text overlays, engagement strategy, and tool recommendations.",
+      "files": []
+    }
+  ]
+}

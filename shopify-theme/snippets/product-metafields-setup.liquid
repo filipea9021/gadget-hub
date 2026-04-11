@@ -1,0 +1,37 @@
+{% comment %}
+  ============================================================
+  Gadget Hub — Guia de Metafields para Shopify
+
+  Execute no Shopify Admin → Settings → Custom data → Products
+  Crie os seguintes metafields com namespace "gadgethub":
+
+  Key              | Type    | Descrição
+  ─────────────────┼─────────┼──────────────────────────────
+  score            | Integer | Score 0-100 calculado
+  rating           | Decimal | Avaliação média (ex: 4.7)
+  orders           | Integer | Número de pedidos
+  delivery_days    | Integer | Prazo de entrega em dias
+  supplier         | Text    | Nome do fornecedor
+  supplier_price   | Decimal | Preço de custo
+  margin           | Decimal | Margem em %
+  cj_product_id    | Text    | ID do produto no CJ Dropshipping
+
+  ============================================================
+  Script de exemplo para criar via API Admin (Node.js):
+  ============================================================
+
+  const metafields = [
+    { namespace: 'gadgethub', key: 'score',          type: 'number_integer' },
+    { namespace: 'gadgethub', key: 'rating',         type: 'number_decimal' },
+    { namespace: 'gadgethub', key: 'orders',         type: 'number_integer' },
+    { namespace: 'gadgethub', key: 'delivery_days',  type: 'number_integer' },
+    { namespace: 'gadgethub', key: 'supplier',       type: 'single_line_text_field' },
+    { namespace: 'gadgethub', key: 'supplier_price', type: 'number_decimal' },
+    { namespace: 'gadgethub', key: 'margin',         type: 'number_decimal' },
+    { namespace: 'gadgethub', key: 'cj_product_id',  type: 'single_line_text_field' },
+  ];
+
+  ============================================================
+{% endcomment %}
+
+{%- comment %} Este snippet não renderiza nada — é apenas documentação {%- endcomment %}

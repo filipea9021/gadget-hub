@@ -1,0 +1,22 @@
+{
+  "tipoConteudo": "Render 3D cinematográfico",
+  "plataformas": [
+    "TikTok",
+    "Instagram Reels",
+    "YouTube Shorts"
+  ],
+  "duracoes": {
+    "TikTok": "15s — hook rápido + produto + CTA",
+    "Reels": "30s — lifestyle + features + CTA",
+    "Shorts": "45s — unboxing style + demo + CTA"
+  },
+  "paleta": "tech_blue",
+  "estiloVisual": "Fundo escuro, iluminação dual-tone azul, partículas, rotação 360°",
+  "musica": "Beat energético, trending TikTok sound",
+  "ganchos": [
+    "⌚ Este smartwatch custa menos de 40€...",
+    "GPS + Cardíaco + AMOLED por 39.99€? Sim.",
+    "O smartwatch que toda a gente está a comprar em Portugal",
+    "POV: compraste um smartwatch premium por metade do preço"
+  ]
+}

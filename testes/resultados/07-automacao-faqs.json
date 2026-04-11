@@ -1,0 +1,36 @@
+[
+  {
+    "pergunta": "qual o prazo de entrega?",
+    "encontrada": true,
+    "resposta": "O prazo de entrega é de 7 a 15 dias úteis para Portugal.",
+    "perguntaOriginal": "qual o prazo de entrega?"
+  },
+  {
+    "pergunta": "como rastrear meu pedido?",
+    "encontrada": false,
+    "resposta": "Peço desculpa, não consigo ajudar. Contacte suporte@gadget-hub.com."
+  },
+  {
+    "pergunta": "quais formas de pagamento?",
+    "encontrada": true,
+    "resposta": "Aceitamos MBWay, Multibanco, cartão de crédito e PayPal.",
+    "perguntaOriginal": "quais formas de pagamento?"
+  },
+  {
+    "pergunta": "tem garantia?",
+    "encontrada": true,
+    "resposta": "Todos os produtos têm garantia de 1 ano.",
+    "perguntaOriginal": "tem garantia?"
+  },
+  {
+    "pergunta": "como funciona a devolução?",
+    "encontrada": false,
+    "resposta": "Peço desculpa, não consigo ajudar. Contacte suporte@gadget-hub.com."
+  },
+  {
+    "pergunta": "quanto custa o frete?",
+    "encontrada": true,
+    "resposta": "Frete grátis para Portugal em compras acima de 30€.",
+    "perguntaOriginal": "quanto custa o frete?"
+  }
+]

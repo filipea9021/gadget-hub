@@ -1,0 +1,152 @@
+{
+  "etapas": [
+    {
+      "ordem": 1,
+      "agente": "CJ",
+      "acao": "Produto encontrado e validado",
+      "input": "Busca por smartwatches com margem > 50%",
+      "output": {
+        "produtoId": "sw-test-001",
+        "nome": "SmartWatch Pro X7 — Fitness Tracker",
+        "validado": true
+      },
+      "evento": "novos_produtos_validados"
+    },
+    {
+      "ordem": 2,
+      "agente": "Blender",
+      "acao": "Render solicitado via evento CJ→Blender",
+      "input": {
+        "produtoId": "sw-test-001",
+        "categoria": "smartwatch"
+      },
+      "output": {
+        "jobId": "job-1775727215584",
+        "tipos": [
+          "hero",
+          "multiAngle",
+          "turntable",
+          "exploded"
+        ],
+        "template": "smartwatch_wrist",
+        "status": "na_fila"
+      },
+      "evento": "render_solicitado"
+    },
+    {
+      "ordem": 3,
+      "agente": "Blender",
+      "acao": "Renders completos + vídeo cinematográfico",
+      "input": {
+        "jobId": "job-1775727215584"
+      },
+      "output": {
+        "renders": 5,
+        "animacoes": 1,
+        "arquivos": [
+          "SW-PRO-X7-001_hero.png",
+          "SW-PRO-X7-001_multiAngle.png",
+          "SW-PRO-X7-001_turntable.gif",
+          "SW-PRO-X7-001_exploded.png",
+          "SW-PRO-X7-001_lifestyle.png",
+          "SW-PRO-X7-001_cinematic_tech_blue.mp4"
+        ]
+      },
+      "evento": "renders_prontos"
+    },
+    {
+      "ordem": 4,
+      "agente": "Shopify",
+      "acao": "Produto criado com imagens do Blender",
+      "input": {
+        "produtoId": "sw-test-001",
+        "imagens": 5
+      },
+      "output": {
+        "shopifyProductId": "gid://shopify/Product/8901234567890",
+        "url": "https://gadget-hub-72955.myshopify.com/products/smartwatch-pro-x7",
+        "status": "active"
+      },
+      "evento": "produto_criado"
+    },
+    {
+      "ordem": 5,
+      "agente": "Marketing",
+      "acao": "Campanha criada com renders + vídeo cinematográfico",
+      "input": {
+        "renders": 5,
+        "video": 1
+      },
+      "output": {
+        "campanhaId": "camp-1775727215584",
+        "plataformas": [
+          "TikTok",
+          "Instagram",
+          "Facebook"
+        ],
+        "orcamentoDiario": 20,
+        "status": "agendada",
+        "videoUsado": "SW-PRO-X7-001_cinematic_tech_blue.mp4"
+      },
+      "evento": "campanha_criada"
+    },
+    {
+      "ordem": 6,
+      "agente": "Precos",
+      "acao": "Preço monitorizado vs concorrência",
+      "input": {
+        "precoAtual": 39.99
+      },
+      "output": {
+        "competitivo": true,
+        "concorrentes": {
+          "AliExpress": 42.99,
+          "Amazon": 49.99
+        },
+        "acao": "manter_preco"
+      },
+      "evento": "preco_verificado"
+    },
+    {
+      "ordem": 7,
+      "agente": "Estoque",
+      "acao": "Stock monitorizado",
+      "input": {
+        "sku": "SW-PRO-X7-001"
+      },
+      "output": {
+        "quantidade": 3,
+        "minimo": 5,
+        "alerta": "critico",
+        "acao": "reabastecer_cj"
+      },
+      "evento": "estoque_alerta"
+    },
+    {
+      "ordem": 8,
+      "agente": "Automacao",
+      "acao": "Webhook order.created processado",
+      "input": {
+        "evento": "order.created",
+        "dados": {
+          "email": "joao@gmail.com",
+          "pedido": "#1001"
+        }
+      },
+      "output": {
+        "emailEnviado": "confirmacao",
+        "assunto": "Pedido confirmado!"
+      },
+      "evento": "webhook_processado"
+    }
+  ],
+  "resumo": {
+    "agentesEnvolvidos": 7,
+    "etapasCompletas": 8,
+    "produtoPublicado": true,
+    "campainhaCriada": true,
+    "videoGerado": true,
+    "emailEnviado": true,
+    "fluxoCompleto": true
+  }
+}

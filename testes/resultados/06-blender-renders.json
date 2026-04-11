@@ -1,0 +1,64 @@
+{
+  "renders": [
+    {
+      "tipo": "hero",
+      "arquivo": "renders/SW-PRO-X7-001_hero_1775727215432.png",
+      "resolucao": "1920x1080",
+      "engine": "CYCLES",
+      "samples": 256,
+      "tempoRender": "19.4s"
+    },
+    {
+      "tipo": "multiAngle",
+      "arquivo": "renders/SW-PRO-X7-001_multiAngle_1775727215432.png",
+      "resolucao": "1920x1080",
+      "engine": "CYCLES",
+      "samples": 256,
+      "tempoRender": "23.0s"
+    },
+    {
+      "tipo": "turntable",
+      "arquivo": "renders/SW-PRO-X7-001_turntable_1775727215432.png",
+      "resolucao": "1920x1080",
+      "engine": "CYCLES",
+      "samples": 256,
+      "tempoRender": "14.7s"
+    },
+    {
+      "tipo": "exploded",
+      "arquivo": "renders/SW-PRO-X7-001_exploded_1775727215432.png",
+      "resolucao": "1920x1080",
+      "engine": "CYCLES",
+      "samples": 256,
+      "tempoRender": "32.6s"
+    },
+    {
+      "tipo": "lifestyle",
+      "arquivo": "renders/SW-PRO-X7-001_lifestyle_1775727215432.png",
+      "resolucao": "1920x1080",
+      "engine": "CYCLES",
+      "samples": 256,
+      "tempoRender": "22.7s"
+    }
+  ],
+  "cinematico": {
+    "tipo": "cinematic_tech_blue",
+    "arquivo": "renders/SW-PRO-X7-001_cinematic_tech_blue_1775727215432.mp4",
+    "resolucao": "1920x1080",
+    "frames": 120,
+    "fps": 30,
+    "duracao": "4s",
+    "efeitos": [
+      "energy_core",
+      "particles_sparks",
+      "dual_tone_lighting"
+    ],
+    "paleta": {
+      "nome": "tech_blue",
+      "primary": "#00A8FF",
+      "secondary": "#0047AB",
+      "accent": "#00D4FF",
+      "glow": "#4DC9FF"
+    }
+  }
+}

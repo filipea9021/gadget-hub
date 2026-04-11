@@ -1,0 +1,277 @@
+{
+  "_docs": "Configuração de cenas por template — define iluminação, câmera, materiais e backgrounds para cada tipo de produto",
+
+  "electronics_small": {
+    "name": "Eletrônicos Pequenos",
+    "description": "Smart plugs, carregadores, cabos, adaptadores, hubs USB",
+    "scene": {
+      "scale": 1.0,
+      "groundPlane": true,
+      "groundMaterial": "matte_white"
+    },
+    "camera": {
+      "lens": 85,
+      "fstop": 5.6,
+      "defaultAngle": "three_quarter",
+      "defaultDistance": "medium"
+    },
+    "lighting": {
+      "hero": "studio_3point",
+      "multiAngle": "studio_soft",
+      "lifestyle": "environment_hdri"
+    },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.15, 0.15, 0.18, 1.0] },
+      "secondary": { "type": "plastic_matte", "color": [0.8, 0.8, 0.82, 1.0] },
+      "accent": { "type": "led_emissive", "color": [0.0, 0.4, 1.0, 1.0], "strength": 5.0 }
+    },
+    "renders": ["hero", "multiAngle", "exploded"],
+    "qualityPreset": "standard"
+  },
+
+  "audio_wearable": {
+    "name": "Fones & Earbuds",
+    "description": "Fones bluetooth, earbuds, TWS",
+    "scene": {
+      "scale": 1.2,
+      "groundPlane": false
+    },
+    "camera": {
+      "lens": 100,
+      "fstop": 4.0,
+      "defaultAngle": "three_quarter",
+      "defaultDistance": "close"
+    },
+    "lighting": {
+      "hero": "studio_3point",
+      "multiAngle": "studio_soft",
+      "turntable": "studio_3point"
+    },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.95, 0.95, 0.97, 1.0] },
+      "secondary": { "type": "rubber_soft", "color": [0.3, 0.3, 0.35, 1.0] },
+      "accent": { "type": "metal_brushed", "color": [0.8, 0.8, 0.82, 1.0] }
+    },
+    "renders": ["hero", "multiAngle", "turntable", "exploded"],
+    "qualityPreset": "high"
+  },
+
+  "audio_speaker": {
+    "name": "Speakers & Caixas de Som",
+    "description": "Speakers bluetooth, caixas portáteis",
+    "scene": {
+      "scale": 0.8,
+      "groundPlane": true,
+      "groundMaterial": "matte_dark"
+    },
+    "camera": {
+      "lens": 85,
+      "fstop": 5.6,
+      "defaultAngle": "three_quarter",
+      "defaultDistance": "medium"
+    },
+    "lighting": {
+      "hero": "studio_3point",
+      "lifestyle": "environment_hdri"
+    },
+    "materials": {
+      "primary": { "type": "fabric_mesh", "color": [0.1, 0.1, 0.12, 1.0] },
+      "secondary": { "type": "metal_brushed", "color": [0.5, 0.5, 0.52, 1.0] },
+      "accent": { "type": "rubber_soft", "color": [0.05, 0.05, 0.05, 1.0] }
+    },
+    "renders": ["hero", "multiAngle", "turntable", "lifestyle"],
+    "qualityPreset": "high"
+  },
+
+  "lighting_strip": {
+    "name": "Fitas LED",
+    "description": "LED strips RGB, fitas adesivas",
+    "scene": {
+      "scale": 0.6,
+      "groundPlane": false,
+      "darkScene": true
+    },
+    "camera": {
+      "lens": 50,
+      "fstop": 2.8,
+      "defaultAngle": "perspective",
+      "defaultDistance": "medium"
+    },
+    "lighting": {
+      "hero": "studio_clean",
+      "lifestyle": "environment_hdri"
+    },
+    "materials": {
+      "primary": { "type": "rubber_soft", "color": [0.9, 0.9, 0.9, 1.0] },
+      "accent": { "type": "led_emissive", "color": [1.0, 0.0, 0.5, 1.0], "strength": 8.0 }
+    },
+    "renders": ["hero", "multiAngle", "lifestyle"],
+    "qualityPreset": "standard"
+  },
+
+  "lighting_bulb": {
+    "name": "Lâmpadas Inteligentes",
+    "scene": { "scale": 1.0, "groundPlane": true },
+    "camera": { "lens": 85, "fstop": 4.0, "defaultAngle": "three_quarter", "defaultDistance": "close" },
+    "lighting": { "hero": "studio_3point" },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.95, 0.95, 0.97, 1.0] },
+      "accent": { "type": "led_emissive", "color": [1.0, 0.9, 0.7, 1.0], "strength": 10.0 }
+    },
+    "renders": ["hero", "multiAngle", "lifestyle"],
+    "qualityPreset": "standard"
+  },
+
+  "wearable_watch": {
+    "name": "Smartwatches",
+    "description": "Relógios inteligentes, fitness trackers",
+    "scene": {
+      "scale": 1.5,
+      "groundPlane": false
+    },
+    "camera": {
+      "lens": 100,
+      "fstop": 4.0,
+      "defaultAngle": "three_quarter",
+      "defaultDistance": "close"
+    },
+    "lighting": {
+      "hero": "studio_3point",
+      "lifestyle": "environment_hdri"
+    },
+    "materials": {
+      "primary": { "type": "metal_brushed", "color": [0.6, 0.6, 0.65, 1.0] },
+      "secondary": { "type": "glass_screen" },
+      "accent": { "type": "rubber_soft", "color": [0.05, 0.05, 0.06, 1.0] }
+    },
+    "renders": ["hero", "multiAngle", "turntable", "exploded"],
+    "qualityPreset": "premium"
+  },
+
+  "smarthome_plug": {
+    "name": "Tomadas Inteligentes",
+    "scene": { "scale": 1.0, "groundPlane": true },
+    "camera": { "lens": 85, "fstop": 5.6, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point" },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.95, 0.95, 0.97, 1.0] },
+      "accent": { "type": "led_emissive", "color": [0.0, 0.4, 1.0, 1.0], "strength": 5.0 }
+    },
+    "renders": ["hero", "multiAngle", "exploded", "lifestyle"],
+    "qualityPreset": "standard"
+  },
+
+  "smarthome_camera": {
+    "name": "Câmeras de Segurança",
+    "scene": { "scale": 1.0, "groundPlane": true },
+    "camera": { "lens": 85, "fstop": 5.6, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point", "lifestyle": "environment_hdri" },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.95, 0.95, 0.97, 1.0] },
+      "secondary": { "type": "glass_screen" },
+      "accent": { "type": "led_emissive", "color": [1.0, 0.0, 0.0, 1.0], "strength": 3.0 }
+    },
+    "renders": ["hero", "multiAngle", "turntable", "lifestyle"],
+    "qualityPreset": "high"
+  },
+
+  "gaming_controller": {
+    "name": "Controles de Jogo",
+    "scene": { "scale": 1.0, "groundPlane": true, "groundMaterial": "matte_dark" },
+    "camera": { "lens": 85, "fstop": 4.0, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point" },
+    "materials": {
+      "primary": { "type": "plastic_matte", "color": [0.08, 0.08, 0.1, 1.0] },
+      "secondary": { "type": "rubber_soft", "color": [0.05, 0.05, 0.05, 1.0] },
+      "accent": { "type": "led_emissive", "color": [0.0, 0.5, 1.0, 1.0], "strength": 3.0 }
+    },
+    "renders": ["hero", "multiAngle", "turntable", "exploded"],
+    "qualityPreset": "high"
+  },
+
+  "gaming_headset": {
+    "name": "Headsets Gamer",
+    "scene": { "scale": 0.8, "groundPlane": false },
+    "camera": { "lens": 85, "fstop": 4.0, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point" },
+    "materials": {
+      "primary": { "type": "plastic_matte", "color": [0.05, 0.05, 0.07, 1.0] },
+      "secondary": { "type": "fabric_mesh", "color": [0.1, 0.1, 0.12, 1.0] },
+      "accent": { "type": "led_emissive", "color": [1.0, 0.0, 0.3, 1.0], "strength": 6.0 }
+    },
+    "renders": ["hero", "multiAngle", "turntable", "exploded"],
+    "qualityPreset": "high"
+  },
+
+  "gaming_mouse": {
+    "name": "Mouses Gamer",
+    "scene": { "scale": 1.2, "groundPlane": true, "groundMaterial": "matte_dark" },
+    "camera": { "lens": 100, "fstop": 4.0, "defaultAngle": "low_angle", "defaultDistance": "close" },
+    "lighting": { "hero": "studio_3point" },
+    "materials": {
+      "primary": { "type": "plastic_matte", "color": [0.05, 0.05, 0.07, 1.0] },
+      "secondary": { "type": "rubber_soft" },
+      "accent": { "type": "led_emissive", "color": [0.5, 0.0, 1.0, 1.0], "strength": 10.0 }
+    },
+    "renders": ["hero", "multiAngle", "turntable"],
+    "qualityPreset": "high"
+  },
+
+  "phone_case": {
+    "name": "Capinhas de Celular",
+    "scene": { "scale": 1.0, "groundPlane": false },
+    "camera": { "lens": 85, "fstop": 5.6, "defaultAngle": "three_quarter", "defaultDistance": "close" },
+    "lighting": { "hero": "studio_soft" },
+    "materials": {
+      "primary": { "type": "plastic_matte", "color": [0.1, 0.2, 0.4, 1.0] }
+    },
+    "renders": ["hero", "multiAngle"],
+    "qualityPreset": "standard"
+  },
+
+  "phone_holder": {
+    "name": "Suportes para Celular",
+    "scene": { "scale": 1.0, "groundPlane": true },
+    "camera": { "lens": 85, "fstop": 5.6, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point", "lifestyle": "environment_hdri" },
+    "materials": {
+      "primary": { "type": "metal_brushed", "color": [0.6, 0.6, 0.65, 1.0] },
+      "secondary": { "type": "rubber_soft" }
+    },
+    "renders": ["hero", "multiAngle", "lifestyle"],
+    "qualityPreset": "standard"
+  },
+
+  "kitchen_gadget": {
+    "name": "Gadgets de Cozinha",
+    "scene": { "scale": 1.0, "groundPlane": true },
+    "camera": { "lens": 85, "fstop": 5.6, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point", "lifestyle": "environment_hdri" },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.95, 0.95, 0.97, 1.0] },
+      "secondary": { "type": "metal_brushed", "color": [0.7, 0.7, 0.72, 1.0] }
+    },
+    "renders": ["hero", "multiAngle", "lifestyle"],
+    "qualityPreset": "standard"
+  },
+
+  "generic_product": {
+    "name": "Produto Genérico",
+    "description": "Template fallback para qualquer tipo de produto",
+    "scene": { "scale": 1.0, "groundPlane": true },
+    "camera": { "lens": 85, "fstop": 5.6, "defaultAngle": "three_quarter", "defaultDistance": "medium" },
+    "lighting": { "hero": "studio_3point", "multiAngle": "studio_soft" },
+    "materials": {
+      "primary": { "type": "plastic_glossy", "color": [0.2, 0.2, 0.22, 1.0] }
+    },
+    "renders": ["hero", "multiAngle"],
+    "qualityPreset": "standard"
+  },
+
+  "_qualityPresets": {
+    "standard": { "samples": 128, "resolution": { "x": 1920, "y": 1920 }, "denoising": true },
+    "high": { "samples": 256, "resolution": { "x": 2400, "y": 2400 }, "denoising": true },
+    "premium": { "samples": 512, "resolution": { "x": 3000, "y": 3000 }, "denoising": true },
+    "draft": { "samples": 32, "resolution": { "x": 960, "y": 960 }, "denoising": false }
+  }
+}

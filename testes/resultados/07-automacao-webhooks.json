@@ -1,0 +1,23 @@
+[
+  {
+    "processado": true,
+    "evento": "order.created"
+  },
+  {
+    "processado": true,
+    "evento": "order.shipped"
+  },
+  {
+    "processado": true,
+    "evento": "cart.abandoned"
+  },
+  {
+    "processado": true,
+    "evento": "customer.created"
+  },
+  {
+    "processado": false,
+    "evento": "order.refunded",
+    "motivo": "Evento não reconhecido"
+  }
+]

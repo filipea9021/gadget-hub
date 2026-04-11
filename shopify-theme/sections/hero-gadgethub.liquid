@@ -1,0 +1,193 @@
+{% comment %}
+  ============================================================
+  Gadget Hub — Hero Section para Shopify
+  Banner principal da loja com gradiente dark + CTA
+
+  Como usar:
+  1. Copie para: themes/SEU-TEMA/sections/hero-gadgethub.liquid
+  2. No editor de temas → Home → "Add section" → "Hero Gadget Hub"
+  ============================================================
+{% endcomment %}
+
+<section class="gh-hero" id="gh-hero">
+  <div class="gh-hero-bg"></div>
+  <div class="gh-hero-content">
+    <div class="gh-hero-badge">{{ section.settings.badge_text }}</div>
+    <h1 class="gh-hero-title">{{ section.settings.title }}</h1>
+    <p class="gh-hero-subtitle">{{ section.settings.subtitle }}</p>
+    <div class="gh-hero-ctas">
+      <a href="{{ section.settings.cta_url }}" class="gh-hero-btn-primary">
+        {{ section.settings.cta_text }}
+      </a>
+      <a href="{{ section.settings.cta2_url }}" class="gh-hero-btn-secondary">
+        {{ section.settings.cta2_text }}
+      </a>
+    </div>
+    <div class="gh-hero-stats">
+      <div class="gh-stat">
+        <span class="gh-stat-num">{{ section.settings.stat1_num }}</span>
+        <span class="gh-stat-label">{{ section.settings.stat1_label }}</span>
+      </div>
+      <div class="gh-stat-divider"></div>
+      <div class="gh-stat">
+        <span class="gh-stat-num">{{ section.settings.stat2_num }}</span>
+        <span class="gh-stat-label">{{ section.settings.stat2_label }}</span>
+      </div>
+      <div class="gh-stat-divider"></div>
+      <div class="gh-stat">
+        <span class="gh-stat-num">{{ section.settings.stat3_num }}</span>
+        <span class="gh-stat-label">{{ section.settings.stat3_label }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gh-hero {
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2e 100%);
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .gh-hero-bg {
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 50%);
+    animation: ghPulse 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes ghPulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+  .gh-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #e0e0e0;
+  }
+  .gh-hero-badge {
+    display: inline-block;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .gh-hero-title {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    background: linear-gradient(90deg, #00d4ff, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+  .gh-hero-subtitle {
+    font-size: 17px;
+    color: #a0a0b0;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .gh-hero-ctas {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .gh-hero-btn-primary {
+    background: linear-gradient(135deg, #7c3aed, #00d4ff);
+    color: white;
+    padding: 15px 36px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: inline-block;
+  }
+  .gh-hero-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(124,58,237,0.35);
+    color: white;
+    text-decoration: none;
+  }
+  .gh-hero-btn-secondary {
+    background: transparent;
+    color: #e0e0e0;
+    padding: 15px 36px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: 1px solid #2a2a3e;
+    text-decoration: none;
+    transition: border-color 0.3s, color 0.3s;
+    display: inline-block;
+  }
+  .gh-hero-btn-secondary:hover {
+    border-color: #7c3aed;
+    color: #a78bfa;
+    text-decoration: none;
+  }
+  .gh-hero-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  .gh-stat { text-align: center; }
+  .gh-stat-num {
+    display: block;
+    font-size: 26px;
+    font-weight: bold;
+    color: #00d4ff;
+  }
+  .gh-stat-label {
+    font-size: 12px;
+    color: #606070;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .gh-stat-divider {
+    width: 1px;
+    height: 40px;
+    background: #1a1a2e;
+  }
+  @media (max-width: 600px) {
+    .gh-hero { padding: 60px 20px; }
+    .gh-stat-divider { display: none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero — Gadget Hub",
+  "settings": [
+    { "type": "text", "id": "badge_text",    "label": "Badge",       "default": "🚀 Gadgets com Score Verificado" },
+    { "type": "text", "id": "title",         "label": "Título",      "default": "Os Melhores Gadgets do Mercado" },
+    { "type": "text", "id": "subtitle",      "label": "Subtítulo",   "default": "Selecionados com IA. Avaliados pela comunidade. Entregues com velocidade." },
+    { "type": "url",  "id": "cta_url",       "label": "URL CTA 1",   "default": "/collections/all" },
+    { "type": "text", "id": "cta_text",      "label": "Texto CTA 1", "default": "Ver Catálogo" },
+    { "type": "url",  "id": "cta2_url",      "label": "URL CTA 2",   "default": "/pages/sobre" },
+    { "type": "text", "id": "cta2_text",     "label": "Texto CTA 2", "default": "Como Funciona" },
+    { "type": "text", "id": "stat1_num",     "label": "Stat 1 Nº",   "default": "12+" },
+    { "type": "text", "id": "stat1_label",   "label": "Stat 1 Label","default": "Gadgets Curados" },
+    { "type": "text", "id": "stat2_num",     "label": "Stat 2 Nº",   "default": "40%" },
+    { "type": "text", "id": "stat2_label",   "label": "Stat 2 Label","default": "Margem Mínima" },
+    { "type": "text", "id": "stat3_num",     "label": "Stat 3 Nº",   "default": "30d" },
+    { "type": "text", "id": "stat3_label",   "label": "Stat 3 Label","default": "Garantia" }
+  ],
+  "presets": [
+    { "name": "Hero — Gadget Hub", "category": "Hero" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,28 @@
+{
+  "name": "landing-page-template",
+  "description": "Template base para landing pages SaaS",
+  "project_type": "landing_page",
+  "default_sections": [
+    "Hero com headline, sub-headline e CTA",
+    "Seção de features/benefícios (3-6 items com ícones)",
+    "Social proof / Depoimentos",
+    "Pricing (se aplicável)",
+    "FAQ",
+    "CTA final",
+    "Footer com links e copyright"
+  ],
+  "tech_stack": ["next.js", "tailwind", "typescript"],
+  "seo_requirements": {
+    "meta_title": true,
+    "meta_description": true,
+    "open_graph": true,
+    "semantic_html": true,
+    "alt_texts": true,
+    "structured_data": true
+  },
+  "performance_targets": {
+    "lighthouse_score": 90,
+    "first_contentful_paint": "< 1.5s",
+    "cumulative_layout_shift": "< 0.1"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "nicho": "Smartwatches",
+  "objetivo": "Gerar conteúdo de vídeo para TikTok, Reels e Shorts usando renders Blender",
+  "videos": [
+    {
+      "id": "vid-001",
+      "titulo": "SmartWatch Pro X7 — Hero Reveal",
+      "plataforma": "TikTok",
+      "duracao": "15s",
+      "paleta": "tech_blue",
+      "camera": "push_in",
+      "efeitos": [
+        "energy_core",
+        "particles_sparks",
+        "dual_tone_lighting"
+      ],
+      "roteiro": [
+        {
+          "frame": "0-2s",
+          "descricao": "Ecrã negro. Partículas azuis aparecem."
+        },
+        {
+          "frame": "2-5s",
+          "descricao": "Smartwatch emerge com glow azul. Energy core pulsa."
+        },
+        {
+          "frame": "5-10s",
+          "descricao": "Rotação 360° com dual-tone lighting. Features aparecem."
+        },
+        {
+          "frame": "10-13s",
+          "descricao": "Zoom no ecrã AMOLED com heart rate."
+        },
+        {
+          "frame": "13-15s",
+          "descricao": "Logo + preço + CTA \"Link na bio\"."
+        }
+      ],
+      "textoOverlay": "⌚ SmartWatch Pro X7 | 39.99€ | GPS + AMOLED",
+      "musica": "Trending beat energético",
+      "hashtags": "#smartwatch #tech #gadgets #portugal #fitness"
+    },
+    {
+      "id": "vid-002",
+      "titulo": "SmartWatch — Exploded View",
+      "plataforma": "Instagram Reels",
+      "duracao": "30s",
+      "paleta": "cyber_purple",
+      "camera": "orbit_zoom",
+      "efeitos": [
+        "procedural_disassembly",
+        "internal_layers",
+        "particles_fragments"
+      ],
+      "roteiro": [
+        {
+          "frame": "0-3s",
+          "descricao": "Smartwatch inteiro no centro, fundo escuro."
+        },
+        {
+          "frame": "3-10s",
+          "descricao": "Peças separam-se — ecrã, bateria, sensor, chassis."
+        },
+        {
+          "frame": "10-18s",
+          "descricao": "Cada peça roda com label: \"AMOLED\", \"7 dias bateria\", \"GPS\"."
+        },
+        {
+          "frame": "18-25s",
+          "descricao": "Peças voltam a juntar-se (reassemble)."
+        },
+        {
+          "frame": "25-28s",
+          "descricao": "Smartwatch completo no pulso (lifestyle mockup)."
+        },
+        {
+          "frame": "28-30s",
+          "descricao": "Logo + preço + CTA."
+        }
+      ],
+      "textoOverlay": "O que há dentro do SmartWatch Pro X7?",
+      "musica": "Cinematic tech beat",
+      "hashtags": "#smartwatch #teardown #tech #inside #gadgets #portugal"
+    },
+    {
+      "id": "vid-003",
+      "titulo": "SmartWatch — Night Run",
+      "plataforma": "YouTube Shorts",
+      "duracao": "45s",
+      "paleta": "energy_orange",
+      "camera": "reveal",
+      "efeitos": [
+        "energy_core",
+        "dual_tone_lighting",
+        "particles_dust"
+      ],
+      "roteiro": [
+        {
+          "frame": "0-5s",
+          "descricao": "Cenário urbano noturno (dark). Luzes laranjas."
+        },
+        {
+          "frame": "5-12s",
+          "descricao": "Smartwatch aparece — ecrã acende com GPS tracking."
+        },
+        {
+          "frame": "12-20s",
+          "descricao": "Simulação de corrida: BPM sobe, distância conta."
+        },
+        {
+          "frame": "20-30s",
+          "descricao": "Features: GPS, cardíaco, IP68, bluetooth."
+        },
+        {
+          "frame": "30-40s",
+          "descricao": "Comparação preço: \"Ali: 42€ | Amazon: 49€ | Nós: 39.99€\""
+        },
+        {
+          "frame": "40-45s",
+          "descricao": "CTA final com link."
+        }
+      ],
+      "textoOverlay": "O companheiro perfeito para a tua corrida 🏃",
+      "musica": "Running motivation beat",
+      "hashtags": "#smartwatch #corrida #fitness #GPS #noite #portugal"
+    }
+  ],
+  "batchConfig": {
+    "totalVideos": 3,
+    "renderEngine": "CYCLES",
+    "qualidade": "high",
+    "resolucao": "1080x1920",
+    "tempoEstimado": "15-25 min por vídeo",
+    "outputFormato": "mp4 H.264"
+  }
+}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartWatch Pro X7 — Hero Reveal (Preview)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Segoe UI', Arial, sans-serif; overflow: hidden; }
+
+  .phone-frame {
+    width: 375px; height: 667px; background: #0a0a0a; border-radius: 40px; border: 3px solid #222;
+    position: relative; overflow: hidden; box-shadow: 0 0 60px rgba(0,168,255,0.15);
+  }
+
+  .scene { width: 100%; height: 100%; position: relative; }
+
+  /* Particles */
+  .particles { position: absolute; width: 100%; height: 100%; z-index: 1; }
+  .particle {
+    position: absolute; width: 4px; height: 4px; border-radius: 50%;
+    background: #00A8FF; opacity: 0;
+    animation: particleFloat 3s ease-in-out infinite;
+  }
+  @keyframes particleFloat {
+    0% { opacity: 0; transform: translateY(40px) scale(0); }
+    30% { opacity: 0.8; }
+    70% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-120px) scale(1.5); }
+  }
+
+  /* Energy core */
+  .energy-core {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 200px; height: 200px; border-radius: 50%; z-index: 2;
+    background: radial-gradient(circle, rgba(0,168,255,0.3) 0%, rgba(0,71,171,0.1) 40%, transparent 70%);
+    animation: corePulse 2s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes corePulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.4; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+  }
+
+  /* Watch */
+  .watch-container {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 10; opacity: 0;
+  }
+  .watch {
+    width: 160px; height: 190px; position: relative;
+    animation: watchRotate 8s linear infinite;
+  }
+  @keyframes watchRotate {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+  .watch-body {
+    width: 140px; height: 170px; margin: 10px auto;
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border-radius: 30px; border: 3px solid #333;
+    position: relative; overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,168,255,0.3), inset 0 0 20px rgba(0,168,255,0.05);
+  }
+  .watch-screen {
+    width: 110px; height: 110px; margin: 18px auto 0;
+    background: linear-gradient(135deg, #0a1628, #0d2137);
+    border-radius: 20px; position: relative; overflow: hidden;
+  }
+  .watch-screen::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(0,168,255,0.1), transparent);
+    border-radius: 20px;
+  }
+  .screen-content {
+    padding: 12px; color: #fff; text-align: center;
+    position: relative; z-index: 1;
+  }
+  .bpm { font-size: 28px; font-weight: 700; color: #00D4FF; margin-top: 5px; }
+  .bpm-label { font-size: 10px; color: #4DC9FF; letter-spacing: 2px; }
+  .bpm-icon { color: #ff4757; font-size: 14px; animation: heartbeat 1s ease-in-out infinite; }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+  .watch-band-top, .watch-band-bottom {
+    width: 80px; height: 15px; margin: 0 auto;
+    background: linear-gradient(90deg, #1a1a2e, #2d2d44, #1a1a2e);
+    border-radius: 4px;
+  }
+  .watch-band-top { margin-bottom: -2px; }
+  .watch-band-bottom { margin-top: -2px; }
+  .watch-button {
+    position: absolute; right: -6px; top: 45%; width: 6px; height: 20px;
+    background: linear-gradient(180deg, #444, #222); border-radius: 0 3px 3px 0;
+  }
+
+  /* Dual tone lighting */
+  .light-left {
+    position: absolute; left: -50px; top: 30%; width: 200px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,168,255,0.15), transparent);
+    z-index: 0; opacity: 0;
+    animation: lightPulseL 4s ease-in-out infinite;
+  }
+  .light-right {
+    position: absolute; right: -50px; top: 20%; width: 200px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,71,171,0.2), transparent);
+    z-index: 0; opacity: 0;
+    animation: lightPulseR 4s ease-in-out 1s infinite;
+  }
+  @keyframes lightPulseL { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+  @keyframes lightPulseR { 0%,100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+
+  /* Features */
+  .features {
+    position: absolute; bottom: 160px; width: 100%; z-index: 20;
+    display: flex; justify-content: center; gap: 10px; opacity: 0;
+  }
+  .feature-tag {
+    background: rgba(0,168,255,0.15); border: 1px solid rgba(0,168,255,0.3);
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; color: #4DC9FF;
+    backdrop-filter: blur(5px);
+  }
+
+  /* Text overlay */
+  .overlay-text {
+    position: absolute; bottom: 80px; width: 100%; text-align: center;
+    z-index: 20; opacity: 0;
+  }
+  .overlay-text h2 {
+    font-size: 18px; color: #fff; font-weight: 700;
+    text-shadow: 0 0 20px rgba(0,168,255,0.5);
+  }
+  .overlay-text .price {
+    font-size: 28px; color: #00D4FF; font-weight: 800; margin-top: 4px;
+  }
+
+  /* CTA */
+  .cta {
+    position: absolute; bottom: 30px; width: 100%; text-align: center;
+    z-index: 20; opacity: 0;
+  }
+  .cta-btn {
+    display: inline-block; padding: 10px 30px; background: linear-gradient(135deg, #00A8FF, #0047AB);
+    color: #fff; font-size: 14px; font-weight: 700; border-radius: 25px;
+    letter-spacing: 1px; box-shadow: 0 0 20px rgba(0,168,255,0.4);
+    animation: ctaPulse 2s ease-in-out infinite;
+  }
+  @keyframes ctaPulse {
+    0%,100% { box-shadow: 0 0 20px rgba(0,168,255,0.4); }
+    50% { box-shadow: 0 0 40px rgba(0,168,255,0.7); }
+  }
+
+  /* Timeline bar */
+  .timeline {
+    position: absolute; bottom: 8px; left: 20px; right: 20px; height: 3px;
+    background: rgba(255,255,255,0.1); border-radius: 2px; z-index: 30;
+  }
+  .timeline-progress {
+    height: 100%; background: #00A8FF; border-radius: 2px; width: 0%;
+    animation: timelineRun 15s linear infinite;
+  }
+  @keyframes timelineRun { 0% { width: 0%; } 100% { width: 100%; } }
+
+  /* Phase labels */
+  .phase-label {
+    position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.4); z-index: 30;
+    letter-spacing: 3px; text-transform: uppercase;
+  }
+
+  /* Hashtags */
+  .hashtags {
+    position: absolute; bottom: 12px; width: 100%; text-align: center;
+    font-size: 9px; color: rgba(0,168,255,0.5); z-index: 20; opacity: 0;
+    padding: 0 15px;
+  }
+
+  /* ANIMATION SEQUENCE — 15s total */
+  .scene { animation: sceneLoop 15s ease-in-out infinite; }
+
+  /* Phase 1: 0-2s — particles appear */
+  .particles { animation: fadeIn 1s ease-out 0.5s forwards; opacity: 0; }
+  .energy-core { animation: corePulse 2s ease-in-out infinite, fadeIn 1s ease-out 1s forwards; }
+
+  /* Phase 2: 2-5s — watch emerges */
+  .watch-container { animation: watchEmerge 2s ease-out 2s forwards; }
+  .light-left { animation: lightPulseL 4s ease-in-out infinite, fadeIn 0.5s ease-out 2s forwards; }
+  .light-right { animation: lightPulseR 4s ease-in-out 1s infinite, fadeIn 0.5s ease-out 2.5s forwards; }
+
+  /* Phase 3: 5-10s — features appear */
+  .features { animation: fadeSlideUp 1s ease-out 5s forwards; }
+
+  /* Phase 4: 10-13s — text + price */
+  .overlay-text { animation: fadeSlideUp 1s ease-out 10s forwards; }
+
+  /* Phase 5: 13-15s — CTA */
+  .cta { animation: fadeSlideUp 0.8s ease-out 13s forwards; }
+  .hashtags { animation: fadeIn 0.8s ease-out 13.5s forwards; }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes watchEmerge {
+    0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes fadeSlideUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Info panel */
+  .info-panel {
+    position: fixed; top: 20px; right: 20px; width: 280px;
+    background: rgba(10,10,20,0.9); border: 1px solid #222; border-radius: 12px;
+    padding: 20px; color: #ccc; font-size: 12px; z-index: 100;
+  }
+  .info-panel h3 { color: #00A8FF; font-size: 14px; margin-bottom: 10px; }
+  .info-panel .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #1a1a2a; }
+  .info-panel .label { color: #666; }
+  .info-panel .value { color: #4DC9FF; font-weight: 600; }
+  .info-panel .section { margin-top: 12px; padding-top: 8px; border-top: 1px solid #222; }
+  .info-panel .section h4 { color: #fff; font-size: 11px; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .timeline-label {
+    display: flex; justify-content: space-between; margin-top: 12px;
+    font-size: 9px; color: #444;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="scene">
+    <div class="phase-label">SmartWatch Pro X7 — Hero Reveal</div>
+
+    <!-- Particles -->
+    <div class="particles">
+      <div class="particle" style="left:20%;top:70%;animation-delay:0s;width:3px;height:3px;"></div>
+      <div class="particle" style="left:35%;top:80%;animation-delay:0.5s;"></div>
+      <div class="particle" style="left:55%;top:75%;animation-delay:1s;width:5px;height:5px;"></div>
+      <div class="particle" style="left:70%;top:85%;animation-delay:1.5s;"></div>
+      <div class="particle" style="left:45%;top:65%;animation-delay:0.8s;width:3px;height:3px;"></div>
+      <div class="particle" style="left:25%;top:60%;animation-delay:2s;width:6px;height:6px;"></div>
+      <div class="particle" style="left:80%;top:70%;animation-delay:0.3s;"></div>
+      <div class="particle" style="left:15%;top:50%;animation-delay:1.2s;width:3px;height:3px;"></div>
+      <div class="particle" style="left:60%;top:55%;animation-delay:2.5s;"></div>
+      <div class="particle" style="left:40%;top:90%;animation-delay:0.7s;width:5px;height:5px;"></div>
+      <div class="particle" style="left:50%;top:45%;animation-delay:1.8s;"></div>
+      <div class="particle" style="left:30%;top:40%;animation-delay:2.2s;width:4px;height:4px;"></div>
+      <div class="particle" style="left:65%;top:60%;animation-delay:0.4s;"></div>
+      <div class="particle" style="left:75%;top:50%;animation-delay:1.6s;width:3px;height:3px;"></div>
+      <div class="particle" style="left:10%;top:80%;animation-delay:2.8s;"></div>
+    </div>
+
+    <!-- Energy core glow -->
+    <div class="energy-core"></div>
+
+    <!-- Dual tone lighting -->
+    <div class="light-left"></div>
+    <div class="light-right"></div>
+
+    <!-- Watch -->
+    <div class="watch-container">
+      <div class="watch">
+        <div class="watch-band-top"></div>
+        <div class="watch-body">
+          <div class="watch-button"></div>
+          <div class="watch-screen">
+            <div class="screen-content">
+              <div class="bpm-label">HEART RATE</div>
+              <div class="bpm"><span class="bpm-icon">♥</span> 72</div>
+              <div style="font-size:9px;color:#4DC9FF;margin-top:8px;">GPS • IP68 • BT 5.3</div>
+              <div style="font-size:8px;color:#333;margin-top:4px;">━━━━━━━━━━</div>
+              <div style="font-size:8px;color:#4DC9FF;margin-top:2px;">⚡ 86%</div>
+            </div>
+          </div>
+        </div>
+        <div class="watch-band-bottom"></div>
+      </div>
+    </div>
+
+    <!-- Feature tags -->
+    <div class="features">
+      <span class="feature-tag">AMOLED</span>
+      <span class="feature-tag">GPS</span>
+      <span class="feature-tag">IP68</span>
+      <span class="feature-tag">7 dias</span>
+    </div>
+
+    <!-- Text overlay -->
+    <div class="overlay-text">
+      <h2>⌚ SmartWatch Pro X7</h2>
+      <div class="price">39.99€</div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <span class="cta-btn">COMPRAR AGORA</span>
+    </div>
+
+    <!-- Hashtags -->
+    <div class="hashtags">#smartwatch #tech #gadgets #portugal #fitness #gadgethub</div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="timeline-progress"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Info Panel -->
+<div class="info-panel">
+  <h3>🎬 vid-001 — Hero Reveal</h3>
+  <div class="row"><span class="label">Plataforma</span><span class="value">TikTok</span></div>
+  <div class="row"><span class="label">Duração</span><span class="value">15 segundos</span></div>
+  <div class="row"><span class="label">Paleta</span><span class="value">tech_blue</span></div>
+  <div class="row"><span class="label">Câmara</span><span class="value">push_in</span></div>
+  <div class="row"><span class="label">Resolução</span><span class="value">1080×1920</span></div>
+  <div class="row"><span class="label">Engine</span><span class="value">Blender CYCLES</span></div>
+
+  <div class="section">
+    <h4>Efeitos ativos</h4>
+    <div class="row"><span class="label">Energy Core</span><span class="value">✅ ON</span></div>
+    <div class="row"><span class="label">Partículas</span><span class="value">✅ Sparks</span></div>
+    <div class="row"><span class="label">Dual Tone</span><span class="value">✅ ON</span></div>
+  </div>
+
+  <div class="section">
+    <h4>Roteiro</h4>
+    <div style="color:#555;font-size:10px;line-height:1.6;">
+      [0-2s] Ecrã negro + partículas<br>
+      [2-5s] Watch emerge + glow<br>
+      [5-10s] Rotação 360° + features<br>
+      [10-13s] Preço + texto<br>
+      [13-15s] CTA + hashtags
+    </div>
+  </div>
+
+  <div class="timeline-label">
+    <span>0s</span><span>5s</span><span>10s</span><span>15s</span>
+  </div>
+</div>
+
+</body>
+</html>

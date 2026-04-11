@@ -1,0 +1,27 @@
+{
+  "produto": "SmartWatch Pro X7 — Fitness Tracker",
+  "custoCJ": 12.5,
+  "precoAtual": 39.99,
+  "precoCompare": 59.99,
+  "margemAtual": "68.7%",
+  "concorrentes": [
+    {
+      "nome": "AliExpress",
+      "preco": 42.99
+    },
+    {
+      "nome": "Amazon.es",
+      "preco": 49.99
+    },
+    {
+      "nome": "PCDiga",
+      "preco": 59.99
+    }
+  ],
+  "recomendacao": {
+    "precoRecomendado": 39.99,
+    "estrategia": "competitivo",
+    "motivo": "Preço abaixo de Amazon.es mantém margem de 68% — posição competitiva forte"
+  },
+  "margemLiquida": "61.2%"
+}

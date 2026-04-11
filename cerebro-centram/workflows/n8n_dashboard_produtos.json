@@ -1,0 +1,122 @@
+{
+  "name": "📦 Dashboard Produtos — Pipeline Status",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-produtos",
+      "name": "Ver Produtos",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/rest/v1/products",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "*"
+            },
+            {
+              "name": "order",
+              "value": "created_at.desc"
+            },
+            {
+              "name": "limit",
+              "value": "50"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-produtos",
+      "name": "Buscar Produtos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// PAINEL GERAL — Resumo de todos os produtos\n// ═══════════════════════════════════════\n\nconst items = $input.all();\nconst total = items.length;\n\nif (total === 0) {\n  return [{ json: { '📦 Produtos': 'Nenhum produto no pipeline ainda. Execute o Pipeline Completo primeiro!' } }];\n}\n\n// Status counts\nconst statusCounts = {};\nitems.forEach(i => {\n  const s = i.json.pipeline_status || 'desconhecido';\n  statusCounts[s] = (statusCounts[s] || 0) + 1;\n});\n\n// Categorias\nconst categorias = {};\nitems.forEach(i => {\n  const c = i.json.category || 'geral';\n  categorias[c] = (categorias[c] || 0) + 1;\n});\n\n// Médias\nconst avgPrice = items.reduce((acc, i) => acc + (parseFloat(i.json.price) || 0), 0) / total;\nconst avgMargin = items.reduce((acc, i) => acc + (parseFloat(i.json.margin) || 0), 0) / total;\nconst avgTrend = items.reduce((acc, i) => acc + (parseInt(i.json.trend_score) || 0), 0) / total;\nconst avgViability = items.reduce((acc, i) => acc + (parseInt(i.json.viability_score) || 0), 0) / total;\n\n// Top 3 produtos por viabilidade\nconst sorted = [...items].sort((a, b) => (b.json.viability_score || 0) - (a.json.viability_score || 0));\nconst top3 = sorted.slice(0, 3).map((p, i) => \n  `${i+1}. ${p.json.name} (${p.json.viability_score || 0}/100)`\n);\n\nconst statusEmoji = {\n  'novo': '🆕',\n  'imagem_processada': '🖼️',\n  'descricao_gerada': '📝',\n  'pronto': '✅',\n  'publicado': '🚀',\n  'arquivado': '📦'\n};\n\nreturn [{\n  json: {\n    '📊 DASHBOARD DE PRODUTOS': '══════════════════════',\n    '🔢 Total': `${total} produtos`,\n    '': '',\n    '📈 PIPELINE STATUS': Object.entries(statusCounts)\n      .map(([k,v]) => `${statusEmoji[k] || '❓'} ${k}: ${v}`)\n      .join(' · '),\n    ' ': '',\n    '💰 NÚMEROS': `Preço médio: €${avgPrice.toFixed(2)} | Margem média: ${avgMargin.toFixed(1)}%`,\n    '🎯 SCORES': `Tendência: ${avgTrend.toFixed(0)}/100 | Viabilidade: ${avgViability.toFixed(0)}/100`,\n    '📂 CATEGORIAS': Object.entries(categorias).map(([k,v]) => `${k} (${v})`).join(' · '),\n    '  ': '',\n    '🏆 TOP 3 PRODUTOS': top3.join(' | '),\n    '   ': '',\n    '⏰ Atualizado': new Date().toLocaleString('pt-PT'),\n  }\n}];"
+      },
+      "id": "code-dashboard-prods",
+      "name": "📊 Painel Geral",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// TABELA DETALHADA DE PRODUTOS\n// ═══════════════════════════════════════\n\nconst items = $input.all();\n\nconst statusEmoji = {\n  'novo': '🆕',\n  'imagem_processada': '🖼️',\n  'descricao_gerada': '📝',\n  'pronto': '✅',\n  'publicado': '🚀',\n  'arquivado': '📦'\n};\n\nreturn items.map(item => {\n  const p = item.json;\n  const data = new Date(p.created_at);\n  const tags = p.tags ? (typeof p.tags === 'string' ? JSON.parse(p.tags) : p.tags) : [];\n  \n  return {\n    json: {\n      '📦 Produto': p.name || 'Sem nome',\n      '💰 Preço': `€${p.price || 0}`,\n      '📊 Margem': `${p.margin || 0}%`,\n      '🎯 Viabilidade': `${p.viability_score || 0}/100`,\n      '📈 Tendência': `${p.trend_score || 0}/100`,\n      '🏪 Fornecedor': p.supplier || '-',\n      '📂 Categoria': p.category || '-',\n      '🏷️ Tags': tags.slice(0, 3).join(', ') || '-',\n      '⚡ Status': `${statusEmoji[p.pipeline_status] || '❓'} ${p.pipeline_status || 'desconhecido'}`,\n      '📅 Data': data.toLocaleDateString('pt-PT'),\n    }\n  };\n});"
+      },
+      "id": "code-tabela-prods",
+      "name": "📋 Tabela Produtos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 500]
+    }
+  ],
+  "connections": {
+    "Ver Produtos": {
+      "main": [
+        [
+          {
+            "node": "Buscar Produtos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Produtos": {
+      "main": [
+        [
+          {
+            "node": "📊 Painel Geral",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📋 Tabela Produtos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Data Core"
+    },
+    {
+      "name": "Produtos"
+    },
+    {
+      "name": "Dashboard"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "mode": "semi",
+  "shopify": {
+    "domain": "gadget-hub-72955.myshopify.com",
+    "accessToken": "shpat_708C36892295CE4791FAD26A",
+    "apiVersion": "2024-01",
+    "isConfigured": true
+  },
+  "cj": {
+    "apiKey": "CJ5298786@api@7ca4cd0efbda4ba491c0496638cc3d6b",
+    "email": "filipeazevedo791@gmail.com",
+    "apiSecret": "",
+    "baseUrl": "https://developers.cjdropshipping.com/api2.0/v1",
+    "isConfigured": true
+  },
+  "blender": {
+    "serverUrl": "http://localhost:8585",
+    "apiKey": "",
+    "port": 8585,
+    "maxConcurrentJobs": 2
+  },
+  "ai": {
+    "provider": "anthropic",
+    "anthropicKey": "",
+    "openaiKey": "",
+    "ollamaUrl": "http://localhost:11434",
+    "isConfigured": false
+  },
+  "notifications": {
+    "webhookUrl": "",
+    "email": "admin@gadget-hub.com"
+  },
+  "marketing": {
+    "metaToken": "",
+    "tiktokToken": ""
+  },
+  "server": {
+    "port": 3001
+  },
+  "logLevel": "info",
+  "intervals": {
+    "shopify": 30,
+    "cj": 60,
+    "precos": 120,
+    "marketing": 180,
+    "estoque": 30,
+    "blender": 45,
+    "automacao": 15
+  },
+  "limits": {
+    "margemMinima": 40,
+    "estoqueMinimo": 5,
+    "roasMinimo": 2
+  },
+  "paths": {
+    "root": "/sessions/charming-great-gates/mnt/gadget-hub",
+    "data": "/sessions/charming-great-gates/mnt/gadget-hub/data",
+    "database": "/sessions/charming-great-gates/mnt/gadget-hub/data/gadgethub.db",
+    "relatorios": "/sessions/charming-great-gates/mnt/gadget-hub/data/relatorios",
+    "blenderOutput": "/sessions/charming-great-gates/mnt/gadget-hub/src/agentes/blender/output"
+  },
+  "isDemo": false,
+  "envFile": "/sessions/charming-great-gates/mnt/gadget-hub/config/.env"
+}

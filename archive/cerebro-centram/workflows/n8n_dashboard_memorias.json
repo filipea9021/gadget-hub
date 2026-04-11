@@ -1,0 +1,119 @@
+{
+  "name": "📋 Data Core — Dashboard Memórias",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "Abrir Dashboard",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/rest/v1/action_logs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "*"
+            },
+            {
+              "name": "order",
+              "value": "created_at.desc"
+            },
+            {
+              "name": "limit",
+              "value": "50"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-memorias",
+      "name": "Buscar Memórias",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Formatar dados para visualização\nconst items = $input.all();\nconst memorias = items.map(item => {\n  const d = item.json;\n  const data = new Date(d.created_at);\n  const dataFormatada = data.toLocaleDateString('pt-PT') + ' ' + data.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});\n  \n  return {\n    json: {\n      '📝 Título': d.title || 'Sem título',\n      '📂 Categoria': d.category || 'geral',\n      '📄 Descrição': (d.description || '').substring(0, 100),\n      '🔧 Skill Origem': d.origin_skill || 'desconhecido',\n      '📅 Data': dataFormatada,\n      '🆔 ID': d.id ? d.id.substring(0, 8) + '...' : '',\n    }\n  };\n});\n\nreturn memorias;"
+      },
+      "id": "code-format-memorias",
+      "name": "Formatar Dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Estatísticas gerais\nconst items = $('Buscar Memórias').all();\nconst total = items.length;\n\n// Contar por categoria\nconst categorias = {};\nitems.forEach(item => {\n  const cat = item.json.category || 'sem_categoria';\n  categorias[cat] = (categorias[cat] || 0) + 1;\n});\n\n// Contar por skill\nconst skills = {};\nitems.forEach(item => {\n  const skill = item.json.origin_skill || 'desconhecido';\n  skills[skill] = (skills[skill] || 0) + 1;\n});\n\n// Última memória\nconst ultima = items[0]?.json;\nconst ultimaData = ultima ? new Date(ultima.created_at).toLocaleDateString('pt-PT') : 'N/A';\n\nreturn [{\n  json: {\n    '📊 DASHBOARD DE MEMÓRIAS': '═══════════════════',\n    '🔢 Total de Registos': total,\n    '📂 Categorias': Object.entries(categorias).map(([k,v]) => `${k}: ${v}`).join(' | '),\n    '🔧 Skills Ativas': Object.entries(skills).map(([k,v]) => `${k}: ${v}`).join(' | '),\n    '📅 Último Registo': ultimaData,\n    '📝 Último Título': ultima?.title || 'N/A',\n  }\n}];"
+      },
+      "id": "code-stats",
+      "name": "Estatísticas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 500]
+    }
+  ],
+  "connections": {
+    "Abrir Dashboard": {
+      "main": [
+        [
+          {
+            "node": "Buscar Memórias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Memórias": {
+      "main": [
+        [
+          {
+            "node": "Formatar Dados",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Estatísticas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Data Core"
+    },
+    {
+      "name": "Dashboard"
+    }
+  ]
+}

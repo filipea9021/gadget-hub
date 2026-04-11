@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadget Hub - Review do Projeto</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e0e0e0; line-height: 1.6; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+  h1 { font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #00d4ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+  .subtitle { color: #888; font-size: 1rem; margin-bottom: 40px; }
+
+  .progress-bar { background: #1a1a2e; border-radius: 12px; padding: 24px; margin-bottom: 32px; border: 1px solid #2a2a4a; }
+  .progress-bar h2 { font-size: 1rem; color: #aaa; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .bar-track { background: #2a2a4a; border-radius: 8px; height: 16px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, #00d4ff, #7b2ff7); transition: width 1s; }
+  .bar-label { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem; color: #888; }
+
+  .section { background: #12121e; border-radius: 16px; padding: 28px; margin-bottom: 24px; border: 1px solid #1e1e3a; }
+  .section h2 { font-size: 1.3rem; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 10px; }
+  .section h2 .icon { font-size: 1.4rem; }
+
+  .item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a30; }
+  .item:last-child { border-bottom: none; }
+  .status { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; margin-top: 2px; }
+  .status.done { background: #0d3320; color: #34d399; }
+  .status.pending { background: #3a2800; color: #fbbf24; }
+  .status.critical { background: #3a0d0d; color: #f87171; }
+  .item-content { flex: 1; }
+  .item-title { font-weight: 600; color: #e0e0e0; margin-bottom: 2px; }
+  .item-desc { font-size: 0.85rem; color: #888; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: #12121e; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #1e1e3a; }
+  .stat-value { font-size: 2rem; font-weight: 700; color: #00d4ff; }
+  .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-right: 6px; }
+  .tag.green { background: #0d3320; color: #34d399; }
+  .tag.yellow { background: #3a2800; color: #fbbf24; }
+  .tag.red { background: #3a0d0d; color: #f87171; }
+  .tag.blue { background: #0d1f3a; color: #60a5fa; }
+
+  .priority-section { margin-top: 16px; padding: 16px; background: #1a1025; border-radius: 12px; border: 1px solid #2d1f4e; }
+  .priority-section h3 { color: #c084fc; font-size: 1rem; margin-bottom: 12px; }
+  .priority-item { padding: 8px 0; display: flex; align-items: center; gap: 8px; }
+  .priority-num { width: 24px; height: 24px; border-radius: 50%; background: #7b2ff7; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+
+  .config-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .config-table td { padding: 8px 12px; border-bottom: 1px solid #1a1a30; font-size: 0.9rem; }
+  .config-table td:first-child { color: #888; width: 40%; }
+  .config-table td:last-child { color: #e0e0e0; font-weight: 500; }
+
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Gadget Hub - Review do Projeto</h1>
+  <p class="subtitle">Estado atual da loja dropshipping &bull; Atualizado em 6 de abril de 2026</p>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <h2>Progresso Geral para Lançamento</h2>
+    <div class="bar-track"><div class="bar-fill" style="width: 65%"></div></div>
+    <div class="bar-label"><span>0%</span><span style="color:#00d4ff;font-weight:600;">~65% concluído</span><span>100%</span></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">69</div>
+      <div class="stat-label">Produtos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">7</div>
+      <div class="stat-label">Coleções</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">1</div>
+      <div class="stat-label">Pagamento Ativo</div>
+    </div>
+  </div>
+
+  <!-- O QUE JÁ FOI FEITO -->
+  <div class="section">
+    <h2><span class="icon">&#10003;</span> O Que Já Foi Feito</h2>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">Loja Shopify criada e configurada</div>
+        <div class="item-desc">gadget-hub-72955.myshopify.com &bull; Tema Horizon (dark mode) ativo</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">69 produtos importados do CJ Dropshipping</div>
+        <div class="item-desc">Produtos de tecnologia: áudio, wearables, gaming, casa inteligente, acessórios de telemóvel, etc.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">Coleções organizadas por categoria</div>
+        <div class="item-desc">Áudio, Wearables, Gaming, Casa Inteligente, Acessórios, Ofertas, Novidades</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">Imagens de produtos carregadas</div>
+        <div class="item-desc">Imagens genéricas de categoria do CJ &bull; Funcionais mas podem ser melhoradas</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">Taxas de envio configuradas</div>
+        <div class="item-desc">
+          <table class="config-table">
+            <tr><td>Portugal (doméstico)</td><td>Grátis &ge;€45 &bull; €7.99 abaixo de €45</td></tr>
+            <tr><td>Internacional (27 países)</td><td>€16.00 taxa fixa</td></tr>
+            <tr><td>Alinhamento com CJ</td><td>Custo CJ ~€6.60 &rarr; cobrado €7.99 (+€1.39 margem)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">CJ Dropshipping ativado como fulfillment</div>
+        <div class="item-desc">Pedidos encaminhados automaticamente para CJ processar e enviar</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">PayPal configurado como método de pagamento</div>
+        <div class="item-desc">Ativo e funcional &bull; Shopify Payments em modo de teste</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status done">&#10003;</div>
+      <div class="item-content">
+        <div class="item-title">Planeamento completo no Notion</div>
+        <div class="item-desc">10 partes documentadas: business overview, análise de mercado, roadmap MVP, modelo de receita, etc.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- O QUE FALTA -->
+  <div class="section">
+    <h2><span class="icon">&#9888;</span> O Que Falta para Lançar</h2>
+
+    <div class="item">
+      <div class="status critical">!</div>
+      <div class="item-content">
+        <div class="item-title">Remover proteção por password da loja <span class="tag red">CRÍTICO</span></div>
+        <div class="item-desc">A loja está protegida por password — ninguém consegue aceder. É preciso desbloquear para que clientes possam comprar.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status critical">!</div>
+      <div class="item-content">
+        <div class="item-title">Registar domínio personalizado <span class="tag red">CRÍTICO</span></div>
+        <div class="item-desc">Atualmente em gadget-hub-72955.myshopify.com — precisa de um domínio profissional (ex: gadget-hub.com ou gadgethub.pt)</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status critical">!</div>
+      <div class="item-content">
+        <div class="item-title">Páginas legais obrigatórias <span class="tag red">CRÍTICO</span></div>
+        <div class="item-desc">Política de Privacidade, Termos de Serviço, Política de Devolução, Política de Envio — obrigatórias por lei na UE</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Personalizar homepage <span class="tag yellow">IMPORTANTE</span></div>
+        <div class="item-desc">Banner principal ainda genérico ("Browse our latest products"). Precisa de branding, imagens hero, e destaque de categorias.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Atualizar menu de navegação <span class="tag yellow">IMPORTANTE</span></div>
+        <div class="item-desc">Adicionar todas as coleções ao menu principal para navegação fácil entre categorias.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Adicionar MB Way como pagamento <span class="tag yellow">IMPORTANTE</span></div>
+        <div class="item-desc">Essencial para clientes portugueses. O Filipe mencionou que vai adicionar depois.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Ativar Shopify Payments (conta completa) <span class="tag yellow">IMPORTANTE</span></div>
+        <div class="item-desc">Ainda em modo de teste. Precisa de completar os dados da conta para aceitar cartões de crédito/débito.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Melhorar imagens dos produtos <span class="tag blue">MELHORIA</span></div>
+        <div class="item-desc">Imagens atuais são genéricas por categoria. Idealmente usar imagens específicas de cada produto do CJ.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Página "Sobre Nós" e contacto <span class="tag blue">MELHORIA</span></div>
+        <div class="item-desc">Criar páginas que transmitam confiança: quem somos, como contactar, FAQ.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">Configurar email de contacto profissional <span class="tag blue">MELHORIA</span></div>
+        <div class="item-desc">Email com domínio próprio (ex: info@gadget-hub.com) em vez de gmail pessoal.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="status pending">&#9679;</div>
+      <div class="item-content">
+        <div class="item-title">SEO e descrições otimizadas <span class="tag blue">MELHORIA</span></div>
+        <div class="item-desc">Meta titles, meta descriptions, e descrições de produto otimizadas para motores de busca.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIGURAÇÃO ATUAL -->
+  <div class="section">
+    <h2><span class="icon">&#9881;</span> Configuração Atual da Loja</h2>
+    <table class="config-table">
+      <tr><td>Plataforma</td><td>Shopify</td></tr>
+      <tr><td>URL Admin</td><td>admin.shopify.com/store/gadget-hub-72955</td></tr>
+      <tr><td>URL Loja</td><td>gadget-hub-72955.myshopify.com</td></tr>
+      <tr><td>Tema</td><td>Horizon (Dark Mode)</td></tr>
+      <tr><td>Fornecedor</td><td>CJ Dropshipping (fulfillment ativo)</td></tr>
+      <tr><td>Envio CJ</td><td>CJPacket Super Pure Electricity (China &rarr; Portugal)</td></tr>
+      <tr><td>Pagamento</td><td>PayPal (ativo) &bull; Shopify Payments (teste)</td></tr>
+      <tr><td>Produtos</td><td>69 produtos em 7 coleções</td></tr>
+      <tr><td>Mercado principal</td><td>Portugal</td></tr>
+      <tr><td>Modelo</td><td>Dropshipping &rarr; Private Label (futuro)</td></tr>
+    </table>
+  </div>
+
+  <!-- PRÓXIMOS PASSOS PRIORITÁRIOS -->
+  <div class="section">
+    <h2><span class="icon">&#9889;</span> Ordem Recomendada para Lançamento</h2>
+    <div class="priority-section">
+      <h3>Fase 1 — Obrigatório antes de abrir</h3>
+      <div class="priority-item"><div class="priority-num">1</div><span>Criar páginas legais (Privacidade, Termos, Devoluções, Envio)</span></div>
+      <div class="priority-item"><div class="priority-num">2</div><span>Personalizar homepage com banner e categorias em destaque</span></div>
+      <div class="priority-item"><div class="priority-num">3</div><span>Atualizar menu de navegação com todas as coleções</span></div>
+      <div class="priority-item"><div class="priority-num">4</div><span>Registar domínio personalizado</span></div>
+      <div class="priority-item"><div class="priority-num">5</div><span>Remover password e abrir a loja ao público</span></div>
+    </div>
+    <div class="priority-section" style="margin-top: 12px; background: #0d1f2a; border-color: #1a3a4e;">
+      <h3 style="color: #60a5fa;">Fase 2 — Primeiras semanas após lançamento</h3>
+      <div class="priority-item"><div class="priority-num" style="background:#2563eb;">6</div><span>Completar Shopify Payments para aceitar cartões</span></div>
+      <div class="priority-item"><div class="priority-num" style="background:#2563eb;">7</div><span>Adicionar MB Way</span></div>
+      <div class="priority-item"><div class="priority-num" style="background:#2563eb;">8</div><span>Criar páginas "Sobre Nós" e Contacto/FAQ</span></div>
+      <div class="priority-item"><div class="priority-num" style="background:#2563eb;">9</div><span>Melhorar imagens de produto (específicas em vez de genéricas)</span></div>
+      <div class="priority-item"><div class="priority-num" style="background:#2563eb;">10</div><span>Otimizar SEO e descrições de produto</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

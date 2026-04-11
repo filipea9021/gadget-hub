@@ -1,0 +1,61 @@
+{
+  "produto": "SmartWatch Pro X7 — Fitness Tracker",
+  "nicho": "Smartwatches / Fitness / Wearables",
+  "publicoAlvo": "Portugal, 18-45 anos, tech & fitness enthusiasts",
+  "orcamentoDiario": 20,
+  "canaisPrioritarios": [
+    "TikTok Ads",
+    "Meta Ads (Instagram)"
+  ],
+  "copyTikTok": {
+    "texto": "⌚ SmartWatch Pro X7 — GPS + Cardíaco + AMOLED 🔥 Entrega rápida PT!",
+    "hashtags": "#smartwatch #fitness #gadgets #portugal #tech #wearable #relogio #fones #acessorios #gadgethub",
+    "formato": "Vídeo curto 15-30s com render 3D cinematográfico",
+    "cta": "Link na bio!"
+  },
+  "copyInstagram": {
+    "titulo": "⌚ O smartwatch que muda tudo.",
+    "corpo": "SmartWatch Pro X7 — Ecrã AMOLED 1.85\", GPS integrado, sensor cardíaco e resistência IP68.\n\nMonitoriza a tua saúde 24/7. Bateria que dura 7 dias. Design premium por apenas 39.99€.\n\n💪 Para quem leva o fitness a sério.\n🚚 Entrega rápida para Portugal.\n💰 Frete grátis acima de 30€.",
+    "hashtags": "#smartwatch #fitness #corrida #saude #tecnologia #gadgets #portugal #wearable #relogio #gps #amoled #ip68 #fitnesstracker #corrida #treino #gym #desporto #gadgethub #shopping #tech",
+    "formato": "Carrossel 5 slides: hero shot → features → no pulso → specs → CTA",
+    "cta": "Compra já — link na bio 👆"
+  },
+  "copyFacebook": {
+    "titulo": "SmartWatch Pro X7 — Tecnologia no pulso por 39.99€",
+    "corpo": "Ecrã AMOLED brilhante, GPS preciso, monitorização cardíaca contínua e bateria para 7 dias.\n\nIP68 — usa na chuva, na piscina, no duche. Bluetooth 5.3 para chamadas e notificações.\n\nPorquê pagar 60€+ noutro sítio? Na Gadget Hub tens qualidade premium a preço justo.\n\n🚚 Frete grátis para Portugal | 🔄 30 dias devolução | 🛡️ 1 ano garantia",
+    "cta": "Comprar agora → gadget-hub.com"
+  },
+  "copyGoogle": {
+    "titulo": "SmartWatch Pro X7 | AMOLED + GPS",
+    "descricao": "Smartwatch fitness com ecrã AMOLED, GPS, IP68. Desde 39.99€. Frete grátis PT.",
+    "keywords": [
+      "smartwatch portugal",
+      "relogio inteligente",
+      "fitness tracker",
+      "smartwatch GPS",
+      "smartwatch barato"
+    ]
+  },
+  "videoStrategy": {
+    "tipoConteudo": "Render 3D cinematográfico",
+    "plataformas": [
+      "TikTok",
+      "Instagram Reels",
+      "YouTube Shorts"
+    ],
+    "duracoes": {
+      "TikTok": "15s — hook rápido + produto + CTA",
+      "Reels": "30s — lifestyle + features + CTA",
+      "Shorts": "45s — unboxing style + demo + CTA"
+    },
+    "paleta": "tech_blue",
+    "estiloVisual": "Fundo escuro, iluminação dual-tone azul, partículas, rotação 360°",
+    "musica": "Beat energético, trending TikTok sound",
+    "ganchos": [
+      "⌚ Este smartwatch custa menos de 40€...",
+      "GPS + Cardíaco + AMOLED por 39.99€? Sim.",
+      "O smartwatch que toda a gente está a comprar em Portugal",
+      "POV: compraste um smartwatch premium por metade do preço"
+    ]
+  }
+}

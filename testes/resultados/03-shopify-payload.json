@@ -1,0 +1,23 @@
+{
+  "mutation": "productCreate",
+  "input": {
+    "title": "SmartWatch Pro X7 — Fitness Tracker",
+    "bodyHtml": "<p>Smartwatch com ecrã AMOLED 1.85\", monitorização cardíaca, GPS, resistência à água IP68</p>",
+    "vendor": "CJ Dropshipping",
+    "productType": "smartwatch",
+    "tags": [
+      "smartwatch",
+      "fitness",
+      "GPS",
+      "AMOLED"
+    ],
+    "variants": [
+      {
+        "price": "39.99",
+        "compareAtPrice": "59.99",
+        "sku": "SW-PRO-X7-001",
+        "inventoryManagement": "SHOPIFY"
+      }
+    ]
+  }
+}

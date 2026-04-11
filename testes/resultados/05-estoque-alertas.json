@@ -1,0 +1,23 @@
+[
+  {
+    "sku": "SW-PRO-X7-001",
+    "nome": "SmartWatch Pro X7 — Fitness Tracker",
+    "quantidade": 3,
+    "minimo": 5,
+    "nivel": "critico"
+  },
+  {
+    "sku": "SB-FIT-U-002",
+    "nome": "SmartBand Fit Ultra",
+    "quantidade": 15,
+    "minimo": 5,
+    "nivel": "ok"
+  },
+  {
+    "sku": "GPS-SR-003",
+    "nome": "Relógio GPS Sport",
+    "quantidade": 7,
+    "minimo": 5,
+    "nivel": "ok"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "systemPrompt": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.",
+  "analisarProduto": {
+    "sistema": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.",
+    "prompt": "Analisa este produto para a loja Gadget Hub:\n\nNome: SmartWatch Pro X7 — Fitness Tracker\nCategoria: smartwatch\nPreço CJ: 12.5€\nPreço Venda: 39.99€\nAvaliação: 4.6/5\n\nResponde em JSON com:\n{\n  \"recomendacao\": \"aprovar\" | \"rejeitar\" | \"revisar\",\n  \"score\": 0-100,\n  \"motivo\": \"...\",\n  \"tituloSEO\": \"título optimizado para SEO\",\n  \"descricaoSEO\": \"meta description optimizada\",\n  \"tags\": [\"tag1\", \"tag2\", ...],\n  \"precoProposto\": número\n}"
+  },
+  "gerarDescricao": {
+    "sistema": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.",
+    "prompt": "Gera uma descrição de produto para a Shopify em português europeu:\n\nProduto: SmartWatch Pro X7 — Fitness Tracker\nCategoria: smartwatch\nCaracterísticas: Ecrã AMOLED 1.85 polegadas, sensor cardíaco, GPS integrado, IP68, bateria 7 dias, Bluetooth 5.3\n\nA descrição deve ter:\n- Título apelativo (H1)\n- 2-3 parágrafos com benefícios (não features)\n- Lista de especificações\n- Call-to-action final\n- Tom: moderno, tech-savvy, direto\n\nFormato: HTML simples (h1, p, ul, li, strong)"
+  },
+  "gerarCopy": {
+    "sistema": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.",
+    "prompt": "Gera copy de anúncio para TikTok:\n\nProduto: SmartWatch Pro X7 — Fitness Tracker\nPreço: 39.99€\nCategoria: smartwatch\nPúblico: Portugal, 18-45 anos, tech enthusiasts\n\nRequisitos por plataforma:\n- TikTok: max 100 chars, casual, emojis, hashtags\n- Instagram: max 2200 chars, visual, hashtags (20-30)\n- Facebook: max 500 chars, informativo, link\n- Google: título max 30 chars + descrição max 90 chars\n\nResponde em JSON:\n{\n  \"titulo\": \"...\",\n  \"corpo\": \"...\",\n  \"cta\": \"...\",\n  \"hashtags\": [\"...\", \"...\"]\n}"
+  },
+  "analisarPreco": {
+    "sistema": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.",
+    "prompt": "Analisa o pricing deste produto:\n\nProduto: SmartWatch Pro X7 — Fitness Tracker\nCusto CJ: 12.5€\nPreço Atual: 39.99€\nMargem Atual: 68%\n\nConcorrentes:\n- AliExpress: 42.99€\n- Amazon.es: 49.99€\n\nResponde em JSON:\n{\n  \"precoRecomendado\": número,\n  \"precoCompare\": número (preço \"riscado\"),\n  \"margemEstimada\": número em %,\n  \"estrategia\": \"premium\" | \"competitivo\" | \"penetracao\",\n  \"motivo\": \"...\"\n}"
+  },
+  "responderCliente": {
+    "sistema": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.\nEstás a responder a um cliente da loja. Sê simpático, claro e resolve o problema.\nSe não souberes a resposta, sugere contactar suporte@gadget-hub.com.",
+    "prompt": "Pergunta do cliente: \"quando chega o meu smartwatch?\"\n\nPedido: #1001 — Status: enviado\nProduto: SmartWatch Pro X7 — Fitness Tracker\n\nResponde de forma concisa e útil em português europeu."
+  },
+  "classificarComando": {
+    "sistema": "Tu és o assistente AI do Gadget Hub, uma loja de dropshipping de gadgets e eletrónica em Portugal.\nResponde sempre em português europeu. Sê direto, prático e focado em e-commerce.\nA loja usa Shopify, CJ Dropshipping, e gera renders 3D com Blender.",
+    "prompt": "Classifica este comando do operador da loja:\n\n\"mostra os produtos do catálogo\"\n\nResponde APENAS com JSON:\n{\n  \"intencao\": \"status\" | \"executar_agente\" | \"adicionar_produto\" | \"ajustar_preco\" | \"criar_campanha\" | \"gerar_render\" | \"consultar_faq\" | \"relatorio\" | \"outro\",\n  \"agente\": \"shopify\" | \"cj\" | \"precos\" | \"marketing\" | \"estoque\" | \"blender\" | \"automacao\" | null,\n  \"parametros\": { ... },\n  \"confianca\": 0-100\n}"
+  }
+}

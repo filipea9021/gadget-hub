@@ -1,0 +1,126 @@
+{
+  "name": "✍️ Data Core — Criar Memória via Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "data-core/memoria",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-memoria",
+      "name": "Webhook Criar Memória",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "data-core-memoria"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validar e preparar dados\nconst body = $input.first().json.body || $input.first().json;\n\nconst title = body.title || body.titulo || 'Memória sem título';\nconst category = body.category || body.categoria || 'general';\nconst description = body.description || body.descricao || '';\nconst origin = body.origin_skill || body.origem || 'n8n_webhook';\nconst metadata = body.metadata || {};\n\nreturn [{\n  json: {\n    title,\n    category,\n    description,\n    origin_skill: origin,\n    metadata,\n    created_at: new Date().toISOString(),\n  }\n}];"
+      },
+      "id": "code-validar",
+      "name": "Validar Dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/rest/v1/action_logs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-inserir",
+      "name": "Inserir no Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'success', message: 'Memória criada com sucesso!', data: $json }) }}"
+      },
+      "id": "response-ok",
+      "name": "Resposta Sucesso",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [960, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Criar Memória": {
+      "main": [
+        [
+          {
+            "node": "Validar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Dados": {
+      "main": [
+        [
+          {
+            "node": "Inserir no Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inserir no Supabase": {
+      "main": [
+        [
+          {
+            "node": "Resposta Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Data Core"
+    },
+    {
+      "name": "Webhook"
+    }
+  ]
+}

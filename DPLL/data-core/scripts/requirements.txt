@@ -1,0 +1,6 @@
+# Data Core Agent — Dependencias Python
+# Instalar com: pip install -r requirements.txt --break-system-packages
+
+supabase>=2.0.0
+python-dotenv>=1.0.0
+Pillow>=10.0.0

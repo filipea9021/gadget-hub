@@ -1,0 +1,263 @@
+/*
+  ============================================================
+  Gadget Hub — Dark Theme para Shopify
+  Aplica o visual dark do site protótipo ao tema Shopify.
+
+  Como usar:
+  1. Copie para: themes/SEU-TEMA/assets/gadgethub-dark-theme.css
+  2. No layout/theme.liquid, adicione dentro de <head>:
+     {{ 'gadgethub-dark-theme.css' | asset_url | stylesheet_tag }}
+  ============================================================
+*/
+
+/* ===== RESET E BASE ===== */
+:root {
+  --gh-bg:          #0a0a0f;
+  --gh-bg-card:     #111118;
+  --gh-bg-input:    #1a1a2e;
+  --gh-border:      #1a1a2e;
+  --gh-border-2:    #2a2a3e;
+  --gh-text:        #e0e0e0;
+  --gh-text-muted:  #808090;
+  --gh-text-dim:    #606070;
+  --gh-cyan:        #00d4ff;
+  --gh-purple:      #7c3aed;
+  --gh-purple-dark: #6d28d9;
+  --gh-green:       #4ade80;
+  --gh-yellow:      #fbbf24;
+  --gh-red:         #ff4757;
+  --gh-grad:        linear-gradient(135deg, #7c3aed, #00d4ff);
+}
+
+body {
+  background-color: var(--gh-bg) !important;
+  color: var(--gh-text) !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+.header,
+header[role="banner"],
+.site-header {
+  background-color: #111118 !important;
+  border-bottom: 1px solid var(--gh-border) !important;
+  color: var(--gh-text) !important;
+}
+
+.site-header a,
+.header a {
+  color: #b0b0b0 !important;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.site-header a:hover,
+.header a:hover {
+  color: var(--gh-cyan) !important;
+}
+
+/* Logo */
+.header__heading-logo,
+.site-header__logo {
+  filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(170deg);
+}
+
+/* ===== HERO / BANNERS ===== */
+.banner,
+.slideshow,
+.hero {
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2e 100%) !important;
+}
+
+/* ===== CARDS DE PRODUTO ===== */
+.card,
+.card-wrapper,
+.product-card,
+.grid__item .card {
+  background: var(--gh-bg-card) !important;
+  border: 1px solid var(--gh-border) !important;
+  border-radius: 12px !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
+}
+
+.card:hover,
+.card-wrapper:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+}
+
+.card__heading a,
+.card__content .card__heading {
+  color: var(--gh-text) !important;
+}
+
+.price__regular .price-item,
+.price .price-item--regular {
+  color: var(--gh-cyan) !important;
+  font-weight: bold !important;
+  font-size: 1.2em !important;
+}
+
+.price__sale .price-item--sale {
+  color: var(--gh-cyan) !important;
+  font-weight: bold !important;
+}
+
+.price__compare .price-item--regular {
+  color: var(--gh-text-muted) !important;
+  font-size: 0.9em !important;
+}
+
+/* ===== BOTÕES ===== */
+.btn,
+button[type="submit"],
+.button,
+.shopify-payment-button__button,
+.product-form__submit {
+  background: var(--gh-grad) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 14px 28px !important;
+  font-weight: bold !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
+}
+
+.btn:hover,
+button[type="submit"]:hover,
+.button:hover,
+.product-form__submit:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(124,58,237,0.35) !important;
+}
+
+/* Botão secundário */
+.btn--secondary,
+.button--secondary {
+  background: var(--gh-bg-input) !important;
+  border: 1px solid var(--gh-border-2) !important;
+  color: var(--gh-text) !important;
+}
+
+/* ===== INPUTS / FORMS ===== */
+input,
+select,
+textarea {
+  background: var(--gh-bg-input) !important;
+  border: 1px solid var(--gh-border-2) !important;
+  color: var(--gh-text) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--gh-purple) !important;
+  outline: none !important;
+}
+
+label {
+  color: var(--gh-text-muted) !important;
+  font-size: 13px !important;
+}
+
+/* ===== PÁGINA DE PRODUTO ===== */
+.product__title,
+.product-single__title {
+  color: var(--gh-text) !important;
+  font-size: 28px !important;
+}
+
+.product__description,
+.product-single__description {
+  color: var(--gh-text-muted) !important;
+  line-height: 1.7 !important;
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumbs,
+nav.breadcrumb {
+  color: var(--gh-text-dim) !important;
+  font-size: 13px !important;
+}
+
+.breadcrumbs a,
+nav.breadcrumb a {
+  color: var(--gh-purple) !important;
+}
+
+.breadcrumbs a:hover,
+nav.breadcrumb a:hover {
+  color: var(--gh-cyan) !important;
+}
+
+/* ===== CARRINHO (DRAWER) ===== */
+.cart-drawer,
+#cart-notification,
+.cart-notification {
+  background: var(--gh-bg-card) !important;
+  border-left: 1px solid var(--gh-border) !important;
+  color: var(--gh-text) !important;
+}
+
+.cart-drawer__header {
+  border-bottom: 1px solid var(--gh-border) !important;
+}
+
+/* ===== FOOTER ===== */
+footer,
+.footer {
+  background: var(--gh-bg) !important;
+  border-top: 1px solid var(--gh-border) !important;
+  color: var(--gh-text-dim) !important;
+}
+
+footer a,
+.footer a {
+  color: #808090 !important;
+  transition: color 0.3s;
+}
+
+footer a:hover,
+.footer a:hover {
+  color: var(--gh-cyan) !important;
+}
+
+/* ===== BADGES / TAGS ===== */
+.badge,
+.product-label {
+  background: var(--gh-grad) !important;
+  color: white !important;
+  border-radius: 6px !important;
+  padding: 3px 10px !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+}
+
+/* ===== PAGINAÇÃO ===== */
+.pagination__item {
+  background: var(--gh-bg-input) !important;
+  border: 1px solid var(--gh-border-2) !important;
+  color: var(--gh-text) !important;
+}
+
+.pagination__item--current {
+  background: var(--gh-purple) !important;
+  border-color: var(--gh-purple) !important;
+  color: white !important;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gh-bg); }
+::-webkit-scrollbar-thumb { background: var(--gh-border-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gh-purple); }
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+  .card { border-radius: 10px !important; }
+  body { font-size: 14px; }
+}

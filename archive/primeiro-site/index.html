@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gadget Hub - Eletrónicos, Casa & Acessórios</title>
+    <style>
+        /* ===== RESET E BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== BARRA DE NAVEGAÇÃO ===== */
+        .navbar {
+            background-color: #111118;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d4ff;
+            letter-spacing: 2px;
+        }
+
+        .navbar .logo span {
+            color: #7c3aed;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #b0b0b0;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .cart-btn {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .cart-btn:hover {
+            background: #6d28d9;
+        }
+
+        .cart-count {
+            background: #00d4ff;
+            color: #0a0a0f;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2e 100%);
+            padding: 80px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #a0a0b0;
+            margin-bottom: 30px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        /* ===== BARRA DE CATEGORIAS ===== */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 30px 40px;
+            background: #111118;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: #1a1a2e;
+            color: #b0b0b0;
+            border: 1px solid #2a2a3e;
+            padding: 10px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        /* ===== CATÁLOGO DE PRODUTOS ===== */
+        .catalog {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .catalog h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: #111118;
+            border: 1px solid #1a1a2e;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #7c3aed;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+        }
+
+        .product-description {
+            font-size: 13px;
+            color: #808090;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .add-to-cart {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #6d28d9;
+        }
+
+        /* ===== COMO FUNCIONA ===== */
+        .how-it-works {
+            background: #111118;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .how-it-works h2 {
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .step h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+        }
+
+        .step p {
+            font-size: 13px;
+            color: #808090;
+        }
+
+        /* ===== PROBLEMAS DO MERCADO (2.1) ===== */
+        .market-problems {
+            background: #111118;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .market-problems h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .market-problems .section-subtitle {
+            color: #808090;
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: #0a0a0f;
+            border: 1px solid #2a1a1a;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: left;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            border-color: #ff4757;
+        }
+
+        .problem-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .problem-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #ff4757;
+            margin-bottom: 8px;
+        }
+
+        .problem-desc {
+            font-size: 13px;
+            color: #a0a0b0;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .problem-impact {
+            font-size: 12px;
+            color: #808090;
+            padding-top: 10px;
+            border-top: 1px solid #1a1a2e;
+        }
+
+        .problem-impact strong {
+            color: #ff6b7a;
+        }
+
+        /* ===== OPORTUNIDADE (2.2) ===== */
+        .opportunity {
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .opportunity::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .opportunity h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .opportunity .section-subtitle {
+            color: #808090;
+            font-size: 15px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .opportunity-box {
+            max-width: 750px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #0f0a1e, #0a1520);
+            border: 1px solid #1a1a3e;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: left;
+            position: relative;
+        }
+
+        .opportunity-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed, #00d4ff);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .opportunity-quote {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .opportunity-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .opportunity-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #b0b0c0;
+            line-height: 1.5;
+        }
+
+        .opportunity-points li .point-icon {
+            color: #7c3aed;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .opportunity-points li strong {
+            color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .problems-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 15px;
+            }
+
+            .market-problems,
+            .opportunity {
+                padding: 40px 20px;
+            }
+
+            .opportunity-box {
+                padding: 25px;
+            }
+        }
+
+        /* ===== REFERÊNCIAS DE MERCADO ===== */
+        .market-references {
+            padding: 60px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .market-references h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .market-references .section-subtitle {
+            color: #808090;
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        .references-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .reference-card {
+            background: #111118;
+            border: 1px solid #1a1a2e;
+            border-radius: 12px;
+            padding: 30px 20px;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reference-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7c3aed, #00d4ff);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .reference-card:hover {
+            transform: translateY(-5px);
+            border-color: #7c3aed;
+        }
+
+        .reference-card:hover::before {
+            opacity: 1;
+        }
+
+        .reference-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .reference-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e0e0e0;
+            margin-bottom: 8px;
+        }
+
+        .reference-model {
+            font-size: 12px;
+            color: #7c3aed;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .reference-strength {
+            font-size: 13px;
+            color: #808090;
+            line-height: 1.5;
+        }
+
+        .reference-strength strong {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .references-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .market-references {
+                padding: 40px 20px;
+            }
+        }
+
+        /* ===== SIDEBAR DO CARRINHO ===== */
+        .cart-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+        }
+
+        .cart-overlay.open {
+            display: block;
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100%;
+            background: #111118;
+            border-left: 1px solid #1a1a2e;
+            z-index: 300;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid #1a1a2e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h2 {
+            font-size: 20px;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: #b0b0b0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #1a1a2e;
+            align-items: center;
+        }
+
+        .cart-item-emoji {
+            font-size: 36px;
+            width: 50px;
+            text-align: center;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            font-size: 14px;
+            color: #00d4ff;
+        }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .qty-btn {
+            background: #1a1a2e;
+            border: 1px solid #2a2a3e;
+            color: #e0e0e0;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: #7c3aed;
+            border-color: #7c3aed;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: #ff4757;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid #1a1a2e;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .cart-total span:last-child {
+            color: #00d4ff;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .checkout-btn:hover {
+            opacity: 0.9;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: #808090;
+            padding: 40px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #0a0a0f;
+            border-top: 1px solid #1a1a2e;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #808090;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00d4ff;
+        }
+
+        .footer p {
+            color: #505060;
+            font-size: 13px;
+        }
+
+        /* ===== CHATBOT ===== */
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 26px;
+            cursor: pointer;
+            z-index: 400;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            width: 360px;
+            height: 450px;
+            background: #111118;
+            border: 1px solid #1a1a2e;
+            border-radius: 16px;
+            z-index: 400;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .chatbot-window.open {
+            display: flex;
+        }
+
+        .chatbot-header {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 15px;
+            color: white;
+        }
+
+        .chatbot-header .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .chat-msg.bot {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-msg.user {
+            background: #7c3aed;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chatbot-suggestions {
+            padding: 8px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .chat-suggestion {
+            background: #1a1a2e;
+            border: 1px solid #2a2a3e;
+            color: #b0b0c0;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-suggestion:hover {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 12px;
+            border-top: 1px solid #1a1a2e;
+            gap: 8px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            background: #1a1a2e;
+            border: 1px solid #2a2a3e;
+            color: #e0e0e0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .chatbot-input input:focus {
+            border-color: #7c3aed;
+        }
+
+        .chatbot-input button {
+            background: #7c3aed;
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* ===== SCORE BADGE NO CARD ===== */
+        .product-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .product-supplier {
+            font-size: 11px;
+            color: #606070;
+            margin-bottom: 6px;
+        }
+
+        .product-delivery {
+            font-size: 11px;
+            color: #4ade80;
+            margin-bottom: 8px;
+        }
+
+        .product-margin-bar {
+            height: 4px;
+            background: #1a1a2e;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .product-margin-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #7c3aed, #00d4ff);
+        }
+
+        .product-trigger {
+            font-size: 11px;
+            color: #ff6b6b;
+            font-weight: 600;
+            margin-bottom: 10px;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 600px) {
+            .chatbot-window {
+                left: 10px;
+                right: 10px;
+                width: auto;
+                bottom: 90px;
+            }
+        }
+
+        /* ===== NOTIFICAÇÃO ===== */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #7c3aed;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 400;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero {
+                padding: 50px 20px;
+            }
+
+            .catalog {
+                padding: 30px 20px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 15px;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* ===== MENU MOBILE ===== */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: #111118;
+                padding: 20px;
+                border-bottom: 1px solid #1a1a2e;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BARRA DE NAVEGAÇÃO ===== -->
+    <nav class="navbar">
+        <a href="#" class="logo">GADGET<span>HUB</span></a>
+
+        <button class="menu-toggle" onclick="toggleMobileMenu()">&#9776;</button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#catalog">Produtos</a></li>
+            <li><a href="#how-it-works">Como Funciona</a></li>
+            <li><a href="#references">Mercado</a></li>
+            <li><a href="#contact">Contato</a></li>
+        </ul>
+
+        <button class="cart-btn" onclick="toggleCart()">
+            &#128722; Carrinho
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Eletrónicos, Casa Inteligente & Acessórios</h1>
+            <p>Gadgets tech, casa inteligente, áudio e acessórios premium. Produtos curados com score de qualidade, entregues na tua porta.</p>
+            <a href="#catalog" class="hero-btn">Ver Produtos</a>
+        </div>
+    </section>
+
+    <!-- ===== CATEGORIAS ===== -->
+    <section class="categories">
+        <button class="category-btn active" onclick="filterProducts('todos')">Todos</button>
+        <button class="category-btn" onclick="filterProducts('smart-home')">🏠 Casa Inteligente</button>
+        <button class="category-btn" onclick="filterProducts('audio')">🎧 Áudio</button>
+        <button class="category-btn" onclick="filterProducts('acessorios')">⚡ Acessórios</button>
+        <button class="category-btn" onclick="filterProducts('eletronicos')">💻 Eletrónicos</button>
+    </section>
+
+    <!-- ===== CATÁLOGO ===== -->
+    <section class="catalog" id="catalog">
+        <h2>Nossos Produtos</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- Os produtos são inseridos pelo JavaScript abaixo -->
+        </div>
+    </section>
+
+    <!-- ===== COMO FUNCIONA ===== -->
+    <section class="how-it-works" id="how-it-works">
+        <h2>Como Funciona</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Escolha seus Produtos</h3>
+                <p>Navegue pelo catálogo e adicione ao carrinho o que quiser.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Faça seu Pedido</h3>
+                <p>O pedido é registado automaticamente no sistema.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Envio Direto</h3>
+                <p>O fornecedor embala e envia o produto diretamente para você.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Rastreamento</h3>
+                <p>Receba o código de rastreamento automaticamente por e-mail.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROBLEMAS DO MERCADO (2.1) ===== -->
+    <section class="market-problems" id="problems">
+        <h2>Problemas Reais do Mercado</h2>
+        <p class="section-subtitle">Estes são os problemas que os clientes enfrentam todos os dias — e que nós queremos resolver</p>
+        <div class="problems-grid">
+            <div class="problem-card">
+                <div class="problem-icon">&#9203;</div>
+                <div class="problem-title">Entrega Lenta</div>
+                <div class="problem-desc">Prazos de 10 a 30 dias vindos da China, sem previsão clara.</div>
+                <div class="problem-impact"><strong>Impacto:</strong> Principal causa de abandono e reclamações</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">&#128260;</div>
+                <div class="problem-title">Produtos Saturados</div>
+                <div class="problem-desc">Todos vendem os mesmos itens, sem diferenciação.</div>
+                <div class="problem-impact"><strong>Impacto:</strong> Margens comprimidas e guerra de preço</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">&#128683;</div>
+                <div class="problem-title">Falta de Confiança</div>
+                <div class="problem-desc">Sites genéricos sem marca, sem identidade profissional.</div>
+                <div class="problem-impact"><strong>Impacto:</strong> Baixa conversão e alto abandono</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">&#128556;</div>
+                <div class="problem-title">Atendimento Fraco</div>
+                <div class="problem-desc">Sem suporte real ao cliente, respostas automáticas genéricas.</div>
+                <div class="problem-impact"><strong>Impacto:</strong> Reclamações e chargebacks</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">&#128465;</div>
+                <div class="problem-title">Qualidade Inconsistente</div>
+                <div class="problem-desc">Produtos não correspondem às fotos ou descrições.</div>
+                <div class="problem-impact"><strong>Impacto:</strong> Devoluções e reputação negativa</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== OPORTUNIDADE (2.2) ===== -->
+    <section class="opportunity" id="opportunity">
+        <h2>A Nossa Oportunidade</h2>
+        <p class="section-subtitle">Cada problema acima é uma oportunidade directa para quem faz diferente</p>
+        <div class="opportunity-box">
+            <div class="opportunity-quote">Criar um marketplace inteligente que resolve a dor do cliente com transparência, curadoria e tecnologia.</div>
+            <ul class="opportunity-points">
+                <li>
+                    <span class="point-icon">&#10003;</span>
+                    <span><strong>Prazos reais</strong> — baseados em histórico de entregas, sem promessas falsas</span>
+                </li>
+                <li>
+                    <span class="point-icon">&#10003;</span>
+                    <span><strong>Avaliações verificadas</strong> — só clientes reais avaliam, transparência total</span>
+                </li>
+                <li>
+                    <span class="point-icon">&#10003;</span>
+                    <span><strong>Score de produto</strong> — cada item tem uma nota calculada com base em qualidade, entrega e satisfação</span>
+                </li>
+                <li>
+                    <span class="point-icon">&#10003;</span>
+                    <span><strong>Nicho específico</strong> — foco em tecnologia e games em vez de loja genérica</span>
+                </li>
+                <li>
+                    <span class="point-icon">&#10003;</span>
+                    <span><strong>Marca forte</strong> — identidade profissional que gera confiança desde o primeiro clique</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ===== REFERÊNCIAS DE MERCADO (1.3) ===== -->
+    <section class="market-references" id="references">
+        <h2>Referências de Mercado</h2>
+        <p class="section-subtitle">Conheça as principais plataformas que inspiram o nosso modelo de negócio</p>
+        <div class="references-grid">
+            <div class="reference-card">
+                <div class="reference-icon">&#128230;</div>
+                <div class="reference-name">AliExpress</div>
+                <div class="reference-model">Marketplace B2C</div>
+                <div class="reference-strength"><strong>Ponto forte:</strong> Variedade de produtos e preços baixos</div>
+            </div>
+            <div class="reference-card">
+                <div class="reference-icon">&#127981;</div>
+                <div class="reference-name">Temu</div>
+                <div class="reference-model">Directo da fábrica</div>
+                <div class="reference-strength"><strong>Ponto forte:</strong> Preços agressivos e marketing forte</div>
+            </div>
+            <div class="reference-card">
+                <div class="reference-icon">&#128666;</div>
+                <div class="reference-name">Amazon</div>
+                <div class="reference-model">Marketplace misto (FBA + Dropship)</div>
+                <div class="reference-strength"><strong>Ponto forte:</strong> Logística rápida e confiança</div>
+            </div>
+            <div class="reference-card">
+                <div class="reference-icon">&#128421;</div>
+                <div class="reference-name">Shopify</div>
+                <div class="reference-model">Infraestrutura para lojas</div>
+                <div class="reference-strength"><strong>Ponto forte:</strong> Facilidade de criação de lojas</div>
+            </div>
+            <div class="reference-card">
+                <div class="reference-icon">&#127760;</div>
+                <div class="reference-name">CJ Dropshipping</div>
+                <div class="reference-model">Fornecedor + logística</div>
+                <div class="reference-strength"><strong>Ponto forte:</strong> Armazéns locais e branding</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="contact">
+        <div class="footer-links">
+            <a href="#">Sobre Nós</a>
+            <a href="#">Política de Privacidade</a>
+            <a href="#">Termos de Uso</a>
+            <a href="#">Trocas e Devoluções</a>
+            <a href="#">Contato</a>
+        </div>
+        <p>&copy; 2026 Gadget Hub - Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- ===== SIDEBAR DO CARRINHO ===== -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Seu Carrinho</h2>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty" id="cartEmpty">Seu carrinho está vazio</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">R$ 0,00</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Finalizar Compra</button>
+        </div>
+    </aside>
+
+    <!-- ===== CHATBOT (Skill 4 — Automação) ===== -->
+    <button class="chatbot-toggle" id="chatToggle" onclick="toggleChatbot()">&#128172;</button>
+    <div class="chatbot-window" id="chatWindow">
+        <div class="chatbot-header">
+            <h3><span class="status-dot"></span>Gadget Hub Assistente</h3>
+            <button class="chatbot-close" onclick="toggleChatbot()">&times;</button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-msg bot">Olá! Sou o assistente da Gadget Hub. Como posso ajudar?</div>
+        </div>
+        <div class="chatbot-suggestions" id="chatSuggestions">
+            <button class="chat-suggestion" onclick="sendSuggestion('prazo de entrega')">Prazo de entrega</button>
+            <button class="chat-suggestion" onclick="sendSuggestion('rastreamento')">Rastreamento</button>
+            <button class="chat-suggestion" onclick="sendSuggestion('devolução')">Devoluções</button>
+            <button class="chat-suggestion" onclick="sendSuggestion('pagamento')">Pagamento</button>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Escreva sua pergunta..." onkeypress="if(event.key==='Enter')sendChat()">
+            <button onclick="sendChat()">&#10148;</button>
+        </div>
+    </div>
+
+    <!-- ===== NOTIFICAÇÃO ===== -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // =============================================================
+        // SKILL 1 — PESQUISA DE PRODUTOS (integrada no frontend)
+        // =============================================================
+        // Cada produto agora tem dados de fornecedor, margem e score
+        // calculado automaticamente pela lógica da Skill 1.
+        // Critérios: avaliação ≥ 4★, margem ≥ 40%, entrega ≤ 15 dias
+
+        const products = [
+            {
+                id: 1,
+                name: "Smart Plug WiFi 16A",
+                description: "Controla dispositivos pelo telemóvel, compatível com Alexa e Google Home.",
+                price: 29.90,
+                supplierPrice: 8.00,
+                category: "smart-home",
+                emoji: "🔌",
+                rating: 4.6,
+                orders: 8200,
+                deliveryDays: 8,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 2,
+                name: "Lâmpada RGB Smart E27",
+                description: "16 milhões de cores, controlo por voz e app, 12W equivale a 100W.",
+                price: 24.90,
+                supplierPrice: 6.50,
+                category: "smart-home",
+                emoji: "💡",
+                rating: 4.5,
+                orders: 6500,
+                deliveryDays: 9,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 3,
+                name: "Câmera WiFi 1080p",
+                description: "Vigilância 360°, visão noturna, deteção de movimento, app gratuita.",
+                price: 49.90,
+                supplierPrice: 14.00,
+                category: "smart-home",
+                emoji: "📷",
+                rating: 4.4,
+                orders: 4300,
+                deliveryDays: 10,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 4,
+                name: "Fone TWS Bluetooth 5.3",
+                description: "Cancelamento de ruído ativo, 30h de bateria, resistente à água IPX5.",
+                price: 69.90,
+                supplierPrice: 18.00,
+                category: "audio",
+                emoji: "🎧",
+                rating: 4.7,
+                orders: 9100,
+                deliveryDays: 7,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 5,
+                name: "Coluna Bluetooth Portátil",
+                description: "Som 360°, 20W, resistente à água IPX7, 12h de autonomia.",
+                price: 59.90,
+                supplierPrice: 16.00,
+                category: "audio",
+                emoji: "🔊",
+                rating: 4.5,
+                orders: 5700,
+                deliveryDays: 9,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 6,
+                name: "Hub USB-C 7 em 1",
+                description: "HDMI 4K, USB 3.0, SD Card, carregamento rápido 100W PD.",
+                price: 39.90,
+                supplierPrice: 11.00,
+                category: "acessorios",
+                emoji: "🔗",
+                rating: 4.5,
+                orders: 2900,
+                deliveryDays: 8,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 7,
+                name: "Carregador Wireless 15W",
+                description: "Carregamento rápido Qi, compatível com iPhone e Android, LED indicador.",
+                price: 34.90,
+                supplierPrice: 9.00,
+                category: "acessorios",
+                emoji: "⚡",
+                rating: 4.6,
+                orders: 7300,
+                deliveryDays: 7,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 8,
+                name: "Power Bank 20000mAh",
+                description: "Carga rápida 22.5W, 3 portas USB, display LCD, ultra-slim.",
+                price: 49.90,
+                supplierPrice: 14.00,
+                category: "acessorios",
+                emoji: "🔋",
+                rating: 4.4,
+                orders: 5100,
+                deliveryDays: 10,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 9,
+                name: "Aspirador Robô Smart",
+                description: "Mapeamento por laser, app WiFi, compatível com Alexa, 120min autonomia.",
+                price: 189.90,
+                supplierPrice: 55.00,
+                category: "smart-home",
+                emoji: "🤖",
+                rating: 4.3,
+                orders: 1800,
+                deliveryDays: 12,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 10,
+                name: "Rato Sem Fio Silencioso",
+                description: "Silencioso 99%, 2.4GHz, 1600 DPI, bateria até 12 meses.",
+                price: 29.90,
+                supplierPrice: 7.50,
+                category: "acessorios",
+                emoji: "🖱️",
+                rating: 4.4,
+                orders: 4200,
+                deliveryDays: 9,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 11,
+                name: "Teclado Bluetooth Ultra-slim",
+                description: "Compatível com Windows, Mac, iOS e Android, recarga USB-C.",
+                price: 44.90,
+                supplierPrice: 12.00,
+                category: "acessorios",
+                emoji: "⌨️",
+                rating: 4.3,
+                orders: 3100,
+                deliveryDays: 11,
+                supplier: "CJ Dropshipping"
+            },
+            {
+                id: 12,
+                name: "Monitor Portátil 15.6\" FHD",
+                description: "USB-C, 60Hz, visão 178°, peso 800g, ideal para trabalho mobile.",
+                price: 149.90,
+                supplierPrice: 48.00,
+                category: "eletronicos",
+                emoji: "🖥️",
+                rating: 4.6,
+                orders: 2200,
+                deliveryDays: 12,
+                supplier: "CJ Dropshipping"
+            }
+        ];
+
+        // =============================================================
+        // SKILL 1 — CÁLCULO DE SCORE (Avaliação 30%, Margem 30%,
+        //                              Entrega 20%, Pedidos 20%)
+        // =============================================================
+        function calcularScore(product) {
+            const margem = ((product.price - product.supplierPrice) / product.price) * 100;
+            const sAvaliacao = (product.rating / 5) * 30;
+            const sMargem = Math.min((margem / 80) * 30, 30);
+            const sEntrega = product.deliveryDays === 0 ? 20 : ((15 - product.deliveryDays) / 15) * 20;
+            const sPedidos = Math.min((product.orders / 5000) * 20, 20);
+            return Math.round(sAvaliacao + sMargem + sEntrega + sPedidos);
+        }
+
+        function calcularMargem(product) {
+            return ((product.price - product.supplierPrice) / product.price) * 100;
+        }
+
+        // Calcular scores de todos os produtos
+        products.forEach(p => {
+            p.score = calcularScore(p);
+            p.margin = calcularMargem(p);
+        });
+
+        // =============================================================
+        // SKILL 3 — GATILHOS MENTAIS (Marketing)
+        // =============================================================
+        function getGatilho(product) {
+            if (product.orders > 5000) return '🔥 Best-seller — ' + product.orders.toLocaleString('pt-BR') + ' vendidos!';
+            if (product.score >= 85) return '⭐ Top Score — Produto verificado!';
+            if (product.margin > 70) return '💎 Preço exclusivo por tempo limitado!';
+            if (product.deliveryDays <= 7) return '⚡ Entrega express — até 7 dias!';
+            if (product.deliveryDays === 0) return '📩 Entrega digital instantânea!';
+            return null;
+        }
+
+        // =============================================================
+        // SKILL 4 — CHATBOT DE ATENDIMENTO (Automação)
+        // =============================================================
+        const chatbotRespostas = {
+            'prazo de entrega': 'O prazo de entrega varia entre 7 a 15 dias úteis. Receberás o código de rastreamento por e-mail assim que o produto for enviado. Produtos com score alto têm prioridade de envio!',
+            'rastreamento': 'Podes acompanhar o teu pedido com o código de rastreamento enviado por e-mail. Se não recebeste, verifica a pasta de spam ou entra em contacto connosco.',
+            'devolução': 'Aceitamos devoluções em até 30 dias após a entrega. O produto deve estar nas condições originais. Entra em contacto para iniciar o processo.',
+            'pagamento': 'Aceitamos cartão de crédito/débito, MBWay, Multibanco e PayPal. Todos os pagamentos são processados com segurança total.',
+            'produto com defeito': 'Lamentamos o inconveniente! Envia fotos do defeito para o nosso e-mail e faremos a troca ou reembolso em até 48 horas.',
+            'cancelamento': 'Podes cancelar o pedido em até 24 horas após a compra. Depois desse prazo, o pedido já estará em processamento com o fornecedor.',
+            'garantia': 'Todos os nossos produtos têm garantia de 30 dias contra defeitos de fabricação. Produtos com Score acima de 80 são verificados pela nossa equipa de curadoria.',
+            'frete': 'O envio é calculado automaticamente no checkout. Muitos dos nossos gadgets têm envio gratuito incluído no preço!',
+            'compatibilidade': 'Os nossos gadgets são compatíveis com os principais sistemas (iOS, Android, Windows, Mac). Cada produto tem a lista de compatibilidade na descrição.',
+            'smart home': 'Os nossos produtos de casa inteligente são compatíveis com Alexa, Google Home e Apple HomeKit. A configuração é simples e rápida via app!'
+        };
+
+        function processarChat(pergunta) {
+            const lower = pergunta.toLowerCase();
+            for (const [chave, resposta] of Object.entries(chatbotRespostas)) {
+                if (lower.includes(chave)) return resposta;
+            }
+            return 'Obrigado pela tua mensagem! Para questões específicas, envia um e-mail para suporte@gadget-hub.com e respondemos em até 24 horas.';
+        }
+
+        function toggleChatbot() {
+            document.getElementById('chatWindow').classList.toggle('open');
+        }
+
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            addChatMessage(msg, 'user');
+            input.value = '';
+
+            // Simular "digitando..."
+            setTimeout(() => {
+                const resposta = processarChat(msg);
+                addChatMessage(resposta, 'bot');
+            }, 600);
+        }
+
+        function sendSuggestion(texto) {
+            addChatMessage(texto, 'user');
+            setTimeout(() => {
+                addChatMessage(processarChat(texto), 'bot');
+            }, 600);
+        }
+
+        function addChatMessage(texto, tipo) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `chat-msg ${tipo}`;
+            div.textContent = texto;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // ===== CARRINHO DE COMPRAS =====
+        let cart = [];
+
+        // ===== RENDERIZAR PRODUTOS =====
+        function renderProducts(filter = 'todos') {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'todos'
+                ? products
+                : products.filter(p => p.category === filter);
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.setAttribute('data-category', product.category);
+
+                const gatilho = getGatilho(product);
+                const deliveryText = product.deliveryDays === 0
+                    ? 'Entrega instantânea'
+                    : `Entrega em até ${product.deliveryDays} dias`;
+
+                card.innerHTML = `
+                    <div class="product-image" onclick="window.location.href='produto.html?id=${product.id}'" style="cursor:pointer">${product.emoji}</div>
+                    <div class="product-info">
+                        <div class="product-score">&#9733; Score ${product.score}/100</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-name"><a href="produto.html?id=${product.id}" style="color:inherit">${product.name}</a></div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-supplier">via ${product.supplier}</div>
+                        <div class="product-delivery">&#10003; ${deliveryText}</div>
+                        <div class="product-margin-bar"><div class="product-margin-fill" style="width:${Math.min(product.margin, 100)}%"></div></div>
+                        ${gatilho ? `<div class="product-trigger">${gatilho}</div>` : ''}
+                        <div class="product-price-row">
+                            <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                            <button class="add-to-cart" onclick="addToCart(${product.id})">Adicionar</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ===== FILTRAR POR CATEGORIA =====
+        function filterProducts(category) {
+            // Atualizar botão ativo
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            renderProducts(category);
+        }
+
+        // ===== ADICIONAR AO CARRINHO =====
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCart();
+            showNotification(`${product.emoji} ${product.name} adicionado ao carrinho!`);
+        }
+
+        // ===== REMOVER DO CARRINHO =====
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // ===== ALTERAR QUANTIDADE =====
+        function changeQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    removeFromCart(productId);
+                    return;
+                }
+            }
+            updateCart();
+        }
+
+        // ===== ATUALIZAR CARRINHO =====
+        function updateCart() {
+            const countEl = document.getElementById('cartCount');
+            const itemsEl = document.getElementById('cartItems');
+            const totalEl = document.getElementById('cartTotal');
+            const emptyEl = document.getElementById('cartEmpty');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            countEl.textContent = totalItems;
+            totalEl.textContent = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
+
+            if (cart.length === 0) {
+                itemsEl.innerHTML = '<div class="cart-empty">Seu carrinho está vazio</div>';
+                return;
+            }
+
+            itemsEl.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-emoji">${item.emoji}</div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</div>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${item.id}, +1)">+</button>
+                        </div>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${item.id})">&times;</button>
+                </div>
+            `).join('');
+        }
+
+        // ===== ABRIR/FECHAR CARRINHO =====
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('open');
+        }
+
+        // ===== MENU MOBILE =====
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('mobile-open');
+        }
+
+        // ===== NOTIFICAÇÃO =====
+        function showNotification(message) {
+            const el = document.getElementById('notification');
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 2500);
+        }
+
+        // ===== CHECKOUT =====
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Seu carrinho está vazio!');
+                return;
+            }
+            // Redirecionar para checkout com o primeiro item
+            const firstItem = cart[0];
+            window.location.href = `checkout.html?id=${firstItem.id}`;
+        }
+
+        // ===== INICIALIZAR =====
+        renderProducts();
+    </script>
+
+</body>
+</html>

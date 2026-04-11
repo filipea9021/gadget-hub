@@ -1,0 +1,46 @@
+[
+  {
+    "id": "sw-test-001",
+    "nome": "SmartWatch Pro X7 — Fitness Tracker",
+    "sku": "SW-PRO-X7-001",
+    "categoria": "smartwatch",
+    "precoCJ": 12.5,
+    "precoVenda": 39.99,
+    "precoCompare": 59.99,
+    "margem": 68,
+    "avaliacao": 4.6,
+    "descricao": "Smartwatch com ecrã AMOLED 1.85\", monitorização cardíaca, GPS, resistência à água IP68",
+    "imagens": [
+      "https://img.cj.com/sw-x7-front.jpg",
+      "https://img.cj.com/sw-x7-side.jpg"
+    ],
+    "caracteristicas": "Ecrã AMOLED 1.85 polegadas, sensor cardíaco, GPS integrado, IP68, bateria 7 dias, Bluetooth 5.3",
+    "tags": [
+      "smartwatch",
+      "fitness",
+      "GPS",
+      "AMOLED"
+    ],
+    "fornecedor": "CJ Dropshipping"
+  },
+  {
+    "id": "sw-test-002",
+    "nome": "SmartBand Fit Ultra — Monitor Saúde",
+    "sku": "SB-FIT-U-002",
+    "categoria": "smartwatch",
+    "precoCJ": 8.3,
+    "precoVenda": 29.99,
+    "avaliacao": 4.3,
+    "margem": 72
+  },
+  {
+    "id": "sw-test-003",
+    "nome": "Relógio GPS Sport Runner",
+    "sku": "GPS-SR-003",
+    "categoria": "smartwatch",
+    "precoCJ": 18.9,
+    "precoVenda": 54.99,
+    "avaliacao": 4.7,
+    "margem": 65
+  }
+]

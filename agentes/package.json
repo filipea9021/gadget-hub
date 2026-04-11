@@ -1,0 +1,34 @@
+{
+  "name": "gadget-hub-agentes",
+  "version": "1.0.0",
+  "description": "Sistema de agentes autônomos para operação da loja Shopify",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "start:autonomo": "MODO=autonomo node main.js",
+    "producao": "node start-producao.js",
+    "dev": "MODO=semi node main.js",
+    "dashboard": "node dashboard/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "shopify",
+    "dropshipping",
+    "automation",
+    "agents",
+    "cj-dropshipping"
+  ],
+  "author": "Gadget Hub",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2",
+    "sqlite3": "^5.1.6",
+    "sqlite": "^4.2.1",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

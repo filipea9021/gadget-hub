@@ -1,0 +1,17 @@
+🎬 SmartWatch — Night Run
+==================================================
+Plataforma: YouTube Shorts | Duração: 45s
+Paleta: energy_orange | Câmara: reveal
+Efeitos: energy_core, dual_tone_lighting, particles_dust
+
+ROTEIRO:
+  [0-5s] Cenário urbano noturno (dark). Luzes laranjas.
+  [5-12s] Smartwatch aparece — ecrã acende com GPS tracking.
+  [12-20s] Simulação de corrida: BPM sobe, distância conta.
+  [20-30s] Features: GPS, cardíaco, IP68, bluetooth.
+  [30-40s] Comparação preço: "Ali: 42€ | Amazon: 49€ | Nós: 39.99€"
+  [40-45s] CTA final com link.
+
+Texto: O companheiro perfeito para a tua corrida 🏃
+Música: Running motivation beat
+Hashtags: #smartwatch #corrida #fitness #GPS #noite #portugal

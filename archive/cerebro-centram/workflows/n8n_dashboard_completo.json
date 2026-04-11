@@ -1,0 +1,231 @@
+{
+  "name": "🧠 Data Core — Dashboard Completo",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-main",
+      "name": "Abrir Dashboard Completo",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/rest/v1/action_logs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "*"
+            },
+            {
+              "name": "order",
+              "value": "created_at.desc"
+            },
+            {
+              "name": "limit",
+              "value": "100"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-all-memorias",
+      "name": "📋 Todas as Memórias",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/list/images",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"prefix\": \"\",\n  \"limit\": 100,\n  \"offset\": 0,\n  \"sortBy\": {\n    \"column\": \"created_at\",\n    \"order\": \"desc\"\n  }\n}",
+        "options": {}
+      },
+      "id": "http-all-images",
+      "name": "🖼️ Listar Imagens",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/list/documents",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"prefix\": \"\",\n  \"limit\": 100,\n  \"offset\": 0,\n  \"sortBy\": {\n    \"column\": \"created_at\",\n    \"order\": \"desc\"\n  }\n}",
+        "options": {}
+      },
+      "id": "http-all-docs",
+      "name": "📄 Listar Documentos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// PAINEL CENTRAL — Resumo do Data Core\n// ═══════════════════════════════════════\n\nconst memorias = $('📋 Todas as Memórias').all();\nconst imagens = $('🖼️ Listar Imagens').all().filter(i => i.json.name && !i.json.name.endsWith('/'));\nconst docs = $('📄 Listar Documentos').all().filter(i => i.json.name && !i.json.name.endsWith('/'));\n\n// Contagem por categoria\nconst categorias = {};\nmorias.forEach(m => {\n  const cat = m.json.category || 'sem_categoria';\n  categorias[cat] = (categorias[cat] || 0) + 1;\n});\n\n// Contagem por skill\nconst skills = {};\nmemorias.forEach(m => {\n  const sk = m.json.origin_skill || 'desconhecido';\n  skills[sk] = (skills[sk] || 0) + 1;\n});\n\n// Memórias recentes (últimas 5)\nconst recentes = memorias.slice(0, 5).map(m => {\n  const d = new Date(m.json.created_at);\n  return `${d.toLocaleDateString('pt-PT')} — ${m.json.title}`;\n});\n\n// Tamanho total de media\nconst totalSizeImages = imagens.reduce((acc, i) => acc + (i.json.metadata?.size || 0), 0);\nconst totalSizeDocs = docs.reduce((acc, i) => acc + (i.json.metadata?.size || 0), 0);\nconst totalSizeMB = ((totalSizeImages + totalSizeDocs) / (1024 * 1024)).toFixed(2);\n\nreturn [{\n  json: {\n    '🧠 DASHBOARD DATA CORE': '════════════════════════════════',\n    '': '',\n    '📋 MEMÓRIAS': `${memorias.length} registos`,\n    '📂 Por Categoria': Object.entries(categorias).map(([k,v]) => `${k} (${v})`).join(' · '),\n    '🔧 Por Skill': Object.entries(skills).map(([k,v]) => `${k} (${v})`).join(' · '),\n    ' ': '',\n    '🖼️ MEDIA': `${imagens.length} imagens · ${docs.length} documentos`,\n    '💾 Espaço Usado': `${totalSizeMB} MB`,\n    '  ': '',\n    '📝 ÚLTIMAS MEMÓRIAS': '',\n    ...Object.fromEntries(recentes.map((r, i) => [`  ${i+1}.`, r])),\n    '   ': '',\n    '⏰ Atualizado': new Date().toLocaleString('pt-PT'),\n  }\n}];"
+      },
+      "id": "code-dashboard",
+      "name": "🧠 Painel Central",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tabela detalhada de memórias\nconst memorias = $('📋 Todas as Memórias').all();\n\nreturn memorias.map(m => {\n  const d = m.json;\n  const data = new Date(d.created_at);\n  return {\n    json: {\n      'Título': d.title || 'Sem título',\n      'Categoria': d.category || '-',\n      'Descrição': (d.description || '').substring(0, 80),\n      'Skill': d.origin_skill || '-',\n      'Data': data.toLocaleDateString('pt-PT'),\n      'Hora': data.toLocaleTimeString('pt-PT', {hour:'2-digit', minute:'2-digit'}),\n    }\n  };\n});"
+      },
+      "id": "code-tabela-memorias",
+      "name": "📊 Tabela Memórias",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tabela de ficheiros (imagens + docs)\nconst imagens = $('🖼️ Listar Imagens').all().filter(i => i.json.name && !i.json.name.endsWith('/'));\nconst docs = $('📄 Listar Documentos').all().filter(i => i.json.name && !i.json.name.endsWith('/'));\n\nconst baseImgUrl = 'https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/public/images/';\nconst baseDocUrl = 'https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/public/documents/';\n\nconst allFiles = [\n  ...imagens.map(i => ({\n    json: {\n      'Nome': i.json.name,\n      'Tipo': '🖼️ Imagem',\n      'Tamanho': i.json.metadata?.size ? (i.json.metadata.size / 1024).toFixed(1) + ' KB' : 'N/A',\n      'URL': baseImgUrl + i.json.name,\n    }\n  })),\n  ...docs.map(d => ({\n    json: {\n      'Nome': d.json.name,\n      'Tipo': '📄 Documento',\n      'Tamanho': d.json.metadata?.size ? (d.json.metadata.size / 1024).toFixed(1) + ' KB' : 'N/A',\n      'URL': baseDocUrl + d.json.name,\n    }\n  }))\n];\n\nif (allFiles.length === 0) {\n  return [{ json: { 'Media': 'Nenhum ficheiro encontrado ainda. Use o Data Core para fazer upload!' } }];\n}\n\nreturn allFiles;"
+      },
+      "id": "code-tabela-media",
+      "name": "📊 Tabela Media",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 600]
+    }
+  ],
+  "connections": {
+    "Abrir Dashboard Completo": {
+      "main": [
+        [
+          {
+            "node": "📋 Todas as Memórias",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🖼️ Listar Imagens",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📄 Listar Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📋 Todas as Memórias": {
+      "main": [
+        [
+          {
+            "node": "📊 Tabela Memórias",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🧠 Painel Central",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🖼️ Listar Imagens": {
+      "main": [
+        [
+          {
+            "node": "🧠 Painel Central",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📊 Tabela Media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📄 Listar Documentos": {
+      "main": [
+        [
+          {
+            "node": "🧠 Painel Central",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📊 Tabela Media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Data Core"
+    },
+    {
+      "name": "Dashboard"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadget Hub — Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 30px; }
+  h1 { color: #00A8FF; font-size: 24px; margin-bottom: 5px; }
+  .subtitle { color: #555; font-size: 13px; margin-bottom: 30px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card {
+    background: #12122a; border: 1px solid #1e1e3a; border-radius: 12px; padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #00A8FF; }
+  .card h3 { color: #4DC9FF; font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .stat { font-size: 32px; font-weight: 700; color: #fff; }
+  .stat-label { font-size: 12px; color: #666; margin-top: 4px; }
+  .agent-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a2e; }
+  .agent-name { color: #ccc; }
+  .agent-status { padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .status-ok { background: rgba(0,200,100,0.15); color: #00c864; }
+  .status-wait { background: rgba(255,180,0,0.15); color: #ffb400; }
+  .log-entry { font-family: monospace; font-size: 12px; color: #888; padding: 4px 0; border-bottom: 1px solid #111; }
+  .log-time { color: #444; }
+  #status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00c864; margin-right: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .refresh-note { color: #333; font-size: 11px; margin-top: 20px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1><span id="status-dot"></span>Gadget Hub — Dashboard</h1>
+<p class="subtitle">Sistema de agentes autónomos | WebSocket em tempo real</p>
+
+<div class="grid">
+  <div class="card">
+    <h3>Sistema</h3>
+    <div class="stat" id="modo">—</div>
+    <div class="stat-label">Modo de operação</div>
+  </div>
+  <div class="card">
+    <h3>Produtos</h3>
+    <div class="stat" id="produtos">0</div>
+    <div class="stat-label">No catálogo</div>
+  </div>
+  <div class="card">
+    <h3>Fila</h3>
+    <div class="stat" id="fila">0</div>
+    <div class="stat-label">Operações pendentes</div>
+  </div>
+  <div class="card">
+    <h3>Logs Hoje</h3>
+    <div class="stat" id="logs">0</div>
+    <div class="stat-label">Entradas registadas</div>
+  </div>
+</div>
+
+<div class="grid" style="margin-top: 20px;">
+  <div class="card" style="grid-column: span 2;">
+    <h3>Agentes</h3>
+    <div id="agentes">
+      <div class="agent-row"><span class="agent-name">A carregar...</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Logs Recentes</h3>
+    <div id="logs-list">
+      <div class="log-entry">A carregar...</div>
+    </div>
+  </div>
+</div>
+
+<p class="refresh-note">Atualização automática via WebSocket a cada 5s</p>
+
+<script>
+const ws = new WebSocket(`ws://${location.host}`);
+
+ws.onmessage = (event) => {
+  const msg = JSON.parse(event.data);
+  if (msg.tipo === 'status' || msg.tipo === 'update') {
+    const d = msg.data;
+    document.getElementById('produtos').textContent = d.produtos?.total || 0;
+    document.getElementById('fila').textContent = d.operacoesPendentes || 0;
+    document.getElementById('logs').textContent = d.logsHoje || 0;
+  }
+};
+
+// Fetch inicial via REST
+fetch('/api/status')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.sucesso) return;
+    document.getElementById('modo').textContent = data.modo?.toUpperCase() || 'SEMI';
+    const el = document.getElementById('agentes');
+    if (data.agentes && data.agentes.length) {
+      el.innerHTML = data.agentes.map(a => `
+        <div class="agent-row">
+          <span class="agent-name">${a.nome || a.id}</span>
+          <span class="agent-status ${a.status === 'inicializado' ? 'status-ok' : 'status-wait'}">${a.status || 'pronto'}</span>
+        </div>
+      `).join('');
+    }
+  })
+  .catch(() => {});
+</script>
+</body>
+</html>

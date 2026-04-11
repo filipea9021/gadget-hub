@@ -1,0 +1,16 @@
+🎬 SmartWatch Pro X7 — Hero Reveal
+==================================================
+Plataforma: TikTok | Duração: 15s
+Paleta: tech_blue | Câmara: push_in
+Efeitos: energy_core, particles_sparks, dual_tone_lighting
+
+ROTEIRO:
+  [0-2s] Ecrã negro. Partículas azuis aparecem.
+  [2-5s] Smartwatch emerge com glow azul. Energy core pulsa.
+  [5-10s] Rotação 360° com dual-tone lighting. Features aparecem.
+  [10-13s] Zoom no ecrã AMOLED com heart rate.
+  [13-15s] Logo + preço + CTA "Link na bio".
+
+Texto: ⌚ SmartWatch Pro X7 | 39.99€ | GPS + AMOLED
+Música: Trending beat energético
+Hashtags: #smartwatch #tech #gadgets #portugal #fitness

@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "viral-video-creator", "runs": [{"id": "eval-1-meditation-forest-with_skill", "prompt": "Quero criar um YouTube Short viral para promover meu app de medita\u00e7\u00e3o. Algo com visual de floresta m\u00edstica com energia e luz. Estilo parecido com os v\u00eddeos do @airon_ia.", "eval_id": 1, "outputs": [{"name": "PROMPT_VIDEO_MEDITATION_FOREST.md", "type": "text", "content": "# Production Document: Mystical Forest \u2014 Meditation App Viral Short\n\n**Project:** Meditation App Promotion\n**Format:** YouTube Short (9:16, vertical)\n**Duration:** 27 seconds\n**Style Reference:** @airon_ia (cinematic AI visuals, curiosity hooks, bold text overlays)\n**Language:** Portuguese (pt-BR) + English hooks available\n**Created:** 2026-04-07\n\n---\n\n## Stage 1: Reference Analysis\n\n**Target Style:**\n- Duration: 20-30 seconds (targeting 27s)\n- Cinematic AI-generated visuals with one continuous theme\n- Bold white text overlays with dark shadow/outline\n- Curiosity hook in first 3 seconds\n- CTA at end asking viewers to comment for the prompt\n- Prompt shown briefly (2-3 frames) to tease without revealing\n- Mystery element: viewers pause trying to read the prompt, driving engagement\n\n**Adaptation for Meditation Niche:**\n- Tone: Ethereal, peaceful, yet visually striking\n- Color palette: Deep greens, glowing golds, blues, purples with neon/bioluminescent elements\n- Mood: Serene but energetic \u2014 \"peace with power\"\n\n---\n\n## Stage 2: Theme & Narrative\n\n**Core Theme Statement:**\n\n\"An ancient, mystical forest where towering trees glow with ethereal golden and blue light energy. The environment represents inner transformation and spiritual awakening \u2014 as users meditate with our app, they tap into boundless inner peace and clarity, symbolized by the forest's luminous energy.\"\n\n**Visual Metaphor:**\n- **Abstract Concept:** Inner peace + spiritual growth + clarity of mind\n- **Cinematic Environment:** Enchanted forest with bioluminescent/glowing elements\n- **Emotional Resonance:** Viewers feel calm, inspired, and curious about discovering this \"inner world\"\n\n**Narrative Arc:**\n1. Hook: \"E se o seu lugar de paz fosse real?\" (What if your peaceful place was real?)\n2. Reveal: Mystical forest appears\n3. Magic: Energy and light flowing through trees\n4. Payoff: Meditation as the key to unlocking this inner world\n5. CTA: Comment for the prompt\n\n---\n\n## Stage 3: Image Prompt Engineering\n\n### Main Prompt (Hero Shot \u2014 Maximum Detail)\n\n```\nA lone meditation seeker in flowing light-blue spiritual robes stands centered in an\nancient, endless mystical forest at twilight. Towering ancient trees with massive trunks\nrise like silent sentinels around them, their bark glowing with soft golden and ethereal\nblue bioluminescent veins that pulse with light. The forest floor is carpeted with glowing\nmoss and luminescent flowers that shimmer with energy. Streams of swirling golden and\nelectric blue light particles \u2014 representing meditation energy and spiritual awakening \u2014\nspiral upward from the ground and dance through the air like living mist. The canopy above\nis sparse, allowing beams of soft moonlight and otherworldly purple-blue light to pour down,\ncreating dramatic rays that cut through the glowing particles. The air shimmers with\nbioluminescent dust and mist. The seeker's aura glows softly, resonating with the forest's\nenergy. Camera angle: slight low angle looking up, cinematic depth of field with sharp focus\non the seeker and trees, blurred glowing particles in foreground and background. Cinematic\n4K, ultra-realistic, dramatic mystical lighting, ethereal atmosphere, vertical 9:16 portrait.\n```\n\n### Dynamic Variant (More Movement, Different Angle)\n\n```\nA spiritual seeker in flowing light-blue robes walks slowly forward through an enchanted\nmystical forest, arms slightly raised as if communing with the energy around them. Ancient\ntowering trees with luminescent golden and blue glowing bark tower overhead, their roots\nvisible and also glowing with ethereal light. The forest is alive with movement: streams\nof golden and electric blue energy \u2014 representing life force and spiritual awakening \u2014\nflow upward from the roots and swirl around the trees like cosmic vines. Bioluminescent\nflowers pulse with soft purple and green light. The ground beneath their feet trails with\nglowing footprints. Mist rises with golden particles suspended in beams of moonlight from\nabove. The seeker's silhouette is backlit by the glowing forest, creating a halo effect.\nCamera movement: slow dolly forward, following the seeker's journey deeper into the\nmystical realm. Cinematic 4K, ethereal mystical mood, dramatic backlighting, vertical\n9:16 portrait.\n```\n\n### Backup Prompt (Condensed \u2014 Character Limit Friendly)\n\n```\nA meditation seeker in light-blue robes stands in an ancient mystical forest with glowing\ngolden and blue bioluminescent trees. Spiritual energy swirls upward as glowing particles\nand light streams. Ethereal rays of moonlight pierce the canopy. Cinematic, mystical,\n4K, vertical 9:16 portrait.\n```\n\n---\n\n## Stage 4: Image Generation Notes\n\n**Recommended Tools (in order):**\n1. **Higgsfield.ai** (Nano Banana 2) \u2014 Best cinematic quality, free tier available\n2. **Leonardo.ai** \u2014 Consistent style, excellent for mystical themes\n3. **nanobanana.io** \u2014 Good detail, free direct text-to-video\n4. **Ideogram 2.0** \u2014 Clean rendering, good for text overlays\n\n**Generation Settings:**\n- **Aspect ratio:** 9:16 (vertical, critical for Shorts)\n- **Resolution:** 1080x1920 (highest available)\n- **Variations:** Generate 4+ variations, select the one with:\n  - Sharpest glowing elements and light particles\n  - Most cinematic lighting and mood\n  - Clear subject (the seeker figure)\n  - Ethereal \"wow factor\"\n\n**Key Visual Elements to Look For:**\n- Glowing, bioluminescent tree bark\n- Golden/blue energy streams\n- Proper depth of field (sharp subject, soft background)\n- Good contrast between dark forest and glowing elements\n- Mystical, peaceful mood\n\n---\n\n## Stage 5: Image-to-Video Animation\n\n### Animation Prompt\n\n```\nThe lone spiritual seeker stands peacefully in the center of the mystical forest.\nGlowing energy streams \u2014 golden and electric blue light \u2014 flow and spiral upward from\nthe ground around the trees, pulsing gently with rhythm. Bioluminescent particles drift\nslowly through the air like floating dust, moving subtly side to side. The seeker's\nsilhouette remains still, peaceful, grounded. Mist swirls gently at ground level.\nMoonlight creates slowly moving shadows and light rays that shift across the forest floor.\nCamera movement: slow, cinematic dolly backward, pulling back to reveal the scale of the\nforest around the seeker. The movement is subtle and meditative, not rushed. Lighting:\nsoft ethereal glow maintained throughout. Mood: peaceful, spiritual, mystical. Duration:\n6-8 seconds of smooth, cinematic motion.\n```\n\n**Recommended Tools:**\n- **Higgsfield.ai** (video creator) \u2014 Best quality, may need credits\n- **Hailuo AI** (hailuoai.video) \u2014 Free tier, excellent quality\n- **Kling AI** (klingai.com) \u2014 Free tier, cinematic results\n- **Pika** (pika.art) \u2014 Free tier, good 4-6 second clips\n- **Luma Dream Machine** (lumalabs.ai/dream-machine) \u2014 Free tier\n\n**Animation Tips:**\n- Keep motion subtle and cinematic \u2014 avoid jerky or chaotic movement\n- Glowing particles should drift slowly and peacefully\n- Let the visuals breathe; don't over-animate\n- Use slow dolly/push movements for cinematic feel\n- Target 6-8 seconds of smooth animation\n\n---\n\n## Stage 6: Script & Timing (Roteiro)\n\n### Video Structure: 27-Second Short\n\n| **Time** | **Visual** | **Text Overlay** | **Notes** |\n|----------|-----------|------------------|-----------|\n| 0-3s | Forest appears with glowing trees, energy particles visible | \"E se seu lugar de paz fosse real?\" | Curiosity hook \u2014 stops scrolling. White text, bold, centered, dark shadow. |\n| 3-7s | Seeker figure revealed, standing peacefully | \"Medita\u00e7\u00e3o transformadora\" | The subject reveal. Keep it punchy (3 words max). |\n| 7-13s | Energy streams flow, glowing light intensifies | \"Encontre sua paz interior\" | Build intrigue. Show the \"magic\" \u2014 the glowing energy growing stronger. |\n| 13-19s | Camera pulls back, showing massive scale of forest | \"Acesso ilimitado \u00e0 serenidade\" | Scale reveal. The forest is vast, infinite \u2014 like boundless inner peace. |\n| 19-24s | Climax: brightest glow, most particles, visual explosion of light | \"Comece sua jornada agora\" | The payoff. Peak visual intensity. Call to action begins. |\n| 24-27s | Logo fades in with CTA overlay | \"Quer o prompt? Comenta \ud83c\udf3f\" | App logo/branding + engagement CTA. Keyword: \ud83c\udf3f (leaf emoji for meditation theme). |\n\n### Text Overlay Style Guide\n\n**Font:**\n- Sans-serif, bold, thick weight (e.g., Montserrat Bold, Inter Bold, Arial Black)\n- Size: 48-64pt (readable on mobile)\n- Color: White (#FFFFFF)\n- Outline/Shadow: Dark shadow or 2-3px black outline for readability\n\n**Animation:**\n- Fade in over 0.3-0.5 seconds\n- Hold for duration listed\n- Fade out over 0.3-0.5 seconds\n- Alternative: Pop in with slight scale (90% \u2192 100%) for energy\n\n**Position:**\n- Seconds 0-24: Center or lower-third (to not cover subject)\n- Second 24-27: Lower-third (logo + CTA together)\n\n---\n\n## Stage 6b: Optional Narration (Voiceover Script)\n\n**15-20 second voiceover (Portuguese):**\n\n```\n\"E se seu lugar de paz fosse real?\n\nExiste um lugar dentro de voc\u00ea \u2014 um reino de luz infinita, de serenidade absoluta.\nUm lugar onde a mente fica clara, o cora\u00e7\u00e3o se abre, e voc\u00ea finalmente encontra\nquem realmente \u00e9.\n\n[Pause \u2014 let visuals speak]\n\nCom medita\u00e7\u00e3o transformadora, voc\u00ea acessa esse mundo. Todos os dias. Sempre que\nprecisa.\n\nSua paz interior est\u00e1 esperando. Venha descobrir.\"\n```\n\n**Delivery style:**\n- Calm, warm, slightly mystical tone\n- Speak slowly (not rushed)\n- Pause after key phrases to let visuals breathe\n- No background music behind voiceover (or very low ambient music)\n- Use Voiceover Pro, Google Translate TTS, or Adobe Podcast for audio\n\n**Optional: English alternative (hooks international viewers):**\n\n```\n\"What if your inner peace was real?\n\nThere's a place within you \u2014 a realm of infinite light and absolute serenity.\nA place where clarity flows, your heart opens, and you find yourself again.\n\nThrough transformative meditation, you access this world. Every day. Always.\n\nYour peace is waiting. Come discover it.\"\n```\n\n---\n\n## Stage 7: Engagement Strategy & Production Document\n\n### Engagement Tactics\n\n**Prompt Tease Strategy:**\n- Show the FULL IMAGE PROMPT on screen for 2-3 frames (approximately 0.5-1 second) somewhere in the 19-24s range, positioned in lower-third\n- Make it readable but JUST fast enough that viewers feel they need to pause/rewind to catch it all\n- This drives rewatches (YouTube algorithm loves this) and comments\n\n**CTA Strategy:**\n- Primary CTA: \"Quer o prompt? Comenta \ud83c\udf3f\" (Want the prompt? Comment \ud83c\udf3f)\n- Keyword: \ud83c\udf3f (leaf emoji \u2014 ties to meditation/nature/growth theme)\n- Alternative keywords: #medita\u00e7\u00e3o #paz (if using hashtag format)\n\n**Comment Pinning:**\n- Create pinned comment: \"Comenta \ud83c\udf3f que eu mando o prompt no privado! Aproveita pra seguir e ativa o sino \ud83d\udd14\" (Comment \ud83c\udf3f and I'll send the prompt via DM! Follow and hit the bell \ud83d\udd14)\n- This reinforces the CTA and encourages direct engagement\n\n**Description Strategy:**\n```\n\"E se seu lugar de paz fosse real? \ud83c\udf3f\u2728\n\nMedita\u00e7\u00e3o transformadora come\u00e7a aqui. Acesso ilimitado \u00e0 serenidade, \u00e0 clareza mental\ne \u00e0 transforma\u00e7\u00e3o espiritual.\n\n\ud83d\udcab Comenta \ud83c\udf3f para receber o prompt desta imagem AI no privado!\n\nN\u00e3o coloque a descri\u00e7\u00e3o completa do prompt \u2014 force viewers to comment and DM you.\n\n[Links to app/website]\n[Link to full meditation program]\n\n#inteligenciaartificial #ia #aiart #medita\u00e7\u00e3o #paz #spiritualawakening #yogini\n```\n\n### Hashtag Strategy\n\n**Hashtag Set (8 total):**\n1. #inteligenciaartificial \u2014 Broad AI niche\n2. #ia \u2014 Common shorthand, high search volume\n3. #aiart \u2014 AI art community\n4. #medita\u00e7\u00e3o \u2014 Core theme/niche\n5. #paz \u2014 Emotional resonance\n6. #spiritualawakening \u2014 Audience interest\n7. #prompts \u2014 People searching for AI prompts\n8. #shortsviral \u2014 Shorts-specific engagement boost\n\n**Alternative hashtag combinations (if customizing for different audiences):**\n- For spirituality focus: #espiritualidade #energia #transforma\u00e7\u00e3o\n- For app promotion: #appmeditation #mindfulness #selflove\n- For English audiences: #meditation #innerpeace #aivideo\n\n---\n\n## Post-Production Checklist\n\nBefore publishing to YouTube:\n\n- [ ] **Format:** 9:16 vertical (1080x1920px minimum)\n- [ ] **Duration:** 27 seconds exactly (check timeline)\n- [ ] **Hook (0-3s):** Grabs attention, curiosity question visible\n- [ ] **Text overlays:** All readable, properly timed, white with shadow\n- [ ] **Animation:** Smooth, subtle, no jerky cuts\n- [ ] **Prompt visibility:** Shown clearly for 2-3 frames around 20-21s\n- [ ] **Music:** Synced, mood-matched (cinematic ambient or lo-fi epic)\n- [ ] **CTA:** \"Quer o prompt? Comenta \ud83c\udf3f\" visible at 24-27s\n- [ ] **Logo:** App logo/branding visible in final seconds\n- [ ] **Audio levels:** Voiceover (if used) clear, music not overpowering\n- [ ] **Transitions:** Clean fades/cuts between segments, no random effects\n- [ ] **Color grading:** Consistent tone, glowing elements pop\n- [ ] **Thumbnail:** Export the brightest, most striking frame as thumbnail\n\n---\n\n## Music Recommendations\n\n### Option 1: Cinematic Ambient (Best for mystical mood)\n- Search \"royalty free cinematic ambient\" on **YouTube Audio Library**\n- Keywords: \"ethereal\", \"mystical\", \"calm epic\", \"peaceful cinematic\"\n- Duration: 30-35 seconds\n- Mood: Slow build, soft orchestral strings, ethereal synths\n- Example genres: Ambient cinematic, lo-fi epic, post-rock ambient\n\n### Option 2: Lo-Fi Epic\n- Search \"lo-fi epic\" or \"lo-fi cinematic\" on YouTube Audio Library\n- Mood: Peaceful but with energy, slightly building\n- Best for: Driving engagement (lo-fi has strong algorithmic boost on Shorts)\n- Duration: 30-35 seconds\n\n### Option 3: Dramatic Orchestral (if wanting more power)\n- Search \"dramatic orchestral royalty free\" on YouTube Audio Library\n- Mood: Epic, building tension, mystical elements\n- Caution: Don't overpower the voiceover (if used)\n\n### Quick Access:\n- **CapCut built-in music:** Search \"cinematic\", \"ambient\", \"spiritual\"\n- **YouTube Audio Library:** Free, all royalty-free, perfect sync\n- **Epidemic Sound:** Paid but unlimited downloads\n\n---\n\n## Editor Recommendations (Free)\n\n| **Tool** | **Best For** | **Mobile** | **Desktop** |\n|----------|------------|-----------|-----------|\n| **CapCut** | Shorts/TikTok, trending effects, templates | \u2705 Excellent | \u2705 Good |\n| **DaVinci Resolve** | Professional control, advanced effects | \u274c | \u2705 Excellent |\n| **InShot** | Quick mobile edits, simple timeline | \u2705 Best | \u274c |\n| **VN Video Editor** | Mobile-friendly, good color grading | \u2705 Good | \u274c |\n| **Canva Video** | Templates, fast, simple | \u2705 Good | \u2705 Good |\n\n**Recommended workflow:**\n1. Edit in **CapCut** (fastest for Shorts, built-in music/effects)\n2. If needing advanced color grading: use **DaVinci Resolve** (free tier is powerful)\n3. Final export: 9:16, 1080x1920, H.264, 30fps, maximum quality\n\n---\n\n## Tools & Resources Summary\n\n### Image Generation\n- **Higgsfield.ai:** https://higgsfield.ai (Nano Banana 2, best cinematic)\n- **Leonardo.ai:** https://leonardo.ai (consistent style)\n- **nanobanana.io:** https://nanobanana.io (free direct video)\n- **Ideogram:** https://ideogram.ai (text-heavy images)\n\n### Image-to-Video Animation\n- **Higgsfield Video Creator:** https://higgsfield.ai\n- **Hailuo AI:** https://hailuoai.video\n- **Kling AI:** https://klingai.com\n- **Pika:** https://pika.art\n- **Luma Dream Machine:** https://lumalabs.ai/dream-machine\n\n### Editing Software\n- **CapCut:** https://www.capcut.com (free, web + mobile)\n- **DaVinci Resolve:** https://www.blackmagicdesign.com/products/davinciresolve\n- **InShot:** Mobile app (free)\n\n### Music\n- **YouTube Audio Library:** https://www.youtube.com/audiolibrary (free, in YouTube Studio)\n- **Epidemic Sound:** https://www.epidemicsound.com\n- **Pixabay Music:** https://pixabay.com/music\n\n---\n\n## Engagement Metrics to Track\n\nAfter publishing, monitor these metrics to refine future videos:\n\n- **CTR (Click-Through Rate):** Target 3-5% for Shorts\n- **Average View Duration:** Aim for 70%+ of video watched\n- **Comments:** Track engagement on comment CTA (\"Comenta \ud83c\udf3f\")\n- **Shares/Retweets:** Shows strong virality\n- **Click-Through to App:** Track via UTM parameters in bio link\n\n---\n\n## Version Control\n\n| **Version** | **Date** | **Changes** |\n|------------|----------|-----------|\n| v1 | 2026-04-07 | Initial production document created. Main prompt, dynamic variant, animation prompt, script, timing, engagement strategy, and post-production checklist complete. Ready for image generation phase. |\n\n---\n\n## Next Steps\n\n1. **Generate images** using the 3 prompts above via Higgsfield or Leonardo\n2. **Animate images** using the animation prompt via Hailuo AI or Kling\n3. **Edit video** in CapCut: add music, text overlays, timing, CTA\n4. **Add prompt teaser** at 20-21s mark\n5. **Color grade** if needed (add more glow/mystical effect)\n6. **Export** as 9:16 vertical 1080x1920\n7. **Upload to YouTube** with description, hashtags, pinned comment\n8. **Engage:** Respond to comments, reply with prompt in DMs\n\n---\n\n**Document Author:** Viral Video Creator Skill\n**Status:** Ready for Production\n**Quality Gate:** Production document complete; awaiting image generation phase\n"}], "grading": {"run_id": "eval-1-meditation-forest-with_skill", "expectations": [{"text": "has_3_prompts", "passed": true, "evidence": "Document contains 3 distinct copy-pasteable AI image prompts: Main Prompt (lines 54-68), Dynamic Variant (lines 72-85), and Backup Prompt (lines 89-94). All are full, detailed prompts suitable for direct use in image generators."}, {"text": "has_timing_table", "passed": true, "evidence": "Lines 161-168 contain a structured timing table with columns: Time | Visual | Text Overlay | Notes. Provides second-by-second breakdown for the 27-second video (0-3s, 3-7s, 7-13s, 13-19s, 19-24s, 24-27s)."}, {"text": "has_9_16_format", "passed": true, "evidence": "Explicitly specified multiple times: Line 4 'YouTube Short (9:16, vertical)', Line 67 'vertical 9:16 portrait', Line 84 'vertical 9:16 portrait', Line 289 mentions '9:16 vertical (1080x1920px minimum)'"}, {"text": "has_engagement_cta", "passed": true, "evidence": "Line 241 specifies primary CTA 'Quer o prompt? Comenta \ud83c\udf3f' (Want the prompt? Comment \ud83c\udf3f). Includes specific keyword strategy using leaf emoji tied to meditation theme."}, {"text": "correct_language", "passed": true, "evidence": "Document is in Portuguese (pt-BR) with text overlays in Portuguese: 'E se seu lugar de paz fosse real?', 'Medita\u00e7\u00e3o transformadora', 'Encontre sua paz interior', 'Quer o prompt? Comenta \ud83c\udf3f'. Line 7 confirms 'Language: Portuguese (pt-BR)'"}, {"text": "has_tool_recs", "passed": true, "evidence": "Lines 100-104 recommend specific image generation tools with names: Higgsfield.ai, Leonardo.ai, nanobanana.io, Ideogram 2.0. Lines 141-146 recommend animation/video tools: Higgsfield Video Creator, Hailuo AI, Kling AI, Pika, Luma Dream Machine."}, {"text": "has_animation_prompt", "passed": true, "evidence": "Lines 126-138 contain a dedicated, copy-pasteable animation prompt: 'The lone spiritual seeker stands peacefully in the center of the mystical forest...' with specific instructions for camera movement, duration (6-8 seconds), and lighting effects."}]}}, {"id": "eval-1-meditation-forest-without_skill", "prompt": "Quero criar um YouTube Short viral para promover meu app de medita\u00e7\u00e3o. Algo com visual de floresta m\u00edstica com energia e luz. Estilo parecido com os v\u00eddeos do @airon_ia.", "eval_id": 1, "outputs": [{"name": "meditation_forest_youtube_short_production_plan.md", "type": "text", "content": "# YouTube Short Viral Production Plan\n## Meditation App - Mystical Forest Theme\n\n**Target Platform:** YouTube Shorts (9:16, 15-60 seconds)\n**Campaign Goal:** Drive viral reach and app downloads through engaging, aesthetic forest visuals\n**Reference Style:** @airon_ia energy-based visual storytelling\n**Created:** 2026-04-07\n\n---\n\n## 1. CONCEPT & CREATIVE DIRECTION\n\n### 1.1 Core Hook\n- **Opening (0-2s):** Abrupt visual: dense mystical forest with ethereal light rays breaking through dense canopy\n- **Main Visual:** Forest scenes with glowing particles, magical light energy flowing through trees and nature elements\n- **Call to Action:** Text overlay directing viewers to download meditation app for \"inner peace\"\n- **Closing:** Serene meditation figure or nature element fading to app icon/download link\n\n### 1.2 Visual Aesthetic (Inspired by @airon_ia)\n- **Color Palette:** Deep forest greens (#1a472a, #2d5a3d), golden warm light (#d4af37, #f4d03f), deep purples (#4a235a, #663399)\n- **Lighting:** Volumetric light rays, lens flares, God rays through canopy\n- **Energy Elements:** Glowing particles, light trails, subtle orbs floating through frame\n- **Particle Effects:** Golden/white sparkles, ethereal dust, bioluminescent glow\n- **Motion:** Slow, meditative camera movements (pan, dolly, tilt) or smooth floating perspectives\n- **Tone:** Mystical, calming yet energetic, aspirational, transformative\n\n### 1.3 Target Audience\n- Wellness seekers (18-45 years)\n- Meditation app users and potential users\n- Social media users interested in aesthetic/wellness content\n- TikTok/Shorts users who engage with transformational/motivational content\n\n---\n\n## 2. SCRIPT & NARRATIVE STRUCTURE\n\n### 2.1 15-Second Version (High-Impact Short)\n```\n[0-2s] Visual Hook\n- Dense forest canopy, light rays breaking through\n- Text: \"When the world overwhelms...\"\n- Sound: Ambient nature sound + ethereal pad music begins\n\n[2-7s] Problem Introduction\n- Quick cuts: busy city, stressed faces (or forest scenes with dark energy)\n- Text: \"You need to find your center\"\n- Sound: Music intensifies slightly, adds gentle percussion\n\n[7-12s] Solution & Magic\n- Meditation figure in forest glowing with light energy\n- Particle effects intensify, light flows around the figure\n- Text: \"Download [APP NAME]\"\n- Sound: Music crescendos with hopeful melody\n\n[12-15s] CTA\n- App icon with glow effect\n- Text: \"Find Your Peace Within\" + App Store/Google Play buttons\n- Sound: Music resolves with satisfying chord\n```\n\n### 2.2 30-Second Extended Version\n```\n[0-3s] Hook\n- Intense forest opening with dramatic lighting reveal\n- Text: \"Your mind deserves rest\"\n\n[3-10s] Problem Build\n- Montage of stress signals: busy environments, anxious energy\n- Contrast with peaceful forest scenes\n- Text layers building tension: \"But chaos never stops...\"\n\n[10-20s] Transformation Sequence\n- Meditation pose with glowing aura\n- Magical particles surrounding figure\n- Light energy spreading from center outward\n- Forest coming \"alive\" with bioluminescence\n- Multiple perspectives of the transformation\n\n[20-28s] Benefits Statement\n- Show peaceful results: calm mind, glowing energy, inner light\n- Text: \"Meditation Made Magic\" or \"Inner Peace Awaits\"\n\n[28-30s] CTA\n- App icon with download links\n- Final text: \"Download Now\"\n```\n\n---\n\n## 3. PRODUCTION REQUIREMENTS\n\n### 3.1 Asset Sourcing\n\n#### A. Base Footage/Images Needed\n- **Forest Locations:**\n  - Wide shots of dense forest with natural light rays (golden hour preferred)\n  - Close-ups of foliage, ferns, moss, trees\n  - Canopy shots looking up at light\n  - Alternative: High-quality stock forest footage (Unsplash, Pexels, Pixabay, Shutterstock)\n\n- **Human Elements:**\n  - Meditation pose silhouettes (can be stock footage or shot custom)\n  - Peaceful/calm faces (optional, may use silhouettes instead)\n  - Alternative: Use stock meditation/wellness footage\n\n- **Reference Videos:**\n  - Study @airon_ia's video composition, pacing, effects\n  - Analyze their use of light, particles, motion\n  - Note their music timing and sound design\n\n#### B. Visual Effects & Enhancement\n- **Particle Effects Needed:**\n  - Glowing particles/sparkles (golden, white, soft blue)\n  - Dust/mist effects\n  - Light ray enhancements\n  - Orbs or glowing elements floating through space\n  - Aura/glow around meditation figure\n\n- **Color Grading:**\n  - Warm green forest tones with enhanced golden light\n  - Shadows lifted for mystical feel\n  - Selective color grading (green + gold emphasis)\n  - Slight desaturation on stress/chaos scenes, vibrant saturation on peaceful scenes\n\n- **Motion Graphics:**\n  - Text animations (fade, slide, glow effects)\n  - App icon reveal with glow/particle effects\n  - Transition effects between scenes\n  - Logo animations\n\n### 3.2 Audio Requirements\n\n#### A. Music/Soundtrack\n- **Genre:** Ambient, meditative electronic, lo-fi ethereal\n- **Tempo:** Slow (80-100 BPM) or minimal percussion-based\n- **Key Elements:**\n  - Opening: Gentle ambient pad, nature sounds\n  - Middle: Build with subtle percussion, warm synths\n  - Climax: Hopeful melody, fuller arrangement\n  - Ending: Resolution, calming closure\n- **Duration:** Fit 15-30 seconds depending on version\n- **Options:**\n  - Commission original composition (preferred for brand identity)\n  - Licensed music from Epidemic Sound, Artlist, AudioJungle\n  - Royalty-free sources: YouTube Audio Library\n\n#### B. Sound Design\n- **Nature Sounds:**\n  - Gentle forest ambience (wind, rustling leaves)\n  - Subtle bird calls (optional)\n  - Running water (optional, for meditation vibe)\n\n- **Effect Sounds:**\n  - Soft whoosh/transition sounds\n  - Gentle magic/sparkle sounds (very subtle)\n  - Harmonic bells or tones (minimal)\n\n- **Audio Balance:** Music-primary, SFX-secondary, nature ambience as foundation\n\n### 3.3 Technical Specifications\n\n#### Video Format\n- **Resolution:** 4K (3840x2160) to allow for cropping and scaling\n- **Frame Rate:** 24fps or 30fps (cinema feel, smooth motion)\n- **Aspect Ratio:** 9:16 (vertical for Shorts)\n- **Duration Options:** 15s, 30s, 60s versions (create multiple for A/B testing)\n\n#### File Outputs\n- Master file (ProRes or similar high-quality codec)\n- Compressed for YouTube Shorts (H.264, 50-200 Mbps bitrate)\n- Mobile-optimized (for social sharing)\n\n---\n\n## 4. PRODUCTION WORKFLOW\n\n### 4.1 Pre-Production Phase\n**Timeline: 5-7 days**\n\n1. **Creative Finalization**\n   - Finalize script and shot list\n   - Create storyboard (rough sketches or detailed boards)\n   - Reference compilation of @airon_ia and similar content\n   - Lock visual style guide (colors, effects, tone)\n\n2. **Asset Collection**\n   - Source or shoot forest footage\n   - Collect meditation/peace imagery\n   - Curate music options (3-5 candidates)\n   - Gather sound effects library\n\n3. **Team Coordination**\n   - Assign roles: Editor, VFX artist, Motion Graphics designer\n   - Reserve software/hardware resources\n   - Plan render timeline\n\n### 4.2 Production Phase\n**Timeline: 3-5 days**\n\n1. **Editing**\n   - Import all footage\n   - Create rough cut using script timing\n   - Assemble sequences (opening hook, problem, solution, CTA)\n   - Lock pacing and transitions\n\n2. **Visual Effects**\n   - Add particle effects (particles, sparkles, glows)\n   - Create aura/glow around meditation figure\n   - Enhance light rays and volumetric effects\n   - Add transitions and motion elements\n\n3. **Color Grading**\n   - Grade for cohesive mystical aesthetic\n   - Enhance golden light\n   - Adjust contrast for visual pop\n   - Ensure color consistency across cuts\n\n4. **Motion Graphics**\n   - Animate text overlays\n   - Create app icon reveal\n   - Design CTA graphics (download buttons/links)\n   - Add lower-thirds and graphics as needed\n\n### 4.3 Post-Production Phase\n**Timeline: 2-3 days**\n\n1. **Audio Production**\n   - Final music selection/placement\n   - Mix sound effects and nature ambience\n   - Audio leveling and EQ\n   - Add subtle foley if needed\n\n2. **Final Assembly**\n   - Composite all elements\n   - Final color passes\n   - Motion tracking if needed\n   - VFX polish and refinement\n\n3. **Export & Optimization**\n   - Export master in high quality\n   - Create optimized YouTube Shorts version\n   - Generate variations (15s, 30s, 60s)\n   - Create multiple thumbnail versions\n\n4. **QA & Approval**\n   - Review on multiple devices (phone, tablet, desktop)\n   - Check audio levels across platforms\n   - Verify text readability\n   - Final approvals from stakeholders\n\n### 4.4 Total Production Timeline\n**10-15 days** from concept to delivery\n\n---\n\n## 5. PLATFORM OPTIMIZATION\n\n### 5.1 YouTube Shorts Specifications\n- **Max Duration:** 60 seconds (15-30s optimal for engagement)\n- **Aspect Ratio:** 9:16 (vertical)\n- **Upload Format:** MP4, WebM, 3GPP, or MOV\n- **Max File Size:** 256 MB\n- **Resolution:** 1080 x 1920px minimum recommended\n- **Frame Rate:** 24-60fps\n\n### 5.2 Thumbnail Strategy\n- First frame should be compelling and visually clear\n- Consider custom thumbnail with:\n  - Golden glow effect\n  - Meditation figure or forest scene\n  - Bold, readable text\n  - Contrast against dark background\n\n### 5.3 Metadata & SEO\n- **Title:** Incorporate keywords + hook\n  - \"Meditation Made Magic | Find Your Inner Peace #Shorts\"\n  - \"Mystical Forest Meditation | Guided Calm #Wellness\"\n\n- **Tags:** meditation, mindfulness, relaxation, forest, yoga, wellness, short, viral\n- **Description:** Clear CTA for download + link to app store\n- **Hashtags:** #YouTubeShorts #Meditation #Wellness #MeditationApp #InnerPeace\n\n---\n\n## 6. PROMOTION & DISTRIBUTION STRATEGY\n\n### 6.1 Primary Distribution\n- YouTube Shorts (main platform)\n- TikTok (repurpose 9:16 format)\n- Instagram Reels (same format)\n- Threads, Pinterest (optional)\n\n### 6.2 Promotion Tactics\n1. **Direct Download CTA**\n   - Include app store links in descriptions\n   - Use YouTube Shorts' built-in link features if available\n   - QR code overlay for app download\n\n2. **Organic Reach**\n   - Optimize posting time (evenings, weekends)\n   - Encourage shares through emotional resonance\n   - Create follow-up content addressing comments\n\n3. **Paid Amplification** (Optional)\n   - YouTube Shorts Fund eligibility (if applicable)\n   - Social media ads targeting wellness audience\n   - Influencer shares\n\n4. **Community Engagement**\n   - Respond to comments\n   - Create series of related shorts\n   - Tease longer meditation content\n\n### 6.3 Performance Metrics\n- **Primary KPIs:**\n  - Views\n  - Watch time\n  - Click-through rate to app download\n  - Engagement (likes, comments, shares)\n  - Actual app downloads attributed to video\n\n- **Secondary Metrics:**\n  - Audience retention curve\n  - Share rate\n  - Comment sentiment\n  - Subscriber growth\n\n---\n\n## 7. CONTENT VARIATIONS\n\n### 7.1 Multiple Video Versions\nCreate 3-5 variations to A/B test:\n\n**Version 1: Fast-Paced Energy**\n- Quick cuts between scenes\n- More dramatic particle effects\n- Higher energy music\n- Emphasis on transformation\n\n**Version 2: Slow Meditative**\n- Longer takes, slower pacing\n- More subtle effects\n- Calmer music\n- Emphasis on peace and calm\n\n**Version 3: Emotional Journey**\n- Before/after narrative\n- Stress visualization to calm resolution\n- Warmer color grading\n- Emotional music arc\n\n**Version 4: Abstract/Artistic**\n- Focus on light and particles\n- Minimal human presence\n- Hypnotic visuals\n- Experimental music\n\n**Version 5: Direct Product Focus**\n- Feature app interface/screen\n- More prominent branding\n- UI/UX showcase\n- Clear CTAs\n\n### 7.2 Hook Variations\nTest different opening lines:\n- \"When the world overwhelms...\"\n- \"Your mind deserves this...\"\n- \"Find the peace within...\"\n- \"Reality check: You need this...\"\n- \"Close your eyes and breathe...\"\n\n---\n\n## 8. TOOLS & SOFTWARE RECOMMENDATIONS\n\n### Video Editing\n- **Adobe Premiere Pro** (professional standard)\n- **DaVinci Resolve** (free with color grading)\n- **Final Cut Pro** (if Apple ecosystem)\n- **CapCut** (lightweight, mobile-friendly)\n\n### Visual Effects & Motion Graphics\n- **Adobe After Effects** (particle effects, animations)\n- **Blender** (3D elements, particles, advanced effects)\n- **Fusion** (DaVinci's VFX suite)\n\n### Color Grading\n- **DaVinci Resolve** (industry standard, free)\n- **Adobe Premiere Pro** Lumetri panel\n- **Final Cut Pro** Color Board\n\n### Audio Production\n- **Adobe Audition** (audio editing)\n- **Logic Pro** (music production)\n- **Reaper** (DAW, lightweight)\n- **Audacity** (free basic audio editing)\n\n### Stock Assets\n- **Footage:** Shutterstock, Pond5, VideoBlocks, Unsplash, Pexels\n- **Music:** Epidemic Sound, Artlist, AudioJungle, YouTube Audio Library\n- **Sound Effects:** Freesound, Zapsplat, BBC Sound Library\n- **Plugins:** Red Giant, Boris FX, Video Copilot\n\n---\n\n## 9. BUDGET ESTIMATION\n\n### 9.1 Production Costs (Professional Team)\n| Item | Cost Range |\n|------|-----------|\n| Freelance Video Editor | $500-2,000 |\n| Motion Graphics Designer | $400-1,500 |\n| VFX Artist (particle effects) | $300-1,200 |\n| Original Music Composition | $200-800 |\n| Stock Footage License | $100-500 |\n| Stock Music License | $50-200 |\n| **Total** | **$1,550-6,200** |\n\n### 9.2 Budget-Friendly Options\n- DIY editing with templates: $0-300\n- Stock footage/music bundles: $100-500\n- Freelance from platforms (Fiverr, Upwork): $300-1,000\n- **Total** | **$400-1,800** |\n\n---\n\n## 10. SUCCESS METRICS & KPIs\n\n### 10.1 Short-Term (First 30 Days)\n- Target 50K+ views (realistic for quality content)\n- 2-5% engagement rate minimum\n- 0.5-1% click-through to app download\n- 50-200 app installs attributed to video\n\n### 10.2 Long-Term Goals (90 Days)\n- 500K+ cumulative views across platforms\n- Sustained 2-3% engagement rate\n- 300-500+ app installations\n- Establish content series with similar themes\n- Identify top-performing visual elements for scaling\n\n### 10.3 Audience Feedback Signals\n- Comment themes (requests for longer meditation, similar content)\n- Share rate (emotional resonance indicator)\n- Watch-through percentage\n- Audience sentiment analysis\n\n---\n\n## 11. ITERATION & OPTIMIZATION PLAN\n\n### 11.1 Post-Launch (Week 1-2)\n- Monitor performance metrics daily\n- Engage with comments and community\n- Identify top 3 performing variations\n- Prepare follow-up/series content\n\n### 11.2 First Month\n- Analyze full performance data\n- A/B test variations\n- Repurpose assets into longer-form content\n- Plan next video series\n\n### 11.3 Scaling Strategy\n- Identify winning creative elements\n- Create 3-5 follow-up videos with similar aesthetic\n- Develop content pillars (stress relief, sleep, focus, energy, love)\n- Build community around meditation app\n\n---\n\n## 12. RISK MITIGATION\n\n### 12.1 Common Pitfalls\n| Risk | Mitigation |\n|------|-----------|\n| Audio levels too low on mobile | Test on multiple devices, loudness normalize |\n| Text unreadable on small screens | Large fonts, high contrast, test readability |\n| Effects feel overused/cheap | Subtle animation, high-quality particle plugins |\n| Pacing too fast/slow | Test with target audience, iterate |\n| Color grading looks unnatural | Reference real nature, use LUTs, color science |\n| Poor performance/views | A/B test variations, optimize thumbnail, boost organic reach |\n\n### 12.2 Content Safety\n- Ensure no copyright music infringement (license properly)\n- Verify all footage is properly licensed\n- No misleading health claims about meditation benefits\n- Comply with FTC guidelines if promoting paid app\n\n---\n\n## 13. NEXT STEPS & ACTION ITEMS\n\n### Immediate Actions\n- [ ] Finalize script and shot list\n- [ ] Create detailed storyboard\n- [ ] Gather reference videos from @airon_ia and competitors\n- [ ] Compile music candidates and sound effect library\n- [ ] Identify editor and VFX team or freelancers\n\n### Pre-Production Checklist\n- [ ] Lock visual style guide and color palette\n- [ ] Source all forest footage (shoot or license)\n- [ ] Secure music license or commission composition\n- [ ] Create mood board\n- [ ] Brief team on creative direction\n\n### Production Checklist\n- [ ] Begin editing rough cut\n- [ ] Implement particle effects\n- [ ] Color grade and grade for consistency\n- [ ] Create motion graphics and text animations\n- [ ] Mix audio and sound design\n\n### Final Steps\n- [ ] Export all format variations (15s, 30s, 60s)\n- [ ] QA test on multiple devices\n- [ ] Prepare upload package with metadata\n- [ ] Schedule upload and promotion plan\n- [ ] Set up performance tracking\n\n---\n\n## 14. CREATIVE INSPIRATION NOTES\n\n### Visual Language (Inspired by @airon_ia Style)\n- **Signature Elements:**\n  - Dramatic light sources (sun, magical glow)\n  - Particle/mist interaction with light\n  - Slow, cinematic camera movements\n  - Warm color grading with golden undertones\n  - Transformation/evolution narrative\n  - Emotional resonance over explicit product features\n\n- **Pacing:** Slow buildup to moment of impact, then resolution\n- **Music-Visuals Sync:** Visuals peak with musical crescendo\n- **Color Theory:** Green (nature, growth, calm) + Gold (warmth, success, enlightenment)\n\n### Psychological Triggers for Virality\n1. **Emotional:** Aspiration, calm, hope\n2. **Visual:** Mesmerizing, unique, beautiful\n3. **Relatable:** Stress/chaos relatable to audience\n4. **Transformational:** Clear before/after or journey\n5. **Shareable:** Aesthetically beautiful, conversation-starting\n\n---\n\n## FINAL SUMMARY\n\nThis production plan creates a **15-30 second YouTube Short** with:\n- Mystical forest aesthetic with volumetric light and particle effects\n- Energetic yet calming visual style inspired by @airon_ia\n- Clear narrative arc: problem \u2192 transformation \u2192 solution\n- Strategic CTAs optimized for app downloads\n- Multi-platform distribution strategy\n- Data-driven iteration plan\n\n**Expected Timeline:** 2-3 weeks (10-15 production days)\n**Estimated Budget:** $1,500-6,200 (professional) or $400-1,800 (budget-friendly)\n**Success Metric:** 50K+ views in 30 days, 50+ app installs attributed to video\n\n---\n\n**Document Version:** 1.0\n**Last Updated:** 2026-04-07\n**Status:** Ready for Production Planning\n"}], "grading": {"run_id": "eval-1-meditation-forest-without_skill", "expectations": [{"text": "has_3_prompts", "passed": false, "evidence": "Document contains conceptual scene descriptions (lines 94-130) but no copy-pasteable AI image generation prompts. Section 3.1 'Asset Sourcing' describes needed elements but does not provide actual prompt text suitable for direct use in image generators."}, {"text": "has_timing_table", "passed": true, "evidence": "Lines 37-59 (15-second version) and lines 62-86 (30-second version) provide structured script breakdowns with timing and visual/audio descriptions. While more narrative than the with_skill version, timing information is present."}, {"text": "has_9_16_format", "passed": true, "evidence": "Format explicitly specified: Line 4 'YouTube Shorts (9:16, 15-60 seconds)', Line 162 'Aspect Ratio: 9:16 (vertical for Shorts)', Line 263 'Max Duration: 60 seconds...Aspect Ratio: 9:16'"}, {"text": "has_engagement_cta", "passed": false, "evidence": "Document discusses download CTAs (lines 294-297 'Direct Download CTA') but does not specify an engagement CTA asking viewers to comment with a keyword. Generic approaches mentioned but no specific 'Comment X for the prompt' strategy."}, {"text": "correct_language", "passed": false, "evidence": "Entire document is in English. Per evaluation specification, eval-1 (meditation-forest) should be in Portuguese. Scripts shown (lines 37-59, 62-86) are in English: 'When the world overwhelms...', 'Your mind deserves rest', 'Find Your Peace Within'."}, {"text": "has_tool_recs", "passed": false, "evidence": "Lines 375-403 recommend video editing software (Premiere Pro, DaVinci Resolve, CapCut) and stock footage platforms, but no specific AI image generation tools paired with animation tools. Recommendations are for traditional video editing and stock footage, not generative AI tools."}, {"text": "has_animation_prompt", "passed": false, "evidence": "Document describes visual effects needed (lines 206-216 'Visual Effects') but provides no copy-pasteable animation prompt. Section 4.3 discusses VFX production but these are production notes, not a prompt suitable for image-to-video generators."}]}}, {"id": "eval-2-crypto-cyberpunk-with_skill", "prompt": "Create a viral TikTok video concept about cryptocurrency and blockchain. I want something cyberpunk-themed, neon city vibes. Make it look cinematic and futuristic.", "eval_id": 2, "outputs": [{"name": "PROMPT_VIDEO_CRYPTO_CYBERPUNK.md", "type": "text", "content": "# Viral TikTok Video Production Document\n## Cryptocurrency Cyberpunk Neon City Edition\n\n**Project:** Crypto Cyberpunk Cinematic Short\n**Platform:** TikTok (YouTube Shorts, Reels compatible)\n**Duration:** 26 seconds\n**Format:** 9:16 vertical\n**Theme:** Cyberpunk neon-lit metropolis where cryptocurrency and blockchain technology manifest as immersive digital phenomena\n**Vibe:** Cinematic, futuristic, high-energy, mysterious\n\n---\n\n## Stage 1: Reference Analysis\n\n**Target Style:** @airon_ia formula applied to crypto/tech niche\n- **Duration:** 20-30 seconds (targeting 26s)\n- **Visual Style:** Cinematic AI-generated visuals with one continuous cyberpunk aesthetic\n- **Text Overlay:** Bold white sans-serif with dark shadow/outline\n- **Hook Structure:** Curiosity hook in first 3 seconds that stops scrolling\n- **CTA Placement:** End-of-video call-to-action asking viewers to comment for the prompt\n- **Engagement Mechanic:** Prompt shown briefly (2-3 frames) to tease without full reveal\n\n**Key Reference Elements:**\n- Neon color palette (cyan, magenta, purple, electric blue)\n- Vertical composition emphasizing height/scale of cyberpunk cityscape\n- Glow effects and light trails representing crypto transactions\n- Cinematic depth with foreground/background layering\n- Mystery about what we're watching (blockchain? cryptocurrency mining? digital transaction?)\n\n---\n\n## Stage 2: Theme & Narrative\n\n**Theme Statement:**\nA lone figure navigates an endless cyberpunk metropolis bathed in neon light, where cryptocurrency and blockchain technology manifest as tangible visual phenomena. Glowing digital coins float like quantum particles, holographic trading interfaces pulse with energy, and data networks weave through towering skyscrapers. The video captures the intersection of digital finance, cutting-edge technology, and urban dystopian futurism\u2014representing the power, mystery, and allure of decentralized currency in a technologically transformed world.\n\n**Visual Metaphor:**\n- **Concrete:** Neon-lit cyberpunk city with floating holograms and digital phenomena\n- **Abstract Concept:** The invisible infrastructure of cryptocurrency, blockchain, and decentralized networks made visible and tangible\n- **Emotional Resonance:** Wonder, power, futurism, mysterious technology, the future of finance\n\n**Narrative Arc:**\n1. Hook: What is happening in this neon city?\n2. Reveal: Digital currency and blockchain are real and visible\n3. Scale: Massive infrastructure of crypto technology surrounds us\n4. Climax: The convergence of finance and digital consciousness\n5. CTA: Curiosity drives engagement\u2014viewers want the prompt\n\n---\n\n## Stage 3: Image Prompt Engineering\n\n### Prompt Variant 1: MAIN PROMPT (Hero Shot - Maximum Detail)\n\n```\nA lone figure in a sleek, tech-enhanced dark coat walks through an endless,\nsprawling cyberpunk metropolis at midnight. Towering skyscrapers of black glass\nand chrome reach infinitely upward, their surfaces glowing with neon cyan, magenta,\nand electric purple light. The sky itself pulses with digital data streams.\n\nMassive holographic cryptocurrency coins\u2014Bitcoin, Ethereum symbols\u2014float and rotate\nin the air like quantum particles, each one radiating bright neon glow with light\ntrails behind them. Blockchain networks manifest as intricate glowing geometric chains\nof light that weave between buildings, connecting them with pulsing cyan energy.\n\nThe ground reflects neon light like liquid mercury, creating a mirror surface of the\ndigital sky above. Floating holographic trading interfaces and price tickers glow with\ngreen and red candlestick patterns in the distance. Wind carries particles of digital\nlight that shimmer and fade.\n\nCamera follows the figure from behind at a slow, cinematic pace, pushing forward through\nthe neon haze. Dramatic side-lighting from neon signs casts deep shadows. Ultra-cinematic\n4K, ultra-realistic, cyberpunk aesthetic, dramatic neon lighting, shallow depth of field,\nvertical 9:16 portrait.\n```\n\n**Word Count:** 186 words | **Character Count:** 1,118\n\n---\n\n### Prompt Variant 2: DYNAMIC VARIANT (More Movement, Different Angle, Higher Energy)\n\n```\nAn aerial drone shot descends through a dense cyberpunk city canyon at night.\nTowering mega-structures of obsidian and steel surround us, surfaces alive with\nflowing neon light in cyan, magenta, and ultraviolet hues.\n\nHolographic Bitcoin and Ethereum coins spin rapidly in mid-air, leaving bright\nneon light trails that cut through the darkness. Blockchain nodes\u2014glowing spheres\nconnected by electric blue data chains\u2014form a dynamic three-dimensional network\nthat pulses with energy. Trading terminals and exchanges project holographic\ndisplays onto building surfaces, showing real-time crypto price movements.\n\nA cloaked figure stands below on the street level, arms raised as if controlling\nthe digital phenomenon around them. Particles of light rain down like digital snow.\nThe camera pushes downward and forward with momentum, cutting through the haze of\nneon fog. Volumetric light beams cut across the frame. Lightning-fast pulsing in the\nholographic displays creates rhythm and urgency.\n\nCinematic 4K, ultra-realistic, cyberpunk noir, dramatic neon lighting, dynamic motion,\nvolumetric effects, vertical 9:16 portrait.\n```\n\n**Word Count:** 162 words | **Character Count:** 985\n\n---\n\n### Prompt Variant 3: BACKUP (Short Version - Character Limit Friendly)\n\n```\nA lone figure walks through a neon cyberpunk city at midnight. Towering\nskyscrapers glow with cyan and magenta light. Holographic crypto coins float\nand rotate in the air with glowing light trails. Blockchain networks manifest\nas intricate chains of bright light connecting the buildings. The ground\nreflects neon like liquid mercury. Camera follows from behind in a cinematic\npush. Ultra-cinematic 4K, cyberpunk aesthetic, dramatic neon lighting,\nvertical 9:16 portrait.\n```\n\n**Word Count:** 87 words | **Character Count:** 532\n\n---\n\n## Stage 4: Image Generation Recommendations\n\n**Recommended Tools (in preference order):**\n1. **Higgsfield (higgsfield.ai)** - Nano Banana 2 / Pro model for highest cinematic quality\n2. **nanobanana.io** - Direct text-to-video capability\n3. **Leonardo.ai** - Consistent style with excellent detail\n4. **Ideogram** - Superior text rendering if crypto symbols in images needed\n\n**Generation Settings:**\n- **Aspect Ratio:** 9:16 (vertical portrait)\n- **Resolution:** 1080x1920 (ideal for TikTok/Shorts)\n- **Generate:** 4+ variations from main prompt variant\n- **Selection Criteria:** Look for cinematic feel, glowing neon quality, clear figure silhouette, \"wow factor,\" readable holographic elements\n\n**Generation Strategy:**\n- Start with Main Prompt (Variant 1) - most detail and cinematic quality\n- Generate multiple variations to find the best composition\n- Select 1-2 hero images for animation\n- Use Dynamic Variant (Variant 2) if you want a second image with different perspective\n- Keep backup prompt for any character limit issues with tools\n\n---\n\n## Stage 5: Image-to-Video Animation\n\n**Animation Prompt (for selected hero image):**\n\n```\nThe cloaked figure walks slowly forward through the neon-lit cyberpunk city street.\nTheir dark coat catches the neon light as they move with purpose through the digital\nlandscape. Holographic cryptocurrency coins continue to float and rotate in the air,\ntheir light trails following the movement. Blockchain chains of light pulse with\nenergy, brightening and dimming in rhythm. The camera slowly pushes in from behind\nin a cinematic dolly movement, creating depth and movement. Neon light reflects off\nsurfaces below. Wind-like effects cause particles of digital light to drift across\nthe frame. Lighting maintains dramatic neon color scheme\u2014cyan, magenta, purple.\nMotion is subtle and cinematic, not frantic. Duration: 6 seconds.\n```\n\n**Recommended Animation Tools:**\n| Tool | URL | Best For |\n|------|-----|----------|\n| Higgsfield | higgsfield.ai | Best quality, cinematic motion |\n| Vider.ai | vider.ai | Quick, reliable, free tier |\n| Hailuo AI | hailuoai.video | Smooth motion, good quality |\n| Kling AI | klingai.com | Cinematic results, excellent for neon effects |\n| Pika | pika.art | Fast generation, good for short clips |\n\n**Animation Guidelines:**\n- Generate 2-3 clips from different starting points of the image\n- Keep animation subtle\u2014slow dolly, gentle parallax, not too much movement\n- Focus on making the light effects feel alive (pulsing, flowing, shimmering)\n- Target 4-6 second clips for compositing flexibility\n- Cinematic timing: slow builds, not jarring transitions\n\n---\n\n## Stage 6: Script & Timing (Roteiro)\n\n### Complete Video Script (26 seconds)\n\n| Time | Visual | Text Overlay | Notes |\n|------|--------|--------------|-------|\n| 0-3s | Opening hook: Neon city emerges from darkness, figure silhouette against glowing skyline | \"E se a criptomoeda fosse vis\u00edvel?\" | Curiosity question in Portuguese; white bold text with dark shadow. Fade in over 0.5s. |\n| 3-8s | Camera pushes toward holographic coins floating, rotating with light trails | \"O blockchain \u00e9 real.\" | Short, punchy statement. Bold white sans-serif, center or lower-third. |\n| 8-14s | Blockchain chains of light weave between skyscrapers, glowing and pulsing | \"Conectando bilh\u00f5es em transa\u00e7\u00f5es\" | \"Connecting billions in transactions\" - reveals the scale. Building intrigue. |\n| 14-20s | Trading terminals light up, price tickers glow, figure stands amid the digital explosion | \"Descentralizado. Impar\u00e1vel. Futuro.\" | The climax line: \"Decentralized. Unstoppable. Future.\" Builds excitement. |\n| 20-24s | All neon elements converge\u2014coins, chains, light\u2014in a visual crescendo | \"[PROJECT/CHANNEL NAME]\" | Logo or channel watermark appears center. |\n| 24-26s | Hold final frame with glow effect intensifying | \"Quer o prompt? Comenta \ud83e\udd16\" | \"Want the prompt? Comment \ud83e\udd16\" - Clear CTA. Emoji reinforces tech/AI theme. |\n\n---\n\n### Text Overlay Specifications\n\n**Font Style:**\n- **Font Family:** Bold sans-serif (Montserrat Bold, Inter Bold, or Impact)\n- **Color:** Bright white (#FFFFFF)\n- **Shadow/Outline:** Dark shadow (black #000000) or outline for readability against bright neon\n- **Size:** 40-60pt (depends on editor, but ensure 100% readable on mobile)\n\n**Animation Timing:**\n- **Fade In:** 0.3-0.5 seconds\n- **Hold Duration:** Match to spoken/visual timing (see script table)\n- **Fade Out:** 0.3-0.5 seconds\n- **Optional:** Pop effect with slight scale (1.0 \u2192 1.05 \u2192 1.0) for emphasis on key phrases\n\n**Position:**\n- 0-3s: Center of frame (draws full attention)\n- 3-8s: Lower-third (doesn't cover main action)\n- 8-24s: Lower-third or center (follow action)\n- 24-26s: Center with CTA emoji\n\n---\n\n### Optional Narration Script (15-20 seconds)\n\n*Read in a calm, mysterious, tech-forward tone\u2014like a cyberpunk tech announcer:*\n\n\"In the neon night of tomorrow's city, cryptocurrency is not hidden in code. It's visible. It's real. Blockchain networks glow with the power of billions in transactions flowing across the globe. Decentralized. Imparallel. This is the future of finance. This is what AI can reveal.\"\n\n**Narration Timing:**\n- Start at 1.5 seconds (under opening visual)\n- End at 24 seconds (before final CTA)\n- Keep voice modulation subtle\u2014let visuals be the star\n\n---\n\n## Stage 7: Engagement Strategy & Production Notes\n\n### Engagement Tactics\n\n**1. Prompt Revelation Strategy:**\n- Show the **Backup Prompt (Variant 3)** as text on screen for 2-3 frames (0.15-0.2 seconds) at 20 seconds\n- Frame it so it's readable but viewers can't capture it all in one look\u2014forces them to watch again or comment\n- Make the text glow/neon-styled to match the video aesthetic\n- Position: Center or slightly right of center\n\n**2. Call-to-Action (CTA):**\n- **Primary CTA (video end):** \"Quer o prompt? Comenta \ud83e\udd16\" (Want the prompt? Comment \ud83e\udd16)\n- **Alternative in English:** \"Want the prompt? Comment \ud83d\udd10\" or \"Comment [KEYWORD] for the full prompt\"\n- **Keyword strategy:** Use a crypto-related emoji or term (\ud83e\udd16 robot for AI, \ud83d\udd10 for security/blockchain, or \ud83d\udc8e for crypto)\n\n**3. Comment Strategy (Pin in First Comment):**\n```\n\ud83e\udd16 Comenta CRYPTO que eu mando o prompt no privado!\n(Comment CRYPTO and I'll send you the prompt in DM!)\n\nOu responde com \ud83d\udc8e para mais videos assim\n(Or reply with \ud83d\udc8e for more videos like this)\n```\n\n**4. Hashtag Strategy:**\nPrimary hashtags (post in caption):\n```\n#ia #inteligenciaartificial #aiart #cyberpunk #blockchain #crypto #neon #futurismo #aiart #videoia\n```\n\nAlternative English hashtags (if posting in English):\n```\n#ai #aiart #cyberpunk #blockchain #crypto #futuretech #neon #aivideo #promneed\n```\n\n**Target Mix:**\n- Broad AI hashtags (3): #ia #inteligenciaartificial #aiart\n- Niche crypto/tech (2): #blockchain #cyberpunk\n- Aesthetic (2): #neon #futurismo\n- Tool/format (1-2): #videoia #aivideo\n\n---\n\n### Post-Production Notes\n\n**Video Format & Specs:**\n- **Resolution:** 1080x1920 pixels (exact TikTok/Shorts standard)\n- **Frame Rate:** 30fps (standard for short-form video)\n- **Duration:** Exactly 26 seconds (can be 20-30s, but 26s is proven sweet spot)\n- **File Format:** MP4 (H.264 codec)\n\n**Music/Audio Selection:**\n\n**Recommended Music Style:**\nCinematic cyberpunk electronic or synthwave with:\n- Steady, driving beat (no rapid tempo changes)\n- Neon/synth elements (vaporwave aesthetic)\n- Dark, moody undertone with rising energy toward the end\n- Duration: 26 seconds exactly\n\n**Music Search Terms:**\n- \"Cyberpunk ambient royalty free\"\n- \"Neon synthwave cinematic\"\n- \"Dark electronic cinematic\"\n- \"Futuristic sci-fi background music\"\n\n**Platforms for Royalty-Free Music:**\n- YouTube Audio Library (filtered by \"Cinematic\" category)\n- CapCut's built-in music library (trending sounds)\n- Epidemic Sound (free tier available)\n- Pixabay Music\n- Freepik Music\n\n**Music Timing:**\n- Intro build: 0-3s (mysterious, draws you in)\n- Main section: 3-20s (driving energy, shows the spectacle)\n- Climax swell: 20-24s (crescendo, maximum energy)\n- Outro/CTA: 24-26s (slight dip or stinger to draw attention to CTA)\n\n---\n\n**Visual Editing Notes:**\n\n**Transitions:**\n- 0-3s: Fade in from black (2 frames)\n- Between sections: Cut/instant transition (no dissolves\u2014maintains energy)\n- 24-26s: Slight glow effect expand, then fade to semi-transparent logo\n\n**Effects:**\n- **Color Grading:** Cyan/magenta color cast, crushed blacks, bright neons\n- **Glow/Bloom:** Subtle glow around holographic elements (10-15% opacity)\n- **Particle Effects:** Optional light dust/digital particles in air\n- **Lighting Flares:** Occasional neon light flares (not overdone)\n\n**Font/Text Settings:**\n- **Font:** Montserrat Bold or Inter Bold (clean, modern, readable)\n- **Shadow:** Drop shadow (offset -2, -2, blur 4, opacity 80%)\n- **Background:** Optional semi-transparent black box behind text for readability (10% opacity)\n\n**Thumbnail (if generating for YouTube Shorts/repurposing):**\n- Use the most striking frame: figure against massive neon city or floating coins moment\n- Add white text overlay: \"IA CRIOU ISTO?\" or \"CRYPTO AI\"\n- Ensure face/main subject clearly visible\n\n---\n\n### Editor Recommendations (Free)\n\n| Editor | Platform | Best For | Notes |\n|--------|----------|----------|-------|\n| **CapCut** | Desktop/Mobile | TikTok/Shorts native | Built-in music, trending effects, perfect for short-form |\n| **DaVinci Resolve** | Desktop | Professional control | More powerful, steeper learning curve |\n| **InShot** | Mobile | Quick mobile editing | Intuitive, good for fast turnarounds |\n| **VN Video Editor** | Mobile | Mobile timeline | Good for precise timing on phone |\n\n**Recommended:** Start with CapCut for speed and built-in TikTok optimization.\n\n---\n\n### File Links & Resources\n\n**AI Image Generation Tools:**\n- Higgsfield: https://higgsfield.ai\n- nanobanana.io: https://nanobanana.io\n- Leonardo.ai: https://leonardo.ai\n- Ideogram: https://ideogram.ai\n\n**Video Animation Tools:**\n- Kling AI: https://klingai.com\n- Pika: https://pika.art\n- Hailuo AI: https://hailuoai.video\n- Vider.ai: https://vider.ai\n\n**Music Libraries:**\n- YouTube Audio Library: https://www.youtube.com/audiolibrary\n- CapCut Music: Built-in to CapCut app\n- Freepik Music: https://www.freepik.com/music\n\n**Video Editors:**\n- CapCut: https://www.capcut.com\n- DaVinci Resolve: https://www.blackmagicdesign.com/products/davinciresolve\n- InShot: https://www.inshot.com\n\n---\n\n## Production Checklist\n\nBefore publishing, verify:\n\n- [ ] Video is exactly 9:16 (1080x1920) vertical format\n- [ ] Duration is 26 seconds (\u00b11 second acceptable)\n- [ ] Hook in first 3 seconds is visually striking and stops scrolling\n- [ ] Text overlays are readable on mobile (test on phone screen)\n- [ ] Text overlays are well-timed to visual/music beats\n- [ ] Music matches cyberpunk/cinematic mood (no jarring shifts)\n- [ ] CTA at 24-26s is clear: \"Quer o prompt? Comenta \ud83e\udd16\"\n- [ ] Prompt is shown briefly (2-3 frames) but not fully readable\n- [ ] Neon color grading is consistent throughout\n- [ ] No hard cuts that break immersion (transitions smooth or cut-based)\n- [ ] File is exported as MP4 H.264 codec\n- [ ] Thumbnail is the most striking frame (if applicable)\n\n---\n\n## Expected Performance Metrics\n\n**Why This Works:**\n1. **Hook:** Cyberpunk aesthetic stops scrolls (visually unique)\n2. **Mystery:** Viewers want to know what they're watching (blockchain? AI? cryptocurrency?)\n3. **Scale:** Massive holographic elements convey power and futurism\n4. **CTA:** Viewers comment for the prompt, driving engagement and algorithm boost\n5. **Shareability:** Cyberpunk + AI + crypto = multiple communities (AI artists, crypto enthusiasts, sci-fi fans)\n\n**Target Engagement:**\n- **Comments:** High (viewers driven to ask for prompt)\n- **Shares:** High (visually striking, futuristic appeal)\n- **Saves:** High (viewers save to see full prompt later)\n- **Watch Time:** High (26s is digestible, rewatchability for prompt reveal)\n\n---\n\n## Next Steps\n\n1. **Generate images** using Main Prompt (Variant 1) with Higgsfield or Leonardo.ai\n2. **Generate 4+ variations** and select the most cinematic, neon-focused version\n3. **Animate the image** using the Animation Prompt with Kling AI or Pika\n4. **Select music** from CapCut or YouTube Audio Library (cyberpunk/synthwave)\n5. **Edit in CapCut** - import video, add text overlays with timing, add music, add glow effects\n6. **Test on mobile** - preview on phone screen before publishing\n7. **Publish to TikTok** with caption including hashtags and primary CTA\n8. **Pin comment** with the DM offer in first comment\n9. **Monitor engagement** - screenshot comments and DM viewers the prompt\n\n---\n\n## Production Document Summary\n\n**Theme:** Cryptocurrency & Blockchain in Cyberpunk Neon City\n**Platform:** TikTok (universal short-form video format)\n**Duration:** 26 seconds\n**Format:** 9:16 vertical (1080x1920)\n**Mood:** Cinematic, mysterious, futuristic, high-energy\n**Hook:** \"E se a criptomoeda fosse vis\u00edvel?\" (What if cryptocurrency was visible?)\n**CTA:** \"Quer o prompt? Comenta \ud83e\udd16\"\n**Hashtags:** #ia #inteligenciaartificial #aiart #cyberpunk #blockchain #crypto #neon #futurismo #videoia\n\n**Key Visual Elements:**\n- Lone figure in dark coat navigating neon cyberpunk metropolis\n- Floating holographic cryptocurrency coins with light trails\n- Blockchain networks as glowing chains connecting buildings\n- Trading terminals and price tickers as holographic displays\n- Mercury-like reflective ground\n- Dramatic neon lighting (cyan, magenta, purple, electric blue)\n\n**Engagement Mechanics:**\n- Show prompt briefly on screen (unreadable on first watch)\n- Force viewers to comment for full prompt\n- Use keyword-based DM system to build audience\n- Leverage crypto + AI communities for viral potential\n\n---\n\n**Document Created:** 2026-04-07\n**Project:** Viral TikTok Crypto Cyberpunk Cinematic Short\n**Skill Used:** viral-video-creator v1.0\n**Status:** Ready for Production\n"}], "grading": {"run_id": "eval-2-crypto-cyberpunk-with_skill", "expectations": [{"text": "has_3_prompts", "passed": true, "evidence": "Lines 54-120 contain 3 distinct copy-pasteable prompts: Prompt Variant 1 'MAIN PROMPT (Hero Shot)' (lines 55-75), Prompt Variant 2 'DYNAMIC VARIANT' (lines 82-102), Prompt Variant 3 'BACKUP (Short Version)' (lines 108-118). All are full, detailed prompts ready for direct use."}, {"text": "has_timing_table", "passed": true, "evidence": "Lines 185-192 contain structured timing table with columns: Time | Visual | Text Overlay | Notes. Provides second-by-second breakdown for 26-second video (0-3s through 24-26s)."}, {"text": "has_9_16_format", "passed": true, "evidence": "Explicitly specified multiple times: Line 7 'Format: 9:16 vertical', Line 74 'vertical 9:16 portrait', Line 101 'vertical 9:16 portrait', Line 117 'vertical 9:16 portrait'. Line 280 confirms resolution '1080x1920 pixels (exact TikTok/Shorts standard)'"}, {"text": "has_engagement_cta", "passed": true, "evidence": "Line 242 specifies primary CTA 'Quer o prompt? Comenta \ud83e\udd16' (Want the prompt? Comment \ud83e\udd16). Portuguese language CTA integrated into timing table (line 192) with specific emoji (\ud83e\udd16 robot for AI/tech theme) and keyword strategy."}, {"text": "correct_language", "passed": true, "evidence": "Document is in English with Portuguese CTAs appropriately integrated. Main narrative/prompts are in English (lines 33-117), but engagement strategy includes Portuguese text overlays and CTA: 'E se a criptomoeda fosse vis\u00edvel?' (line 187), 'O blockchain \u00e9 real' (line 188), 'Quer o prompt? Comenta \ud83e\udd16' (line 192)."}, {"text": "has_tool_recs", "passed": true, "evidence": "Lines 126-130 recommend specific image generation tools: Higgsfield (higgsfield.ai), nanobanana.io, Leonardo.ai, Ideogram. Lines 163-170 provide table of animation tools with URLs: Higgsfield, Vider.ai, Hailuo AI, Kling AI, Pika."}, {"text": "has_animation_prompt", "passed": true, "evidence": "Lines 151-160 contain dedicated copy-pasteable animation prompt: 'The cloaked figure walks slowly forward through the neon-lit cyberpunk city street...' with specific instructions for camera movement, duration (6 seconds), and visual effects (glowing coins, blockchain chains pulsing)."}]}}, {"id": "eval-2-crypto-cyberpunk-without_skill", "prompt": "Create a viral TikTok video concept about cryptocurrency and blockchain. I want something cyberpunk-themed, neon city vibes. Make it look cinematic and futuristic.", "eval_id": 2, "outputs": [{"name": "CYBERPUNK_CRYPTO_TIKTOK_CONCEPT.md", "type": "text", "content": "# Viral TikTok Concept: Cyberpunk Cryptocurrency\n\n## Project Overview\nA cinematic, futuristic cyberpunk-themed TikTok video exploring cryptocurrency and blockchain technology through visual storytelling and high-energy editing. Target audience: Gen Z crypto enthusiasts, tech enthusiasts, and futurism fans.\n\n---\n\n## Video Concept: \"NEON LEDGER\"\n\n### Tagline\n*\"The future is encrypted. Are you in?\"*\n\n---\n\n## Visual Style & Aesthetics\n\n### Color Palette\n- **Primary**: Electric neon blue (#00D9FF), hot pink/magenta (#FF006E), vivid purple (#B300FF)\n- **Secondary**: Deep black backgrounds (#0A0E27), dark cyan (#00A3A3)\n- **Accents**: Neon green (#39FF14), warning orange (#FF6B35)\n- **Glow Effects**: Heavy neon blooms, light leaks, chromatic aberration\n\n### Cinematic Elements\n- Heavy use of LED/neon light sources\n- Volumetric fog and light rays through digital environments\n- Rain/water droplets reflecting neon lights\n- Holographic UI overlays and data streams\n- Circuit board patterns and flowing digital networks\n- Fast-paced cuts synchronized with electronic beats\n\n### Mood & Tone\nSleek, dangerous, mysterious, tech-forward, empowering. A blend of cyberpunk noir with club energy.\n\n---\n\n## Video Structure (60 seconds)\n\n### Scene 1: \"The City\" (0-8 seconds)\n**Duration**: 8 seconds\n**Visuals**:\n- Aerial shot of a dystopian neon city at night\n- Skyscrapers with holographic advertisements flickering\n- Rain cascading down, reflecting electric blues and pinks\n- Camera zooms through the cityscape rapidly\n- Digital rain effect (Matrix-style) overlaying the footage\n\n**Audio**:\n- Futuristic synth chord swells\n- Deep bass enter\n- Subtle rainfall ambient sounds\n\n**Text Overlay**: None yet\n\n### Scene 2: \"The Network\" (8-18 seconds)\n**Duration**: 10 seconds\n**Visuals**:\n- Transition into digital space: abstract blockchain visualization\n- Glowing nodes connecting in geometric patterns\n- Data blocks moving through a 3D network tunnel\n- Close-up of cryptocurrency symbols (Bitcoin, Ethereum, etc.) pulsing with neon light\n- Chains of data flowing like electricity through the network\n- Multiple split-screen showing different blockchain transactions simultaneously\n\n**Audio**:\n- Electronic beat intensifies\n- Robotic scanning sounds\n- High-frequency digital chirps and beeps\n\n**Text Overlay**:\n- \"DECENTRALIZED\"\n- \"TRANSPARENT\"\n- \"LIMITLESS\"\n(each appears in bold neon font with glow effects)\n\n### Scene 3: \"The Power\" (18-35 seconds)\n**Duration**: 17 seconds\n**Visuals**:\n- Quick cuts between scenes:\n  - A figure in a hoodie, face partially shadowed by neon light, typing rapidly\n  - Close-up of holographic code streaming across their face\n  - Trading graphs spiking upward with neon trails\n  - Hands making transactions on virtual interfaces\n  - Digital money transfers flowing upward like waterfalls\n  - Crypto wallet interface zooming in and out\n  - Circuit board architecture building in real-time\n  - Glitch effects and VHS distortions for authenticity\n  - Fast camera pans across neon signage and digital displays\n\n**Audio**:\n- Heavy electronic/synthwave beat (140+ BPM)\n- Glitchy transitions between clips\n- Building energy and intensity\n- Vocal samples: distorted whispers like \"future,\" \"power,\" \"control\"\n\n**Text Overlays**:\n- \"CONTROL YOUR OWN FUTURE\"\n- \"NO MIDDLEMAN\"\n- \"JUST CODE + COURAGE\"\n- \"THE FUTURE IS NOW\"\n(appearing rapidly, in sync with beat cuts)\n\n### Scene 4: \"The Choice\" (35-50 seconds)\n**Duration**: 15 seconds\n**Visuals**:\n- Split screen showing two paths:\n  - **Left side**: Traditional finance imagery (gray, muted, old-fashioned)\n  - **Right side**: Vibrant crypto/blockchain imagery (neon, glowing, futuristic)\n- User/protagonist figure standing at the center, bathed in neon light\n- Hand gesture reaching toward the neon right side\n- Camera rotates around the figure as they're surrounded by holographic crypto interfaces\n- Light bursts and particle effects as \"they choose\" the crypto path\n- Digital avatar transforming and ascending with neon trails\n\n**Audio**:\n- Beat hits hard as the choice is made\n- Epic synth swell\n- Whoosh sound effects\n- Slight pitch bending to create tension/release\n\n**Text Overlays**:\n- \"OLD WORLD\" (left side, desaturated text)\n- \"NEW WORLD\" (right side, neon glowing text)\n- \"WHICH SIDE ARE YOU ON?\" (center, massive glowing letters)\n\n### Scene 5: \"The Call to Action\" (50-60 seconds)\n**Duration**: 10 seconds\n**Visuals**:\n- Final shot: protagonist standing on a rooftop overlooking the neon city\n- Full neon glow surrounding them\n- Holographic blockchain symbols floating around them\n- Camera pulls back to show the entire neon cityscape\n- Fade to black with one final bright flash\n- Logo/brand appears: a stylized blockchain or crypto icon in neon\n\n**Audio**:\n- Beat reaches crescendo\n- Final dramatic synth chord\n- Everything fades with a satisfying \"whoosh\"\n- Last second of silence before text appears\n\n**Text Overlay**:\n- \"WELCOME TO THE FUTURE\" or \"YOUR MOVE\"\n- Brand/channel name\n- Call to action: \"LINK IN BIO\" or \"FOLLOW FOR MORE\"\n- Crypto symbol or blockchain logo\n\n---\n\n## Editing Techniques\n\n### Transitions\n- **Fast cuts** (0.1-0.3 second clips) during the action sequences\n- **Neon flash transitions** between scenes\n- **Digital glitch effects** for seamless scene changes\n- **Zoom transitions** where camera rushes through the action\n- **Fade to black** for dramatic pauses\n\n### Effects & Filters\n- **Chromatic aberration**: 2-4 pixel offset, subtle but visible\n- **Glow/Bloom**: Heavy neon light bloom on all bright elements\n- **Motion blur**: Fast movement tracking blur\n- **Glitch effects**: Random digital artifacts (20-30ms, 2-3 times per sequence)\n- **Color grading**: Strong color cast favoring cool tones and neon highlights\n- **VHS distortion**: Slight scan lines and color separation for retro-futuristic feel\n- **Lens flares**: Neon-colored flares suggesting holographic projection\n\n### Pacing & Cuts\n- Scene 1 (8s): Slow, cinematic, 2-3 second cuts\n- Scene 2 (10s): Medium pace, 1.5-2 second cuts, building energy\n- Scene 3 (17s): Fast, frantic, 0.3-0.8 second cuts (peak intensity)\n- Scene 4 (15s): Medium-fast, 0.8-1.5 second cuts (dramatic tension)\n- Scene 5 (10s): Slow again, returning to calm after the climax (2-4 second holds)\n\n---\n\n## Audio Design\n\n### Music/Beat\n- **Genre**: Synthwave/Cyberpunk/Electronic\n- **Tempo**: 140-150 BPM (energetic but sustainable)\n- **Instruments**:\n  - Pulsing synth bass\n  - Arpeggiated synthesizer melody\n  - Atmospheric pad underneath\n  - Occasional orchestral stabs\n  - Digital percussion hits\n\n### Sound Effects (SFX)\n- **Network sounds**: Soft pings, data transfer chirps\n- **Glitch sounds**: Short digital crackles, bit errors\n- **Whoosh effects**: Movement transitions, energy bursts\n- **Impact sounds**: Heavy kicks on beat drops\n- **Ambient**: Subtle electrical hum, rainfall, digital ambience\n\n### Voiceover (Optional)\nIf including VO, use distorted/modulated voice:\n- \"The future doesn't wait for permission.\"\n- \"Your choices shape the economy.\"\n- \"Decentralized. Transparent. Yours.\"\n\n---\n\n## Content Strategy\n\n### Hook (First 2-3 Seconds)\nThe first frame must grab attention: vibrant neon cityscape or a sudden flash of light. The opening should feel cinematic and mysterious, making viewers ask \"What is this?\"\n\n### Retention\n- Quick scene changes maintain attention\n- Multiple visual elements prevent boredom\n- The choice/duality concept at 35s brings narrative arc\n- Emotional payoff at the end keeps viewers watching to the end\n\n### Shareability\n- Highly aesthetic and visually distinctive\n- Cryptic message appeals to in-group (crypto community)\n- Empowering tone (\"your move,\" \"control your future\")\n- Background music/style will be memorable and repeatable\n\n### Call-to-Action\n- \"Link in bio\" for wallet signup or blockchain education\n- \"Follow for more future tech\" or \"Follow for Web3 deep dives\"\n- Hashtags: #CryptoCyberpunk #BlockchainFuture #Web3 #Cyberpunk #NeonLife\n\n---\n\n## Production Requirements\n\n### Software & Tools\n- **Video Editor**: DaVinci Resolve (free version sufficient) or Adobe Premiere Pro\n- **VFX/Motion**: After Effects for complex neon effects and overlays\n- **Color Grading**: DaVinci Resolve's Color page for neon color grading\n- **Audio**: Royalty-free synthwave track or custom production\n- **Assets**:\n  - Stock footage of cities, rain, digital interfaces\n  - Crypto/blockchain icon packs\n  - Neon glow brushes and presets\n  - Glitch effect plugins/presets\n\n### Filming/Assets\n- **Option 1 (Real Footage)**: Film cyberpunk-styled scenes (city nights, neon signs, digital displays)\n- **Option 2 (3D/CGI)**: Use 3D rendering for blockchain visualization and digital scenes\n- **Option 3 (Mixed)**: Combine stock footage, 3D renders, and motion graphics overlays\n\n### Timeline\n- Concept & storyboarding: 1 day\n- Asset gathering: 1-2 days\n- Filming/3D production: 2-5 days\n- Editing & VFX: 3-5 days\n- Color grading & final touches: 1-2 days\n- Sound design & mixing: 1 day\n- **Total**: 1-2 weeks for high-quality production\n\n---\n\n## Distribution Strategy\n\n### Posting Details\n- **Platform**: TikTok\n- **Optimal posting times**: 6-9 PM (when audience is scrolling)\n- **Days**: Tuesday-Friday tend to perform better\n- **Caption**: Intriguing but brief\n  - Example: \"Which side are you on? \ud83c\udf03\ud83d\udc8e #Crypto #Web3 #Cyberpunk\"\n\n### Cross-Promotion\n- Share to Instagram Reels with adjusted aspect ratio\n- Post to YouTube Shorts\n- Share teaser clips on Twitter/X (crypto community hub)\n- Link to educational content or wallet signup\n\n### Engagement\n- Respond to comments with similar cyberpunk energy\n- Create follow-up videos expanding on the themes\n- Partner with crypto influencers for shares/duets\n- Encourage viewers to duet/stitch the video\n\n---\n\n## Key Messages\n\n1. **Empowerment**: Control your financial future through crypto\n2. **Innovation**: Blockchain is the future of technology\n3. **Community**: You're part of a global, decentralized movement\n4. **Accessibility**: This future is available to everyone now\n5. **Authenticity**: Crypto represents real, transparent systems (no middleman)\n\n---\n\n## Potential Variations\n\n### Version A: Technical Deep-Dive\nFocus more on actual blockchain mechanics, smart contracts, mining visualizations.\n\n### Version B: Human Story\nCenter on a real person's journey into crypto (more relatable, less abstract).\n\n### Version C: \"Problem/Solution\" Format\nShow pain points of traditional finance, then reveal crypto solutions.\n\n### Version D: \"Day in the Life\"\nFollow a crypto trader through a day, showing neon aesthetic integrated naturally.\n\n---\n\n## Metrics to Track\n\n- **Views**: Target 100K+ within first week\n- **Completion Rate**: Aim for 70%+ watch-through rate\n- **Engagement**: Likes, comments, shares, saves\n- **Shares/Duets**: Measure virality\n- **Click-Through Rate**: Track link clicks in bio\n- **Audience Demographics**: Confirm targeting Gen Z (13-24)\n\n---\n\n## Risk Mitigation\n\n- **Regulatory**: Avoid making explicit financial/investment claims; keep it aspirational\n- **Tone-Deafness**: Balance futurism with caution about real risks\n- **Authenticity**: Don't overstate; cyberpunk aesthetic shouldn't feel gimmicky\n- **Accessibility**: Ensure message is accessible to crypto newcomers, not just experts\n\n---\n\n## Final Notes\n\nThis concept leverages the proven appeal of:\n- **Cyberpunk aesthetics** (trending in gaming, anime, fashion)\n- **Neon visual language** (instantly eye-catching, shareable)\n- **Cinematic production** (stands out against casual TikTok content)\n- **Aspirational messaging** (empowers viewers)\n- **Tech community alignment** (resonates deeply with target audience)\n\nThe video should feel like a trailer to the future, not a sales pitch. The power is in making viewers *want* to be part of this world, not forcing them into it.\n\n---\n\n**Status**: Concept Ready for Production\n**Created**: 2026-04-07\n**Version**: 1.0"}], "grading": {"run_id": "eval-2-crypto-cyberpunk-without_skill", "expectations": [{"text": "has_3_prompts", "passed": false, "evidence": "Document contains conceptual scene descriptions (lines 38-146 'Video Structure') but no copy-pasteable AI image generation prompts. Visuals are described narratively ('Aerial shot of a dystopian neon city', 'Glowing nodes connecting in geometric patterns') rather than as structured prompts for image generators."}, {"text": "has_timing_table", "passed": false, "evidence": "Lines 38-146 provide scene descriptions with timings and audio notes, but this is a narrative structure, not a formatted timing table. No table with columns (Time | Visual | Text | Notes) provided. Timing information is embedded in text blocks rather than extracted to a structured table."}, {"text": "has_9_16_format", "passed": false, "evidence": "No explicit mention of '9:16' format found. Document mentions vertical format implicitly in section 8.1 'Posting Details' and discussions of TikTok/Reels but never explicitly states '9:16' or '1080x1920' resolution specifications."}, {"text": "has_engagement_cta", "passed": false, "evidence": "Lines 141-145 show generic CTAs: 'LINK IN BIO' or 'FOLLOW FOR MORE' and 'Hashtags: #YouTubeShorts'. No specific engagement CTA asking viewers to comment with a keyword (e.g., 'Comment CRYPTO for the prompt'). No keyword-based engagement strategy."}, {"text": "correct_language", "passed": true, "evidence": "Document is entirely in English, which is correct for eval-2 (crypto-cyberpunk). All content from lines 1-340 is in English."}, {"text": "has_tool_recs", "passed": false, "evidence": "Lines 229-243 recommend software categories (DaVinci Resolve, Adobe Premiere Pro, After Effects) and asset types (stock footage, crypto/blockchain icons, glow brushes) but do not recommend specific AI image generation or video animation tools with URLs or tool names."}, {"text": "has_animation_prompt", "passed": false, "evidence": "Document describes motion and effects (lines 206-213 'Editing Techniques', lines 149-159 'Pacing & Cuts') but does not provide a copy-pasteable animation prompt. Effects are described conceptually (glitch, glow, motion blur) rather than as a structured prompt for image-to-video tools."}]}}, {"id": "eval-3-ocean-bioluminescent-with_skill", "prompt": "Faz um v\u00eddeo curto viral pra mim. Tema: oceano profundo com criaturas bioluminescentes e tecnologia subaqu\u00e1tica. \u00c9 pro meu canal de ci\u00eancia.", "eval_id": 3, "outputs": [{"name": "PROMPT_VIDEO_OCEAN_BIOLUMINESCENT.md", "type": "text", "content": "# V\u00eddeo Viral: Oceano Profundo com Criaturas Bioluminescentes\n\n**Projeto:** Canal de Ci\u00eancia - Shorts de Tecnologia Subaqu\u00e1tica\n**Dura\u00e7\u00e3o:** 26 segundos\n**Formato:** 9:16 (vertical)\n**Data de Cria\u00e7\u00e3o:** 2026-04-07\n\n---\n\n## 1. An\u00e1lise de Refer\u00eancia\n\n**Estilo Alvo:** F\u00f3rmula @airon_ia (padr\u00e3o para conte\u00fado cient\u00edfico)\n\n- **Dura\u00e7\u00e3o:** 20-30 segundos (26s target)\n- **Visuais:** Imagens cinem\u00e1ticas de IA mostrando ambiente \u00fanico e espetacular\n- **Sobreposi\u00e7\u00f5es de Texto:** Fonte bold, sans-serif, branca com sombra/outline escura\n- **Gancho:** Pergunta de curiosidade nos primeiros 3 segundos\n- **CTA:** Ao final, pergunta para comentar pedindo o prompt\n- **Prompt:** Mostrado brevemente em 2-3 frames para criar intriga sem revelar totalmente\n\n---\n\n## 2. Tema e Narrativa\n\n**Tema Principal:** \"Profundezas do oceano onde criaturas bioluminescentes encontram tecnologia subaqu\u00e1tica avan\u00e7ada \u2014 revelando os mist\u00e9rios da vida marinha e a fus\u00e3o entre biologia e inova\u00e7\u00e3o.\"\n\n**Met\u00e1fora Visual:** O oceano profundo como um mundo alien\u00edgena onde a natureza e a tecnologia coexistem em perfeita harmonia. Criaturas bioluminescentes como guardi\u00e3s de conhecimento cient\u00edfico n\u00e3o descoberto. Estruturas tecnol\u00f3gicas subaqu\u00e1ticas como portais para novos mundos de pesquisa.\n\n**P\u00fablico:** Entusiastas de ci\u00eancia, biologia marinha, tecnologia, fic\u00e7\u00e3o cient\u00edfica\n\n**Valor Agregado:** Combina espet\u00e1culo visual (bioluminesc\u00eancia) com fasc\u00ednio tecnol\u00f3gico (estruturas submersas), gerando coment\u00e1rios (\"quero esse prompt!\") e compartilhamentos.\n\n---\n\n## 3. Prompts de Imagem\n\n### Variante 1: Prompt Principal (Hero Shot)\n\n```\nA vast underwater abyss filled with bioluminescent creatures glowing in electric blue,\nviolet, and cyan lights. Ancient deep-sea structures \u2014 towering coral cathedrals,\ncrystalline towers, and technological ruins \u2014 rise from the pitch-black ocean floor.\nMechanical jellyfish-like drones with glowing LED tentacles drift gracefully through\nthe darkness, scanning the environment. Bioluminescent plankton create trails of light\nas they swirl around futuristic submerged laboratories with holographic interfaces\nemitting soft blue and purple light. Pressure bubbles with containment fields shield\nadvancing AI-powered research stations. The water is dark and mysterious, with massive\nunderwater canyons visible in the distance. Ultra-cinematic 4K, dramatic volumetric\nlighting, bioluminescent glow effects, deep oceanic mystery, vertical 9:16 portrait,\nultra-realistic, cinematic depth.\n```\n\n### Variante 2: Din\u00e2mica (Mais Movimento)\n\n```\nSwarms of bioluminescent creatures \u2014 squid, jellyfish, and unknown organisms with\nglowing patterns \u2014 swim in coordinated schools through a vast underwater canyon.\nRows of advanced technological domes and sensor arrays line the canyon walls, pulsing\nwith data streams of light. A sleek autonomous submarine with cutting-edge sonar\nexplores the depths, its light beam revealing thousands of creatures in the darkness.\nBioluminescent organisms respond to the submarine's presence, creating waves of\nglowing blue and violet light that cascade across the scene. Ancient tech structures\nemit holographic markers. The scene conveys rapid discovery and scientific breakthrough.\nCinematic 4K, ultra-dynamic movement, glowing effects, exploration theme, vertical\n9:16 portrait, dramatic lighting.\n```\n\n### Variante 3: Backup (Vers\u00e3o Curta)\n\n```\nDeep-sea bioluminescent creatures glow electric blue around towering underwater\ntech structures. Mechanical drones with LED lights explore the darkness. Holographic\nresearch stations emit soft purple glow. Cinematic 4K, bioluminescent effects,\nvertical 9:16, ultra-realistic.\n```\n\n---\n\n## 4. Anima\u00e7\u00e3o de V\u00eddeo\n\n### Prompt de Anima\u00e7\u00e3o\n\n```\nA c\u00e2mera se move lentamente para cima atrav\u00e9s da coluna de \u00e1gua, revelando\nprogressivamente criaturas bioluminescentes flutuando nas profundezas. As luzes\nazuis e violetas pulsam suavemente, criando padr\u00f5es hipn\u00f3ticos. Estruturas\ntecnol\u00f3gicas entram gradualmente em foco, iluminadas por hologramas verdes e azuis.\nPequenos drones giram em \u00f3rbita ao redor de criaturas marinhas, seus far\u00f3is varrendo\na escurid\u00e3o. Pl\u00e2ncton bioluminescente cria trilhas de luz org\u00e2nicas. Movimento\nsuave, cinem\u00e1tico, de explora\u00e7\u00e3o submarinha com pacing lento e revela\u00e7\u00f5es graduais.\nDura\u00e7\u00e3o: 5-6 segundos.\n```\n\n---\n\n## 5. Script e Timing (Roteiro)\n\n| Tempo | Visual | Sobreposi\u00e7\u00e3o de Texto | Descri\u00e7\u00e3o |\n|-------|--------|----------------------|-----------|\n| 0-3s | Abertura: Criaturas bioluminescentes saem da escurid\u00e3o | \"E se fossemos viajar para o fundo do oceano?\" | Gancho de curiosidade. Primeiros frames mostram a bioluminesc\u00eancia pulsando. |\n| 3-8s | Revela\u00e7\u00e3o de estruturas tecnol\u00f3gicas subaqu\u00e1ticas | \"Tecnologia encontra a natureza\" | C\u00e2mera recua revelando drones e esta\u00e7\u00f5es de pesquisa. |\n| 8-14s | Criaturas em intera\u00e7\u00e3o com a tecnologia | \"Organismos ainda desconhecidos\" | Mecanismos automatizados exploram os organismos. Hologramas mapeiam dados. |\n| 14-20s | Escala \u00e9pica: Canyon subaqu\u00e1tico repleto de vida | \"Um mundo alien\u00edgena em nosso planeta\" | Zoom out revelando o tamanho massivo do ecossistema. |\n| 20-24s | Cl\u00edmax: Explos\u00e3o de luz bioluminescente | \"A vida marinha aguarda sua descoberta\" | Pico visual m\u00e1ximo \u2014 todas as criaturas pulsando juntas. |\n| 24-26s | Logo do canal + CTA | \"Quer o prompt? Comenta \ud83c\udf0a\" | Frame final com branding do canal. |\n\n---\n\n## 6. Narra\u00e7\u00e3o (Opcional)\n\n**Script de Voz (15-20 segundos):**\n\n> \"Nas profundezas do oceano, onde a luz nunca chega, uma sinfonia bioluminescente aguarda. Criaturas antigas brilham em azul, violeta e verde \u2014 um c\u00f3digo visual que a ci\u00eancia ainda est\u00e1 decifrando. Agora, tecnologia avan\u00e7ada desce para explorar esses mist\u00e9rios. Rob\u00f4s subaqu\u00e1ticos mapeiam a vida desconhecida. Intelig\u00eancia artificial detecta padr\u00f5es nunca vistos. O futuro da pesquisa marinha \u00e9 agora. Bem-vindo ao abismo.\"\n\n---\n\n## 7. Estrat\u00e9gia de Engajamento\n\n### Call-to-Action (CTA)\n\n**Principal:** \"Quer o prompt? Comenta \ud83c\udf0a\"\n\n**Alternativas:**\n- \"Comenta OCEANO para receber o prompt\"\n- \"Quer esse prompt viral? Comenta PROFUNDO \ud83c\udf0a\"\n- \"Salva e comenta para receber\"\n\n### Estrat\u00e9gia de Coment\u00e1rios\n\n1. **Postar coment\u00e1rio pinado** (imediatamente ap\u00f3s publica\u00e7\u00e3o):\n   > \"Comenta OCEANO que eu mando o prompt no privado! Esse prompt gera 4K cinematic com bioluminesc\u00eancia e estruturas tech subaqu\u00e1ticas.\"\n\n2. **Responder a todos** que comentarem com o CTA:\n   - Responder em at\u00e9 1-2 minutos para aumentar visibilidade\n   - Usar emoji relevante (\ud83c\udf0a, \u2728, \ud83e\udd16)\n   - Encaminhar prompt em DM\n\n### Hashtags (Mix Broad + Niche)\n\n```\n#IA #InteligenciaArtificial #AIArt #OceanoProfundo #BiologiaMarinha\n#TecnologiaSubaquatica #CienciaViral #AIGenerated #ViralVideo\n```\n\n**Total:** 8 hashtags (mix de amplitude e nicho cient\u00edfico)\n\n### Estrat\u00e9gia de Pronta Entrega\n\n- Preparar a resposta com o prompt **antes** de publicar\n- Copiar para clipboard para responder rapidamente em DM\n- Mencionar na resposta: \"Esse prompt funciona em [Leonardo.ai / Higgsfield / etc]\"\n\n---\n\n## 8. Notas de P\u00f3s-Produ\u00e7\u00e3o\n\n### Especifica\u00e7\u00f5es T\u00e9cnicas\n\n- **Resolu\u00e7\u00e3o:** 1080x1920 (9:16 vertical)\n- **Dura\u00e7\u00e3o:** 26 segundos\n- **Taxa de Quadros:** 24fps ou 30fps\n- **Formato de Sa\u00edda:** MP4 H.264, m\u00e1ximo 100MB\n\n### Edi\u00e7\u00e3o de V\u00eddeo\n\n**Recomenda\u00e7\u00e3o:** CapCut (ideal para Shorts)\n\n**Passos:**\n1. Importar clipe de anima\u00e7\u00e3o (5-6 segundos)\n2. Estender timeline para 26 segundos com transi\u00e7\u00f5es/efeitos\n3. Adicionar sobreposi\u00e7\u00f5es de texto com timing conforme tabela acima\n4. Aplicar efeitos de glow/part\u00edculas nas criaturas (neon effect)\n5. Adicionar m\u00fasica de fundo\n6. Adicionar branding/logo nos \u00faltimos 2 segundos\n\n### Estilo de Fonte\n\n- **Fonte:** Montserrat Bold, Roboto Bold, ou fonte padr\u00e3o CapCut sans-serif\n- **Cor:** Branco (#FFFFFF)\n- **Sombra:** Preto escuro (#000000) com 2-3px offset\n- **Tamanho:** 48-64px (ajustar para legibilidade)\n- **Anima\u00e7\u00e3o:** Fade in / Pop with scale (n\u00e3o muito abrupto)\n\n### Sele\u00e7\u00e3o de M\u00fasica\n\n**Recomendado:**\n- Buscar \"royalty free cinematic ambient ocean\" no YouTube Audio Library\n- Buscar \"lo-fi epic mysterious\" em CapCut's built-in library\n- Estilo: Ambiental \u00e9pico com toques de eletr\u00f4nico/sintetizador para combinar com a tecnologia\n\n**Alternativas:**\n- Dramatic orchestral lento (representa a magnitude)\n- Lo-fi cinematic (mais moderno, com sintetizadores)\n- Ambient pad com pulsos r\u00edtmicos sutis\n\n### Efeitos Especiais a Aplicar\n\n- **Glow/Bloom:** Aumentar brilho das luzes bioluminescentes\n- **Part\u00edculas:** Adicionar efeitos de part\u00edculas de luz flutuando\n- **Zoom dolly:** Movimento suave de c\u00e2mera em alguns frames\n- **Satura\u00e7\u00e3o de cor:** Aumentar azuis, violetas e cyans\n- **Vigneta:** Escurecer bordas para criar profundidade\n\n---\n\n## 9. Ferramentas Recomendadas\n\n### Gera\u00e7\u00e3o de Imagem\n\n| Ferramenta | URL | Observa\u00e7\u00f5es |\n|-----------|-----|------------|\n| **Higgsfield** | higgsfield.ai | Melhor qualidade cinematogr\u00e1fica, Nano Banana 2 |\n| **Leonardo.ai** | leonardo.ai | Estilo consistente, bom para efeitos de bioluminesc\u00eancia |\n| **Ideogram** | ideogram.ai | Excelente para rendering de texto/detalhes finos |\n| **Nanobanana.io** | nanobanana.io | Gratuito, r\u00e1pido, bom para testes |\n\n### Anima\u00e7\u00e3o de Imagem para V\u00eddeo\n\n| Ferramenta | URL | Observa\u00e7\u00f5es |\n|-----------|-----|------------|\n| **Higgsfield Video Creator** | higgsfield.ai | Melhor qualidade, pode precisar de cr\u00e9ditos |\n| **Kling AI** | klingai.com | Free tier generoso, resultados cinem\u00e1ticos |\n| **Hailuo AI** | hailuoai.video | Free, qualidade boa para oceanografia |\n| **Pika** | pika.art | Free tier, bom para clips curtos (4-6s) |\n| **Luma Dream Machine** | lumalabs.ai/dream-machine | Free tier, movimento realista |\n\n### Edi\u00e7\u00e3o de V\u00eddeo\n\n| Ferramenta | Plataforma | Observa\u00e7\u00f5es |\n|-----------|-----------|------------|\n| **CapCut** | Web / Mobile | Melhor para Shorts, templates, trending effects |\n| **DaVinci Resolve** | Desktop | Profissional, gratuito, controle total |\n| **InShot** | Mobile | R\u00e1pido, intuitivo, bom para redes sociais |\n| **VN Video Editor** | Mobile | Timeline decente, bom para portugu\u00eas |\n\n---\n\n## 10. Checklist de Pr\u00e9-Publica\u00e7\u00e3o\n\n- [ ] V\u00eddeo em formato 9:16 (1080x1920) vertical\n- [ ] Dura\u00e7\u00e3o entre 20-30 segundos (validar 26s exatos)\n- [ ] Gancho nos primeiros 3 segundos prende aten\u00e7\u00e3o\n- [ ] Sobreposi\u00e7\u00f5es de texto leg\u00edveis e bem-cronometradas\n- [ ] M\u00fasica combina com o mood \u00e9pico-cient\u00edfico\n- [ ] CTA \u00e9 claro e espec\u00edfico (\"Quer o prompt? Comenta \ud83c\udf0a\")\n- [ ] Prompt mostrado brevemente (2-3 frames) em algum ponto\n- [ ] Thumbnail (se necess\u00e1rio) mostra o frame mais impressionante\n- [ ] Logo do canal vis\u00edvel nos \u00faltimos 2 segundos\n- [ ] Nenhum corte abrupto \u2014 transi\u00e7\u00f5es suaves\n- [ ] \u00c1udio sincronizado com picos visuais\n\n---\n\n## 11. Estrat\u00e9gia de Publica\u00e7\u00e3o\n\n### Timing \u00d3timo\n\n- **Para YouTube Shorts:** Quinta-feira ou sexta-feira, 18-21h (maior engajamento)\n- **Para TikTok:** Ter\u00e7a a quinta, 15-18h (pico de visualiza\u00e7\u00f5es educacionais)\n- **Para Reels:** Quinta-feira, 19h (melhor performance em conte\u00fado cient\u00edfico)\n\n### Descri\u00e7\u00e3o (Description Copy)\n\n**YouTube Shorts:**\n```\nOceano profundo com criaturas bioluminescentes e tecnologia subaqu\u00e1tica.\nUm mundo alien\u00edgena existe aqui na Terra. Quer o prompt? Comenta \ud83c\udf0a\n\n#IA #InteligenciaArtificial #AIArt #OceanoProfundo #TecnologiaSubaquatica\n```\n\n**TikTok/Reels:**\n```\nCriaturas bioluminescentes do abismo encontram tecnologia avan\u00e7ada.\nComenta OCEANO para receber o prompt! \ud83c\udf0a\u2728\n\n#IA #AIArt #OceanoProfundo #BiologiaMarinha #CienciaViral\n```\n\n### Primeira Resposta (Pinada)\n\nPublicar este coment\u00e1rio **nos primeiros 5 minutos:**\n\n> \"Oi! \ud83d\udc4b Comenta OCEANO que eu mando o prompt no privado! Esse prompt foi criado usando IA para gerar uma cena cinem\u00e1tica de 4K com criaturas bioluminescentes, estruturas tech subaqu\u00e1ticas e lighting dram\u00e1tico. Feito em [Tool] com extens\u00e3o de anima\u00e7\u00e3o em [Tool]. Perfeito para canais de ci\u00eancia! \ud83c\udf0a\"\n\n---\n\n## 12. Varia\u00e7\u00f5es Futuras\n\n### Variante B: Foco em Descoberta Cient\u00edfica\n\n**Tema:** Pesquisadores submarinos descobrindo nova esp\u00e9cie\n**Ajuste:** Incluir equipamento de pesquisa mais vis\u00edvel, data de descoberta em sobreposi\u00e7\u00e3o\n**Prompt adicional:** \"Close-up de curiosos olhos bioluminescentes de criatura estranha...\"\n\n### Variante C: Foco em Fic\u00e7\u00e3o Cient\u00edfica\n\n**Tema:** Col\u00f4nia subaqu\u00e1tica futurista com criaturas ind\u00edgenas\n**Ajuste:** Mais estruturas tecnol\u00f3gicas, menos organismos naturais\n**Prompt adicional:** \"Cidade subaqu\u00e1tica com torres de cristal e c\u00fapulas de conten\u00e7\u00e3o...\"\n\n---\n\n## 13. M\u00e9tricas de Sucesso\n\n**Indicadores a Monitorar:**\n\n- **Taxa de Cliques no CTA:** Quantas pessoas comentaram \"OCEANO\" ou \"Quer o prompt\"\n- **Taxa de Salvamento:** Usar insights do YouTube/TikTok para validar\n- **Engajamento em Coment\u00e1rios:** Responder r\u00e1pido para aumentar visibilidade\n- **Compartilhamentos:** Viralidade depende de compartilhamento em outras plataformas\n- **Tempo M\u00e9dio de Visualiza\u00e7\u00e3o:** Meta 80%+ da dura\u00e7\u00e3o (>20s)\n- **Cliques em Perfil:** Direto para inscri\u00e7\u00e3o no canal\n\n**Itera\u00e7\u00e3o R\u00e1pida:**\nSe o v\u00eddeo n\u00e3o atingir 10k views em 48h, considere:\n- Ajustar thumbnail\n- Mudar CTA\n- Testar hashtags diferentes\n- Repostar em outro hor\u00e1rio\n\n---\n\n## Resumo do Projeto\n\nEste v\u00eddeo combina **espet\u00e1culo visual** (bioluminesc\u00eancia) com **intriga cient\u00edfica** (tecnologia subaqu\u00e1tica) para criar um gancho irresist\u00edvel. O prompt e a narra\u00e7\u00e3o s\u00e3o totalmente otimizados para viraliza\u00e7\u00e3o em Shorts, com foco em coment\u00e1rios (\"Quer o prompt?\") como m\u00e9trica principal.\n\n**Diferencial:** Merge \u00fanico entre fic\u00e7\u00e3o (criaturas coloridas) e realidade (estruturas tech + pesquisa marinha) = curiosidade m\u00e1xima + compartilhabilidade.\n\n**Pr\u00f3ximo Passo:** Gerar imagens usando um dos prompts acima em Higgsfield ou Leonardo.ai, animar em Kling AI ou Hailuo, editar em CapCut, e publicar com estrat\u00e9gia de coment\u00e1rios pinado.\n"}], "grading": {"run_id": "eval-3-ocean-bioluminescent-with_skill", "expectations": [{"text": "has_3_prompts", "passed": true, "evidence": "Lines 37-75 contain 3 distinct copy-pasteable prompts in Portuguese: Variante 1 'Prompt Principal (Hero Shot)' (lines 39-51), Variante 2 'Din\u00e2mica (Mais Movimento)' (lines 55-66), Variante 3 'Backup (Vers\u00e3o Curta)' (lines 70-75). All are detailed, generator-ready prompts."}, {"text": "has_timing_table", "passed": true, "evidence": "Lines 98-105 contain structured timing table with columns: Tempo | Visual | Sobreposi\u00e7\u00e3o de Texto | Descri\u00e7\u00e3o. Provides second-by-second breakdown for 26-second video (0-3s, 3-8s, 8-14s, 14-20s, 20-24s, 24-26s)."}, {"text": "has_9_16_format", "passed": true, "evidence": "Explicitly specified: Line 49 'vertical 9:16 portrait', Line 64 'vertical 9:16 portrait', Line 159 'Resolu\u00e7\u00e3o: 1080x1920 (9:16 vertical)'. Format clearly stated in Portuguese context."}, {"text": "has_engagement_cta", "passed": true, "evidence": "Line 105 specifies primary CTA 'Quer o prompt? Comenta \ud83c\udf0a' (Want the prompt? Comment \ud83c\udf0a). Line 121 provides alternative CTAs including keyword-based variants. Emoji (\ud83c\udf0a ocean wave) is thematically aligned with ocean/bioluminescence content."}, {"text": "correct_language", "passed": true, "evidence": "All content is in Portuguese as required for eval-3. Text overlays in timing table (lines 100-105) are in Portuguese: 'E se fossemos viajar para o fundo do oceano?', 'Tecnologia encontra a natureza', 'Organismos ainda desconhecidos', 'Quer o prompt? Comenta \ud83c\udf0a'. CTA is in Portuguese."}, {"text": "has_tool_recs", "passed": true, "evidence": "Lines 207-215 provide table of 'Gera\u00e7\u00e3o de Imagem' (image generation) tools: Higgsfield, Leonardo.ai, Ideogram, Nanobanana.io. Lines 217-225 provide table of 'Anima\u00e7\u00e3o de Imagem para V\u00eddeo' tools: Higgsfield Video Creator, Kling AI, Hailuo AI, Pika, Luma Dream Machine."}, {"text": "has_animation_prompt", "passed": true, "evidence": "Lines 83-91 contain dedicated animation prompt in Portuguese: 'A c\u00e2mera se move lentamente para cima atrav\u00e9s da coluna de \u00e1gua...' with specific instructions for camera movement, duration (5-6 seconds), lighting effects (blues and violets pulsing), and pacing (slow, cinematic, gradual revelations)."}]}}, {"id": "eval-3-ocean-bioluminescent-without_skill", "prompt": "Faz um v\u00eddeo curto viral pra mim. Tema: oceano profundo com criaturas bioluminescentes e tecnologia subaqu\u00e1tica. \u00c9 pro meu canal de ci\u00eancia.", "eval_id": 3, "outputs": [{"name": "VIDEO_CONCEPT_OCEAN_BIOLUMINESCENCE.md", "type": "text", "content": "# V\u00eddeo Viral: Oceano Profundo com Criaturas Bioluminescentes e Tecnologia Subaqu\u00e1tica\n\n## Metadata\n- **Tema:** Oceano Profundo | Bioluminesc\u00eancia | Tecnologia Subaqu\u00e1tica\n- **Tipo de Conte\u00fado:** V\u00eddeo Curto Viral (15-60 segundos)\n- **P\u00fablico Alvo:** Entusiastas de ci\u00eancia, curiosidade sobre natureza, explora\u00e7\u00e3o submarina\n- **Plataformas:** TikTok, Instagram Reels, YouTube Shorts\n- **Tom:** Ci\u00eancia envolvente + Espanto visual + Educacional\n\n---\n\n## 1. Conceito Criativo Principal\n\n### Hook (0-2 segundos)\n**Visual:** Close-up de uma criatura bioluminescente piscando em cores vibrantes\n**\u00c1udio:** Som \"otherworldly\" + voz do narrador\n**Texto:** \"A tecnologia j\u00e1 descobriu isso... 2 anos atr\u00e1s \ud83c\udf0a\u2728\"\n\n**Objetivo:** Capturar aten\u00e7\u00e3o imediatamente. Criar FOMO (fear of missing out) sobre descoberta cient\u00edfica.\n\n---\n\n## 2. Estrutura de Cenas (Progress\u00e3o Visual)\n\n### Cena 1: Descent (0-5 seg)\n- Anima\u00e7\u00e3o de c\u00e2mera mergulhando nas profundezas oce\u00e2nicas\n- Transi\u00e7\u00e3o de luz azul para escurid\u00e3o total\n- Efeito de press\u00e3o/distor\u00e7\u00e3o visual\n- **\u00c1udio:** Sons submersivos, batida musical crescente\n- **Mensagem:** \"Nas profundezas do oceano...\"\n\n### Cena 2: Discovery (5-15 seg)\n- Criatura 1: Lanterna-do-mar (Hatchetfish) com bioluminesc\u00eancia verde\n- Criatura 2: Lula-de-vidro (Glass Squid) com \u00f3rg\u00e3os luminosos\n- Criatura 3: Anglerfish f\u00eamea com isca bioluminescente\n- **Transi\u00e7\u00f5es:** Cortes r\u00e1pidos sincronizados com batida musical\n- **Efeito Visual:** Glow neon em cores: verde, azul, roxo\n- **Mensagem:** \"Existem criaturas que CRIAM sua pr\u00f3pria luz\"\n\n### Cena 3: Technology Integration (15-25 seg)\n- Sobreposi\u00e7\u00e3o de tecnologia: drones submarinos, c\u00e2meras infravermelhas, sensores\n- Visualiza\u00e7\u00e3o de dados em tempo real (gr\u00e1ficos, mapas de calor)\n- Compara\u00e7\u00e3o lado-a-lado: criatura natural vs tecnologia que a detecta\n- **Efeito Visual:** UI futurista, hologramas transl\u00facidos\n- **Mensagem:** \"Rob\u00f4s subaqu\u00e1ticos copiaram essa tecnologia...\"\n\n### Cena 4: Mind-Blowing Fact (25-35 seg)\n- Texto grande e vibrante: \"FATO IMPRESSIONANTE\"\n- Revela\u00e7\u00e3o: \"90% das criaturas do fundo do oceano s\u00e3o bioluminescentes\"\n- Visual: Multiplica\u00e7\u00e3o de criaturas preenchendo a tela\n- Explos\u00e3o de particulas/efeitos especiais\n- **Mensagem:** \"Voc\u00ea est\u00e1 apenas vendo a ponta do iceberg\"\n\n### Cena 5: Call-to-Action (35-40 seg)\n- Fade para branco com logo do canal/marca\n- Texto: \"Qual seria a pr\u00f3xima tecnologia que copiamos da natureza?\"\n- \u00cdcone de inscri\u00e7\u00e3o/seguir\n- **\u00c1udio:** Batida final marcante\n\n---\n\n## 3. Estrat\u00e9gia de Engajamento Viral\n\n### Elementos Virais Incorporados:\n1. **Shock Factor:** Revela\u00e7\u00e3o surpreendente sobre a vida marinha\n2. **Curiosidade:** \"Voc\u00ea sabia que...?\" format\n3. **Valor Educacional:** Ci\u00eancia real + fatos verific\u00e1veis\n4. **Elementos Visuais Deslumbrantes:** Cores vibrantes em contraste com escurid\u00e3o\n5. **Ritmo Acelerado:** Cortes r\u00e1pidos sincronizados com m\u00fasica\n6. **Quest\u00e3o Provocadora:** CTA que estimula coment\u00e1rios\n\n### Elementos de Design:\n- Paleta de cores: Azul profundo, neon (verde, roxo, azul brilhante), preto\n- Tipografia: Moderno, sem serifa, leg\u00edvel em mobile\n- Efeitos: Glitch digital, bioluminesc\u00eancia pulsante, transi\u00e7\u00f5es de corte r\u00e1pido\n\n---\n\n## 4. Conte\u00fado de \u00c1udio\n\n### Narra\u00e7\u00e3o Principal (Op\u00e7\u00e3o 1 - Dram\u00e1tico):\n> \"Nas profundezas inexpur\u00e1veis do oceano, a 1000 metros abaixo da superf\u00edcie, existe um mundo que voc\u00ea nunca imaginou. Criaturas que produzem sua pr\u00f3pria luz. Organismos que brilham em cores imposs\u00edveis. E os cientistas n\u00e3o apenas descobriram isso... eles copiaram.\"\n\n### Narra\u00e7\u00e3o Alternativa (Op\u00e7\u00e3o 2 - Conversacional):\n> \"Sabia que 90% das criaturas no fundo do oceano criam sua pr\u00f3pria luz? Sim. CRIAM. E a tecnologia? J\u00e1 copiou tudo. Drones submarinos, c\u00e2meras de vis\u00e3o noturna, sistemas de comunica\u00e7\u00e3o. Tudo inspirado em criaturas que ningu\u00e9m v\u00ea.\"\n\n### Trilha Sonora:\n- **Fundo:** M\u00fasica eletr\u00f4nica/sint\u00e9tica envolvente (tipo synthwave futurista)\n- **Tempo:** ~120-130 BPM para manter ritmo energ\u00e9tico\n- **Efeitos:** Sons de \u00e1gua, bolhas, pulsos eletr\u00f4nicos\n- **Cl\u00edmax:** Batida forte durante revela\u00e7\u00e3o de fato\n\n---\n\n## 5. Criaturas Bioluminescentes em Destaque\n\n### Criatura 1: Anglerfish (Peixe-Diabo)\n- **Caracter\u00edsticas:** F\u00eamea com isca bioluminescente (esca)\n- **Cor:** Bioluminesc\u00eancia verde-azulada\n- **Fato Viral:** A f\u00eamea \u00e9 10x maior que o macho\n- **Tempo em Tela:** 4-5 segundos\n\n### Criatura 2: Hatchetfish (Peixe-Machado)\n- **Caracter\u00edsticas:** Corpo prateado + fot\u00f3foros (\u00f3rg\u00e3os luminosos)\n- **Cor:** Bioluminesc\u00eancia verde-amarelada\n- **Fato Viral:** Usa luz para se camuflar de predadores\n- **Tempo em Tela:** 4-5 segundos\n\n### Criatura 3: Glass Squid (Lula-de-Vidro)\n- **Caracter\u00edsticas:** Transparente com \u00f3rg\u00e3os luminosos vis\u00edveis\n- **Cor:** Verde/azul neon concentrado nos olhos e \u00f3rg\u00e3os\n- **Fato Viral:** Corpo completamente transparente, \u00f3rg\u00e3os brilham\n- **Tempo em Tela:** 4-5 segundos\n\n### Criatura 4: Atolla Jellyfish (\u00c1gua-Viva Luminosa)\n- **Caracter\u00edsticas:** Pulsos de bioluminesc\u00eancia radial\n- **Cor:** Azul radiante em padr\u00e3o de \"alarma de Burgess\"\n- **Fato Viral:** Cria \"fogos de artif\u00edcio\" para afastar predadores\n- **Tempo em Tela:** 4-5 segundos\n\n---\n\n## 6. Integra\u00e7\u00f5es Tecnol\u00f3gicas\n\n### Tecnologia 1: ROV (Remotely Operated Vehicle)\n- Visual: Drone subaqu\u00e1tico com luzes LED\n- Fun\u00e7\u00e3o: Mimics bioluminescence para comunica\u00e7\u00e3o\n- Impacto: \"Rob\u00f4s copiaram a linguagem deles\"\n\n### Tecnologia 2: Bioluminescent Biosensors\n- Visual: Gr\u00e1ficos com dados piscantes em tempo real\n- Fun\u00e7\u00e3o: Usa prote\u00ednas fluorescentes marinhas para diagn\u00f3sticos\n- Impacto: \"Usamos suas prote\u00ednas para salvar vidas\"\n\n### Tecnologia 3: Pressure-Resistant Cameras\n- Visual: C\u00e2meras especiais descendo, imagens do fundo do oceano\n- Fun\u00e7\u00e3o: Captura footage imposs\u00edvel\n- Impacto: \"S\u00f3 conseguimos ver porque aprendemos com elas\"\n\n---\n\n## 7. Efeitos Visuais Recomendados\n\n- **Bioluminesc\u00eancia:** Glow effect com bloom, pulsa\u00e7\u00e3o sincronizada com m\u00fasica\n- **Transi\u00e7\u00f5es:** Fast cuts, wipes, digital glitch\n- **Cor Grade:** High contrast, satura\u00e7\u00e3o elevada em cores vibrantes\n- **Tipografia:** Anima\u00e7\u00e3o de aparecimento de texto, with emphasis effects\n- **Particulas:** Part\u00edculas de luz flutuando, efeito de profundidade\n\n---\n\n## 8. Estrat\u00e9gia de Distribui\u00e7\u00e3o\n\n### Otimiza\u00e7\u00e3o por Plataforma:\n\n#### TikTok\n- Dura\u00e7\u00e3o: 30-45 segundos (m\u00e1xima reten\u00e7\u00e3o)\n- Aspectrela\u00e7\u00e3o: 9:16 (vertical)\n- Hashtags: #oceanmystery #bioluminescence #deepseacreatures #science #marinelife #tecnologia #curiosidades\n- Tend\u00eancia: Usar trending sounds + original music\n\n#### Instagram Reels\n- Dura\u00e7\u00e3o: 30-60 segundos\n- Aspecto: 9:16\n- Caption: Hook provocador + CTA para coment\u00e1rios\n- Hashtags: 20-30 hashtags relevantes\n\n#### YouTube Shorts\n- Dura\u00e7\u00e3o: 15-60 segundos\n- Descri\u00e7\u00e3o: Palavras-chave + link para v\u00eddeo completo no canal\n- Thumbnail: Criatura mais impressionante em destaque\n\n---\n\n## 9. Elementos CTA (Call-to-Action)\n\n### Final de V\u00eddeo:\n1. **Visual CTA:** \u00cdcone de inscri\u00e7\u00e3o animado\n2. **Texto:** \"Qual seria a pr\u00f3xima tecnologia que a gente copia da natureza?\"\n3. **Audio:** Som satisfat\u00f3rio/impressionante\n\n### No Caption:\n- \"Qual tecnologia voc\u00ea gostaria que fosse inspirada em criaturas marinhas?\"\n- Estimular coment\u00e1rios para aumentar engajamento\n\n---\n\n## 10. Especifica\u00e7\u00f5es T\u00e9cnicas\n\n- **Resolu\u00e7\u00e3o:** 1080p (1080 x 1920 para vertical)\n- **Taxa de Fotogramas:** 30fps ou 60fps (60fps para movimento mais suave)\n- **Codifica\u00e7\u00e3o:** H.264/H.265\n- **Tamanho de Arquivo:** Otimizado para upload (m\u00e1x 1GB)\n- **Dura\u00e7\u00e3o Final:** 45 segundos (otimizado para m\u00e1xima reten\u00e7\u00e3o em shorts)\n\n---\n\n## 11. Fluxo de Produ\u00e7\u00e3o Recomendado\n\n### Fase 1: Pr\u00e9-Produ\u00e7\u00e3o (1-2 dias)\n- Definir storyboard detalhado\n- Selecionar/licenciar m\u00fasica\n- Compilar footage de criaturas marinhas\n- Criar briefing para designer/animador\n\n### Fase 2: Produ\u00e7\u00e3o (3-5 dias)\n- Anima\u00e7\u00f5es de descida/ambiente\n- Efeitos visuais de bioluminesc\u00eancia\n- Integra\u00e7\u00e3o de footage real\n- Sincroniza\u00e7\u00e3o com \u00e1udio\n\n### Fase 3: P\u00f3s-Produ\u00e7\u00e3o (1-2 dias)\n- Color grading final\n- Sincroniza\u00e7\u00e3o precisa m\u00fasica-visual\n- Testes de visualiza\u00e7\u00e3o (mobile, desktop)\n- Exporta\u00e7\u00e3o em formatos m\u00faltiplos\n\n### Fase 4: Publica\u00e7\u00e3o (1 dia)\n- Upload simult\u00e2neo em plataformas\n- Monitoramento inicial de m\u00e9tricas\n- Resposta a coment\u00e1rios\n- Ajustes conforme necess\u00e1rio\n\n---\n\n## 12. M\u00e9tricas de Sucesso\n\n### KPIs a Monitorar:\n- **Reten\u00e7\u00e3o Visual:** % de pessoas que veem at\u00e9 o final\n- **Engajamento:** Likes, coment\u00e1rios, shares\n- **Crescimento:** Novos seguidores a partir do v\u00eddeo\n- **Visualiza\u00e7\u00f5es:** Alcance total do conte\u00fado\n- **CTR:** Taxa de clique no CTA final\n- **Tempo M\u00e9dio Assistido:** Quanto tempo m\u00e9dio \u00e9 gasto no v\u00eddeo\n\n### Benchmarks Visuais de Sucesso:\n- Reten\u00e7\u00e3o > 80% (muito boa para shorts)\n- Engagement rate > 5%\n- Crescimento de 5-10% novos seguidores por v\u00eddeo\n\n---\n\n## 13. Varia\u00e7\u00f5es Poss\u00edveis\n\n### Vers\u00e3o 1: \"Educacional Dramatizada\" (Atual)\n- Foco: Fatos cient\u00edficos + visuals impressionantes\n- Tom: Inspirador + Educacional\n\n### Vers\u00e3o 2: \"Mist\u00e9rio Profundo\"\n- Foco: \"Ainda h\u00e1 muito para descobrir\"\n- Tom: Misterioso + Intrigante\n\n### Vers\u00e3o 3: \"Compara\u00e7\u00e3o Natura vs Tecnologia\"\n- Foco: Side-by-side tech inspiration\n- Tom: Engenhosidade humana + Admira\u00e7\u00e3o pela natureza\n\n---\n\n## 14. Observa\u00e7\u00f5es Finais para Cria\u00e7\u00e3o\n\n1. **Velocidade \u00e9 Tudo:** Em shorts de ci\u00eancia, manter ritmo acelerado \u00e9 crucial\n2. **Curiosidade > Conhecimento:** Sempre deixar perguntas em aberto para engajamento\n3. **Cores Vibrantes:** Bioluminesc\u00eancia deve ser visualmente hipnotizante\n4. **\u00c1udio Din\u00e2mico:** A trilha sonora \u00e9 t\u00e3o importante quanto o visual\n5. **Mobile First:** Testar tudo em tela vertical pequena\n6. **Shareability:** Design pensado para \"mostrar para um amigo\"\n\n---\n\n## 15. Recursos Recomendados\n\n### Footage Stock:\n- BBC Planet Earth (underwater sequences)\n- National Geographic content\n- Pexels/Pixabay videos (licen\u00e7a livre)\n\n### Ferramentas de Edi\u00e7\u00e3o:\n- Adobe Premiere Pro / DaVinci Resolve (profissional)\n- CapCut / Adobe Express (r\u00e1pido e mobile-friendly)\n\n### Bibliotecas de Som:\n- Epidemic Sound\n- Artlist\n- YouTube Audio Library (livre)\n\n---\n\n## 16. Script Final (Narra\u00e7\u00e3o + Timings)\n\n**[0-2 seg]** - Hook silencioso com visual impressionante\n**\"A tecnologia j\u00e1 descobriu isso... 2 anos atr\u00e1s\" (texto na tela)**\n\n**[2-8 seg]** - Descida dram\u00e1tica\n**Narrador:** \"Nas profundezas do oceano, a mais de 1000 metros...\"\n\n**[8-18 seg]** - Apresenta\u00e7\u00e3o de criaturas\n**Narrador:** \"...existem criaturas que criam sua pr\u00f3pria luz.\"\n(Mostrar 4 criaturas diferentes com efeitos de bioluminesc\u00eancia)\n\n**[18-28 seg]** - Tecnologia\n**Narrador:** \"E a gente? A gente copiou tudo.\"\n(Mostrar tech: ROVs, sensores, c\u00e2meras)\n\n**[28-35 seg]** - Fato Impressionante\n**Texto Grande:** \"90% DAS CRIATURAS PROFUNDAS S\u00c3O BIOLUMINESCENTES\"\n(Explos\u00e3o visual de particulas)\n\n**[35-42 seg]** - CTA\n**Texto:** \"Qual seria a pr\u00f3xima?\"\n**Narrador:** \"Qual tecnologia voc\u00ea gostaria que a gente criasse inspirado na natureza?\"\n\n**[42-45 seg]** - Closing\nFade para branco com logo do canal\n\n---\n\n**Vers\u00e3o do Documento:** 1.0\n**Data de Cria\u00e7\u00e3o:** 2026-04-07\n**Status:** Pronto para Produ\u00e7\u00e3o\n"}], "grading": {"run_id": "eval-3-ocean-bioluminescent-without_skill", "expectations": [{"text": "has_3_prompts", "passed": false, "evidence": "Document contains conceptual scene and visual descriptions (lines 25-139) but no copy-pasteable AI image generation prompts. Content describes scenes narratively ('Close-up de uma criatura bioluminescente', 'Anima\u00e7\u00e3o de c\u00e2mera mergulhando') rather than providing structured prompts for image generators."}, {"text": "has_timing_table", "passed": false, "evidence": "Lines 25-139 describe scenes with timing information embedded in section headers (Scene 1-5 with timestamp ranges) but no structured table format. Timing is narrative rather than tabular (no Time | Visual | Text | Notes columns)."}, {"text": "has_9_16_format", "passed": false, "evidence": "No explicit mention of '9:16' format found. While line 4 mentions 'Plataformas: TikTok, Instagram Reels, YouTube Shorts', there is no explicit statement of '9:16 vertical' or resolution specifications like '1080x1920'."}, {"text": "has_engagement_cta", "passed": false, "evidence": "Line 178 shows generic CTA: 'Qual tecnologia voc\u00ea gostaria que fosse inspirada em criaturas marinhas?' (What technology would you like inspired by sea creatures?). This is a discussion prompt, not a specific engagement CTA asking to comment with a keyword like 'Comment OCEAN for the prompt'."}, {"text": "correct_language", "passed": true, "evidence": "Document is entirely in Portuguese, which is correct for eval-3. All content from lines 1-320 is in Portuguese."}, {"text": "has_tool_recs", "passed": false, "evidence": "Lines 277-284 'Recursos Recomendados' recommend general categories (footage stock from BBC/National Geographic/Pexels, editing software like Premiere Pro/DaVinci Resolve, sound libraries) but do not recommend specific AI image generation tools or image-to-video animation tools with URLs."}, {"text": "has_animation_prompt", "passed": false, "evidence": "Document describes animation effects conceptually (lines 144-150 'Efeitos Visuais Recomendados': bioluminescence glow, transitions, color grading) but does not provide a copy-pasteable animation prompt for image-to-video tools. These are production notes rather than prompts."}]}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "viral-video-creator", "skill_path": "/sessions/blissful-confident-brown/mnt/aruivo pro X01/.claude/skills/viral-video-creator", "executor_model": "claude-opus-4-6", "analyzer_model": "claude-opus-4-6", "timestamp": "2026-04-07T00:00:00Z", "evals_run": ["meditation-forest-pt-br", "crypto-cyberpunk-english", "ocean-bioluminescent-pt-br"], "runs_per_configuration": 3}, "runs": [{"eval_name": "meditation-forest-pt-br", "configuration": "with_skill", "pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 71.8, "tokens": 76985, "expectations": [{"text": "has_3_prompts", "passed": true}, {"text": "has_timing_table", "passed": true}, {"text": "has_9_16_format", "passed": true}, {"text": "has_engagement_cta", "passed": true}, {"text": "correct_language", "passed": true}, {"text": "has_tool_recs", "passed": true}, {"text": "has_animation_prompt", "passed": true}]}, {"eval_name": "meditation-forest-pt-br", "configuration": "without_skill", "pass_rate": 0.286, "passed": 2, "failed": 5, "total": 7, "time_seconds": 57.2, "tokens": 72780, "expectations": [{"text": "has_3_prompts", "passed": false}, {"text": "has_timing_table", "passed": true}, {"text": "has_9_16_format", "passed": true}, {"text": "has_engagement_cta", "passed": false}, {"text": "correct_language", "passed": false}, {"text": "has_tool_recs", "passed": false}, {"text": "has_animation_prompt", "passed": false}]}, {"eval_name": "crypto-cyberpunk-english", "configuration": "with_skill", "pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 75.0, "tokens": 77322, "expectations": [{"text": "has_3_prompts", "passed": true}, {"text": "has_timing_table", "passed": true}, {"text": "has_9_16_format", "passed": true}, {"text": "has_engagement_cta", "passed": true}, {"text": "correct_language", "passed": true}, {"text": "has_tool_recs", "passed": true}, {"text": "has_animation_prompt", "passed": true}]}, {"eval_name": "crypto-cyberpunk-english", "configuration": "without_skill", "pass_rate": 0.143, "passed": 1, "failed": 6, "total": 7, "time_seconds": 43.7, "tokens": 71029, "expectations": [{"text": "has_3_prompts", "passed": false}, {"text": "has_timing_table", "passed": false}, {"text": "has_9_16_format", "passed": false}, {"text": "has_engagement_cta", "passed": false}, {"text": "correct_language", "passed": true}, {"text": "has_tool_recs", "passed": false}, {"text": "has_animation_prompt", "passed": false}]}, {"eval_name": "ocean-bioluminescent-pt-br", "configuration": "with_skill", "pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 60.7, "tokens": 76342, "expectations": [{"text": "has_3_prompts", "passed": true}, {"text": "has_timing_table", "passed": true}, {"text": "has_9_16_format", "passed": true}, {"text": "has_engagement_cta", "passed": true}, {"text": "correct_language", "passed": true}, {"text": "has_tool_recs", "passed": true}, {"text": "has_animation_prompt", "passed": true}]}, {"eval_name": "ocean-bioluminescent-pt-br", "configuration": "without_skill", "pass_rate": 0.143, "passed": 1, "failed": 6, "total": 7, "time_seconds": 43.3, "tokens": 71706, "expectations": [{"text": "has_3_prompts", "passed": false}, {"text": "has_timing_table", "passed": false}, {"text": "has_9_16_format", "passed": false}, {"text": "has_engagement_cta", "passed": false}, {"text": "correct_language", "passed": true}, {"text": "has_tool_recs", "passed": false}, {"text": "has_animation_prompt", "passed": false}]}], "run_summary": {"with_skill": {"mean_pass_rate": 1.0, "stddev_pass_rate": 0.0, "mean_time_seconds": 69.2, "mean_tokens": 76883}, "without_skill": {"mean_pass_rate": 0.19, "stddev_pass_rate": 0.08, "mean_time_seconds": 48.1, "mean_tokens": 71838}, "delta": {"pass_rate": "+0.81", "time_seconds": "+21.1", "tokens": "+5045"}}, "notes": ["With-skill outputs consistently produce structured, production-ready documents with copy-pasteable prompts", "Without-skill outputs tend toward conceptual planning documents rather than actionable production guides", "The skill adds ~21 seconds and ~5K tokens, which is a modest cost for 81% improvement in pass rate", "correct_language passes for baselines because Claude naturally responds in the user's language \u2014 this assertion is non-discriminating"]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+🎬 SmartWatch — Exploded View
+==================================================
+Plataforma: Instagram Reels | Duração: 30s
+Paleta: cyber_purple | Câmara: orbit_zoom
+Efeitos: procedural_disassembly, internal_layers, particles_fragments
+
+ROTEIRO:
+  [0-3s] Smartwatch inteiro no centro, fundo escuro.
+  [3-10s] Peças separam-se — ecrã, bateria, sensor, chassis.
+  [10-18s] Cada peça roda com label: "AMOLED", "7 dias bateria", "GPS".
+  [18-25s] Peças voltam a juntar-se (reassemble).
+  [25-28s] Smartwatch completo no pulso (lifestyle mockup).
+  [28-30s] Logo + preço + CTA.
+
+Texto: O que há dentro do SmartWatch Pro X7?
+Música: Cinematic tech beat
+Hashtags: #smartwatch #teardown #tech #inside #gadgets #portugal

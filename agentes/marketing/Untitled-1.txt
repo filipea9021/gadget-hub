@@ -1,0 +1,327 @@
+[CJ Docs](https://developers.cjdropshipping.cn/en/)
+[Home](https://developers.cjdropshipping.cn/en/summary/)
+[API](https://developers.cjdropshipping.cn/en/api/introduction.html)
+[Notice](https://developers.cjdropshipping.cn/en/publication/notice.html)
+[Contact](https://developers.cjdropshipping.cn/en/about.html)
+-  [English](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+-  [简体中文](https://developers.cjdropshipping.cn/zh/api/api2/api/auth.html)
+[English](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[简体中文](https://developers.cjdropshipping.cn/zh/api/api2/api/auth.html)
+[Home](https://developers.cjdropshipping.cn/en/summary/)
+[API](https://developers.cjdropshipping.cn/en/api/introduction.html)
+[Notice](https://developers.cjdropshipping.cn/en/publication/notice.html)
+[Contact](https://developers.cjdropshipping.cn/en/about.html)
+-  [English](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+-  [简体中文](https://developers.cjdropshipping.cn/zh/api/api2/api/auth.html)
+[English](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[简体中文](https://developers.cjdropshipping.cn/zh/api/api2/api/auth.html)
+-   IntroductionStart  DevelopmentGet Access-tokenPractical ToolOrders Synchronization ProcessingProducts Synchronization ProcessingWebhookSandboxInterface Call RestrictionsAPI  Standard  Interface DefinitionInterface Field DefinitionAppendix 1：Global Error CodesAppendix 2：Country CodeAppendix 3：PlatformsInterface  1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）1.3 Logout Token（POST）2 Setting3 Product4 Storage5 Shopping6 Logistic7 Dispute[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- [Introduction](https://developers.cjdropshipping.cn/en/api/introduction.html)
+- Start  DevelopmentGet Access-tokenPractical ToolOrders Synchronization ProcessingProducts Synchronization ProcessingWebhookSandbox[Interface Call Restrictions](https://developers.cjdropshipping.cn/en/api/start/limit.html)
+- [Development](https://developers.cjdropshipping.cn/en/api/start/development.html)
+- [Get Access-token](https://developers.cjdropshipping.cn/en/api/start/token.html)
+- [Practical Tool](https://developers.cjdropshipping.cn/en/api/start/utils.html)
+- [Orders Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Orders-Synchronization-Processing.html)
+- [Products Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Products-Synchronization-Processing.html)
+- [Webhook](https://developers.cjdropshipping.cn/en/api/start/webhook.html)
+- [Sandbox](https://developers.cjdropshipping.cn/en/api/start/sandbox.html)
+- [Interface Call Restrictions](https://developers.cjdropshipping.cn/en/api/start/limit.html)
+- API  Standard  Interface DefinitionInterface Field DefinitionAppendix 1：Global Error CodesAppendix 2：Country CodeAppendix 3：PlatformsInterface  1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）1.3 Logout Token（POST）2 Setting3 Product4 Storage5 Shopping6 Logistic7 Dispute[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- Standard  Interface DefinitionInterface Field DefinitionAppendix 1：Global Error CodesAppendix 2：Country Code[Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+- [Interface Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/definition.html)
+- [Interface Field Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/field.html)
+- [Appendix 1：Global Error Codes](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+- [Appendix 2：Country Code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-country.html)
+- [Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+- Interface  1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）1.3 Logout Token（POST）2 Setting3 Product4 Storage5 Shopping6 Logistic7 Dispute[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- 1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+
+- 1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [2 Setting](https://developers.cjdropshipping.cn/en/api/api2/api/setting.html)
+- [3 Product](https://developers.cjdropshipping.cn/en/api/api2/api/product.html)
+- [4 Storage](https://developers.cjdropshipping.cn/en/api/api2/api/storage.html)
+- [5 Shopping](https://developers.cjdropshipping.cn/en/api/api2/api/shopping.html)
+- [6 Logistic](https://developers.cjdropshipping.cn/en/api/api2/api/logistic.html)
+- [7 Dispute](https://developers.cjdropshipping.cn/en/api/api2/api/dispute.html)
+- [8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- [Introduction](https://developers.cjdropshipping.cn/en/api/introduction.html)
+- Start  DevelopmentGet Access-tokenPractical ToolOrders Synchronization ProcessingProducts Synchronization ProcessingWebhookSandbox[Interface Call Restrictions](https://developers.cjdropshipping.cn/en/api/start/limit.html)
+- [Development](https://developers.cjdropshipping.cn/en/api/start/development.html)
+- [Get Access-token](https://developers.cjdropshipping.cn/en/api/start/token.html)
+- [Practical Tool](https://developers.cjdropshipping.cn/en/api/start/utils.html)
+- [Orders Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Orders-Synchronization-Processing.html)
+- [Products Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Products-Synchronization-Processing.html)
+- [Webhook](https://developers.cjdropshipping.cn/en/api/start/webhook.html)
+- [Sandbox](https://developers.cjdropshipping.cn/en/api/start/sandbox.html)
+- [Interface Call Restrictions](https://developers.cjdropshipping.cn/en/api/start/limit.html)
+- API  Standard  Interface DefinitionInterface Field DefinitionAppendix 1：Global Error CodesAppendix 2：Country CodeAppendix 3：PlatformsInterface  1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）1.3 Logout Token（POST）2 Setting3 Product4 Storage5 Shopping6 Logistic7 Dispute[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- Standard  Interface DefinitionInterface Field DefinitionAppendix 1：Global Error CodesAppendix 2：Country Code[Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+- [Interface Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/definition.html)
+- [Interface Field Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/field.html)
+- [Appendix 1：Global Error Codes](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+- [Appendix 2：Country Code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-country.html)
+- [Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+- Interface  1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）1.3 Logout Token（POST）2 Setting3 Product4 Storage5 Shopping6 Logistic7 Dispute[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- 1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- 1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [2 Setting](https://developers.cjdropshipping.cn/en/api/api2/api/setting.html)
+- [3 Product](https://developers.cjdropshipping.cn/en/api/api2/api/product.html)
+- [4 Storage](https://developers.cjdropshipping.cn/en/api/api2/api/storage.html)
+
+- [5 Shopping](https://developers.cjdropshipping.cn/en/api/api2/api/shopping.html)
+- [6 Logistic](https://developers.cjdropshipping.cn/en/api/api2/api/logistic.html)
+- [7 Dispute](https://developers.cjdropshipping.cn/en/api/api2/api/dispute.html)
+- [8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+[Introduction](https://developers.cjdropshipping.cn/en/api/introduction.html)
+[Start](https://developers.cjdropshipping.cn/en/api/start)
+- [Development](https://developers.cjdropshipping.cn/en/api/start/development.html)
+- [Get Access-token](https://developers.cjdropshipping.cn/en/api/start/token.html)
+- [Practical Tool](https://developers.cjdropshipping.cn/en/api/start/utils.html)
+- [Orders Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Orders-Synchronization-Processing.html)
+- [Products Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Products-Synchronization-Processing.html)
+- [Webhook](https://developers.cjdropshipping.cn/en/api/start/webhook.html)
+- [Sandbox](https://developers.cjdropshipping.cn/en/api/start/sandbox.html)
+- [Interface Call Restrictions](https://developers.cjdropshipping.cn/en/api/start/limit.html)
+[Development](https://developers.cjdropshipping.cn/en/api/start/development.html)
+[Get Access-token](https://developers.cjdropshipping.cn/en/api/start/token.html)
+[Practical Tool](https://developers.cjdropshipping.cn/en/api/start/utils.html)
+[Orders Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Orders-Synchronization-Processing.html)
+[Products Synchronization Processing](https://developers.cjdropshipping.cn/en/api/start/Products-Synchronization-Processing.html)
+[Webhook](https://developers.cjdropshipping.cn/en/api/start/webhook.html)
+[Sandbox](https://developers.cjdropshipping.cn/en/api/start/sandbox.html)
+[Interface Call Restrictions](https://developers.cjdropshipping.cn/en/api/start/limit.html)
+[API](https://developers.cjdropshipping.cn/en/api/api2/)
+- Standard  Interface DefinitionInterface Field DefinitionAppendix 1：Global Error CodesAppendix 2：Country Code[Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+- [Interface Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/definition.html)
+- [Interface Field Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/field.html)
+- [Appendix 1：Global Error Codes](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+- [Appendix 2：Country Code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-country.html)
+- [Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+- Interface  1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）1.3 Logout Token（POST）2 Setting3 Product4 Storage5 Shopping6 Logistic7 Dispute[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+- 1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- 1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [2 Setting](https://developers.cjdropshipping.cn/en/api/api2/api/setting.html)
+- [3 Product](https://developers.cjdropshipping.cn/en/api/api2/api/product.html)
+- [4 Storage](https://developers.cjdropshipping.cn/en/api/api2/api/storage.html)
+- [5 Shopping](https://developers.cjdropshipping.cn/en/api/api2/api/shopping.html)
+- [6 Logistic](https://developers.cjdropshipping.cn/en/api/api2/api/logistic.html)
+- [7 Dispute](https://developers.cjdropshipping.cn/en/api/api2/api/dispute.html)
+- [8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+Standard
+- [Interface Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/definition.html)
+- [Interface Field Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/field.html)
+
+- [Appendix 1：Global Error Codes](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+- [Appendix 2：Country Code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-country.html)
+- [Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+[Interface Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/definition.html)
+[Interface Field Definition](https://developers.cjdropshipping.cn/en/api/api2/standard/field.html)
+[Appendix 1：Global Error Codes](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+[Appendix 2：Country Code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-country.html)
+[Appendix 3：Platforms](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-Platforms.html)
+Interface
+- 1 Authentication1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- 1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [2 Setting](https://developers.cjdropshipping.cn/en/api/api2/api/setting.html)
+- [3 Product](https://developers.cjdropshipping.cn/en/api/api2/api/product.html)
+- [4 Storage](https://developers.cjdropshipping.cn/en/api/api2/api/storage.html)
+- [5 Shopping](https://developers.cjdropshipping.cn/en/api/api2/api/shopping.html)
+- [6 Logistic](https://developers.cjdropshipping.cn/en/api/api2/api/logistic.html)
+- [7 Dispute](https://developers.cjdropshipping.cn/en/api/api2/api/dispute.html)
+- [8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+[1 Authentication](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- 1 Authentication1.1 Get access token（POST）1.2 Refresh access token（POST）[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[1 Authentication](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+- [1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[1.1 Get access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[1.2 Refresh access token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[1.3 Logout Token（POST）](https://developers.cjdropshipping.cn/en/api/api2/api/auth.html)
+[2 Setting](https://developers.cjdropshipping.cn/en/api/api2/api/setting.html)
+[3 Product](https://developers.cjdropshipping.cn/en/api/api2/api/product.html)
+[4 Storage](https://developers.cjdropshipping.cn/en/api/api2/api/storage.html)
+[5 Shopping](https://developers.cjdropshipping.cn/en/api/api2/api/shopping.html)
+[6 Logistic](https://developers.cjdropshipping.cn/en/api/api2/api/logistic.html)
+[7 Dispute](https://developers.cjdropshipping.cn/en/api/api2/api/dispute.html)
+[8 Webhook](https://developers.cjdropshipping.cn/en/api/api2/api/webhook.html)
+
+# 
+Token-based authentication, the life of an access token is 15 days, and the life of a refresh token is 180 days. You can request new access tokens with refresh token when access token expires. You need to log in when refresh token expires.
+Rate limit is consistent with other API endpoints: maximum 1 call per second (QPS = 1).
+Token Caching: When the same account calls the Get Token endpoint multiple times within 24 hours, the returned accessToken and refreshToken remain consistent (server-side cache). The Refresh Token endpoint also returns the same cached token within the 24-hour window. After 24 hours or after an explicit logout, a new token will be generated.
+
+#### # URL
+
+# 
+https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken
+
+#### # CURL
+
+# 
+```
+curl --location --request POST 'https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken' \ --header 'Content-Type: application/json' \ --data-raw '{ "apiKey": "CJUserNum@api@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" }'
+```
+
+
+```
+curl --location --request POST 'https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken' \ --header 'Content-Type: application/json' \ --data-raw '{ "apiKey": "CJUserNum@api@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" }'
+```
+
+[Get API Key  (opens new window)](https://www.cjdropshipping.com/myCJ.html)
+Use apiKey as the recommended request parameter. Legacy integrations are still compatible with email + password or older password-style credentials, but new integrations should use apiKey only.
+
+```
+apiKey
+```
+
+
+```
+email + password
+```
+
+
+```
+apiKey
+```
+
+How to get Api Key:
+Go to [Get API Key (opens new window)](https://www.cjdropshipping.com/myCJ.html) and click button "Generate"
+
+#### # Return
+
+# 
+success
+
+```
+{ "code": 200, "result": true, "message": "Success", "data": { "openId": 123456789, "accessToken": "f59ac98193d64d62a9e887abea830369", "accessTokenExpiryDate": "2021-08-18T09:16:33+08:00", "refreshToken": "f7edabe65c3b4a198b50ca8f969e36eb", "refreshTokenExpiryDate": "2022-02-07T09:16:33+08:00", "createDate": "2021-08-11T09:16:33+08:00" }, "requestId": "8b3d9ea1-00c3-4d10-9e2b-d18041d98080", "success": true }
+```
+
+
+```
+{ "code": 200, "result": true, "message": "Success", "data": { "openId": 123456789, "accessToken": "f59ac98193d64d62a9e887abea830369", "accessTokenExpiryDate": "2021-08-18T09:16:33+08:00", "refreshToken": "f7edabe65c3b4a198b50ca8f969e36eb", "refreshTokenExpiryDate": "2022-02-07T09:16:33+08:00", "createDate": "2021-08-11T09:16:33+08:00" }, "requestId": "8b3d9ea1-00c3-4d10-9e2b-d18041d98080", "success": true }
+```
+
+error
+
+```
+{ "code": 1601000, "result": false, "message": "User not find", "data": null, "requestId": "a18c9793-7c99-42f9-970b-790eecdceba2", "success": false }
+```
+
+
+```
+{ "code": 1601000, "result": false, "message": "User not find", "data": null, "requestId": "a18c9793-7c99-42f9-970b-790eecdceba2", "success": false }
+```
+
+# 
+An API security mechanism with which the expiry date of access token can be refreshed. The life of an access token is 15 days.
+
+#### # URL
+
+# 
+https://developers.cjdropshipping.com/api2.0/v1/authentication/refreshAccessToken
+
+#### # CURL
+
+# 
+```
+curl --location --request POST 'https://developers.cjdropshipping.com/api2.0/v1/authentication/refreshAccessToken' \ --header 'Content-Type: application/json' \ --data-raw '{ "refreshToken": "3d3b01404da04be8b6795d7e9823cee5" }'
+```
+
+
+```
+curl --location --request POST 'https://developers.cjdropshipping.com/api2.0/v1/authentication/refreshAccessToken' \ --header 'Content-Type: application/json' \ --data-raw '{ "refreshToken": "3d3b01404da04be8b6795d7e9823cee5" }'
+```
+
+
+#### # Return
+
+# 
+success
+
+```
+{ "code": 200, "result": true, "message": "Success", "data": { "accessToken": "f59ac98193d64d62a9e887abea830369", "accessTokenExpiryDate": "2021-08-18T09:16:33+08:00", "refreshToken": "f7edabe65c3b4a198b50ca8f969e36eb", "refreshTokenExpiryDate": "2022-02-07T09:16:33+08:00", "createDate": "2021-08-11T09:16:33+08:00" }, "requestId": "8b3d9ea1-00c3-4d10-9e2b-d18041d98080", "success": true }
+```
+
+
+```
+{ "code": 200, "result": true, "message": "Success", "data": { "accessToken": "f59ac98193d64d62a9e887abea830369", "accessTokenExpiryDate": "2021-08-18T09:16:33+08:00", "refreshToken": "f7edabe65c3b4a198b50ca8f969e36eb", "refreshTokenExpiryDate": "2022-02-07T09:16:33+08:00", "createDate": "2021-08-11T09:16:33+08:00" }, "requestId": "8b3d9ea1-00c3-4d10-9e2b-d18041d98080", "success": true }
+```
+
+error
+
+```
+{ "code": 1600003, "result": false, "message": "Refresh token is failure", "data": null, "requestId": "0b20dc1a-0043-43a7-a7c0-51ca6c61d976", "success": false }
+```
+
+
+```
+{ "code": 1600003, "result": false, "message": "Refresh token is failure", "data": null, "requestId": "0b20dc1a-0043-43a7-a7c0-51ca6c61d976", "success": false }
+```
+
+[Reference error code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+
+# 
+API security mechanism. After logging out, access token and refresh token will expire.
+
+#### # URL
+
+# 
+https://developers.cjdropshipping.com/api2.0/v1/authentication/logout
+
+#### # CURL
+
+# 
+```
+curl --location --request POST 'https://developers.cjdropshipping.com/api2.0/v1/authentication/logout' \ --header 'CJ-Access-Token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+```
+
+
+```
+curl --location --request POST 'https://developers.cjdropshipping.com/api2.0/v1/authentication/logout' \ --header 'CJ-Access-Token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+```
+
+
+#### # Return
+
+# 
+success
+
+```
+{ "code": 200, "result": true, "message": "Success", "data": true, "requestId": "b1d3728d-8a29-417e-9983-6df9926aaa49", "success": true }
+```
+
+
+```
+{ "code": 200, "result": true, "message": "Success", "data": true, "requestId": "b1d3728d-8a29-417e-9983-6df9926aaa49", "success": true }
+```
+
+[Reference error code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+error
+
+```
+{ "code": 1600001, "result": false, "message": "Authentication failed", "data": null, "requestId": "5aa2bb6e-42fa-4e0a-ae88-1833c2c1c883", "success": false }
+```
+
+
+```
+{ "code": 1600001, "result": false, "message": "Authentication failed", "data": null, "requestId": "5aa2bb6e-42fa-4e0a-ae88-1833c2c1c883", "success": false }
+```
+
+[Reference error code](https://developers.cjdropshipping.cn/en/api/api2/standard/ps-code.html)
+← Appendix 3：Platforms [2 Setting](https://developers.cjdropshipping.cn/en/api/api2/api/setting.html) →

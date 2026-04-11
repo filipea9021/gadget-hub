@@ -1,0 +1,341 @@
+/* ============================================
+   GADGET HUB - Custom Dark Mode CSS para Shopify (Tema Horizon)
+   Paleta: Background #0a0a0f | Roxo #7c3aed | Ciano #00d4ff | Texto #e0e0e0
+
+   COMO USAR:
+   1. No Shopify Admin, vai a Loja Online > Temas > Personalizar
+   2. Clica no icone de engrenagem (Definicoes do tema)
+   3. Vai ate ao fundo e encontra "CSS personalizado"
+   4. Cola este codigo todo la dentro
+   5. Clica "Guardar"
+   ============================================ */
+
+/* ===== BASE: DARK MODE ===== */
+:root {
+  --color-background: #0a0a0f !important;
+  --color-foreground: #e0e0e0 !important;
+  --color-primary: #7c3aed !important;
+  --color-secondary: #00d4ff !important;
+  --color-accent: #7c3aed !important;
+}
+
+body,
+.shopify-section,
+main {
+  background-color: #0a0a0f !important;
+  color: #e0e0e0 !important;
+}
+
+/* ===== HEADER / NAVBAR ===== */
+header,
+.header,
+.section-header,
+.shopify-section-header,
+[class*="header"] {
+  background-color: #111118 !important;
+  border-bottom: 1px solid #1a1a2e !important;
+}
+
+.header__heading-link,
+.header h1,
+.header .h2,
+header a {
+  color: #00d4ff !important;
+  letter-spacing: 2px;
+}
+
+.header__heading-link span,
+.header__heading-link strong {
+  color: #7c3aed !important;
+}
+
+header nav a,
+.header__menu-item,
+.header__inline-menu a,
+nav a {
+  color: #b0b0b0 !important;
+  transition: color 0.3s;
+}
+
+header nav a:hover,
+.header__menu-item:hover,
+.header__inline-menu a:hover,
+nav a:hover {
+  color: #00d4ff !important;
+}
+
+/* ===== ANNOUNCEMENT BAR ===== */
+.announcement-bar,
+.utility-bar,
+[class*="announcement"] {
+  background: linear-gradient(135deg, #7c3aed, #00d4ff) !important;
+  color: white !important;
+}
+
+.announcement-bar a,
+.announcement-bar p {
+  color: white !important;
+}
+
+/* ===== HERO / BANNER ===== */
+.banner,
+.hero,
+.image-banner,
+.slideshow,
+[class*="banner"],
+[class*="hero"],
+[class*="slideshow"] {
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2e 100%) !important;
+}
+
+.banner__heading,
+.hero__title,
+.banner h1,
+.banner h2 {
+  background: linear-gradient(90deg, #00d4ff, #7c3aed) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.banner__text,
+.hero__subtitle {
+  color: #a0a0b0 !important;
+}
+
+/* ===== BOTOES ===== */
+.button,
+.btn,
+button[type="submit"],
+.shopify-payment-button button,
+a.button,
+.button--primary,
+[class*="button--primary"] {
+  background: linear-gradient(135deg, #7c3aed, #00d4ff) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
+}
+
+.button:hover,
+.btn:hover,
+a.button:hover,
+.button--primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3) !important;
+}
+
+.button--secondary,
+[class*="button--secondary"] {
+  background: transparent !important;
+  border: 2px solid #7c3aed !important;
+  color: #7c3aed !important;
+  border-radius: 10px !important;
+}
+
+.button--secondary:hover {
+  background: #7c3aed !important;
+  color: white !important;
+}
+
+/* ===== PRODUCT CARDS ===== */
+.card,
+.product-card,
+.card-wrapper,
+[class*="card"] {
+  background-color: #111118 !important;
+  border: 1px solid #1a1a2e !important;
+  border-radius: 12px !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
+}
+
+.card:hover,
+.product-card:hover,
+.card-wrapper:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15) !important;
+  border-color: #7c3aed !important;
+}
+
+.card__heading,
+.card__heading a,
+.card-information__text,
+.product-card__title {
+  color: #e0e0e0 !important;
+}
+
+.price,
+.price-item,
+.price__regular,
+[class*="price"] {
+  color: #00d4ff !important;
+  font-weight: bold !important;
+}
+
+.price--on-sale .price-item--regular,
+.price .price-item--regular s,
+.price s {
+  color: #606070 !important;
+  text-decoration: line-through !important;
+}
+
+/* ===== COLLECTION / CATALOG ===== */
+.collection-hero,
+.collection-banner {
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2e 100%) !important;
+}
+
+.collection-hero__title,
+.collection h1 {
+  color: #00d4ff !important;
+}
+
+/* ===== SECTIONS GERAIS ===== */
+.section,
+.shopify-section,
+section {
+  background-color: #0a0a0f !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+}
+
+p, span, li {
+  color: #e0e0e0 !important;
+}
+
+a {
+  color: #00d4ff !important;
+  transition: color 0.3s !important;
+}
+
+a:hover {
+  color: #7c3aed !important;
+}
+
+/* ===== CART / CARRINHO ===== */
+.cart,
+.drawer,
+.cart-drawer,
+[class*="drawer"],
+[class*="cart-drawer"] {
+  background-color: #111118 !important;
+  border-left: 1px solid #1a1a2e !important;
+}
+
+.cart__footer,
+.cart-drawer__footer {
+  border-top: 1px solid #1a1a2e !important;
+}
+
+/* ===== FOOTER ===== */
+footer,
+.footer,
+.section-footer,
+[class*="footer"] {
+  background-color: #0a0a0f !important;
+  border-top: 1px solid #1a1a2e !important;
+  color: #808090 !important;
+}
+
+footer a,
+.footer a,
+.footer__content a {
+  color: #808090 !important;
+}
+
+footer a:hover,
+.footer a:hover {
+  color: #00d4ff !important;
+}
+
+/* ===== FORMULARIOS ===== */
+input,
+select,
+textarea,
+.field__input {
+  background-color: #1a1a2e !important;
+  border: 1px solid #2a2a3e !important;
+  color: #e0e0e0 !important;
+  border-radius: 8px !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.field__input:focus {
+  border-color: #7c3aed !important;
+  outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #606070 !important;
+}
+
+/* ===== BADGES / SELOS ===== */
+.badge,
+.tag,
+[class*="badge"],
+[class*="tag"] {
+  background: linear-gradient(135deg, #7c3aed, #00d4ff) !important;
+  color: white !important;
+  border-radius: 6px !important;
+  font-weight: bold !important;
+}
+
+/* ===== NEWSLETTER ===== */
+.newsletter,
+[class*="newsletter"] {
+  background-color: #111118 !important;
+  border: 1px solid #1a1a2e !important;
+  border-radius: 12px !important;
+}
+
+/* ===== SEPARADORES E BORDAS ===== */
+hr,
+.divider {
+  border-color: #1a1a2e !important;
+}
+
+/* ===== SCROLLBAR CUSTOMIZADA ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a2e;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+/* ===== ANIMACOES ===== */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.4); }
+}
+
+.featured-product,
+.product--featured {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header__heading-link {
+    font-size: 20px !important;
+  }
+
+  .banner__heading {
+    font-size: 28px !important;
+  }
+}

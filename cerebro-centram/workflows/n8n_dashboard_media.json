@@ -1,0 +1,146 @@
+{
+  "name": "🖼️ Data Core — Galeria de Media",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-media",
+      "name": "Abrir Galeria",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/list/images",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"prefix\": \"\",\n  \"limit\": 100,\n  \"offset\": 0,\n  \"sortBy\": {\n    \"column\": \"created_at\",\n    \"order\": \"desc\"\n  }\n}",
+        "options": {}
+      },
+      "id": "http-images",
+      "name": "Listar Imagens",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/list/videos",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"prefix\": \"\",\n  \"limit\": 100,\n  \"offset\": 0,\n  \"sortBy\": {\n    \"column\": \"created_at\",\n    \"order\": \"desc\"\n  }\n}",
+        "options": {}
+      },
+      "id": "http-videos",
+      "name": "Listar Vídeos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 420]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Formatar lista de imagens\nconst items = $input.all();\nconst baseUrl = 'https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/public/images/';\n\nconst result = items\n  .filter(item => item.json.name && !item.json.name.endsWith('/'))\n  .map(item => {\n    const d = item.json;\n    const size = d.metadata?.size ? (d.metadata.size / 1024).toFixed(1) + ' KB' : 'N/A';\n    const dataRaw = d.created_at || d.updated_at;\n    const data = dataRaw ? new Date(dataRaw).toLocaleDateString('pt-PT') : 'N/A';\n    \n    return {\n      json: {\n        '🖼️ Ficheiro': d.name,\n        '📁 Tipo': 'Imagem',\n        '📦 Tamanho': size,\n        '📅 Data': data,\n        '🔗 URL Pública': baseUrl + d.name,\n      }\n    };\n  });\n\nif (result.length === 0) {\n  return [{ json: { '🖼️ Imagens': 'Nenhuma imagem encontrada. Faça upload pelo Data Core!' } }];\n}\n\nreturn result;"
+      },
+      "id": "code-format-images",
+      "name": "Formatar Imagens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Formatar lista de vídeos\nconst items = $input.all();\nconst baseUrl = 'https://wbmujojscykyngkmzner.supabase.co/storage/v1/object/public/videos/';\n\nconst result = items\n  .filter(item => item.json.name && !item.json.name.endsWith('/'))\n  .map(item => {\n    const d = item.json;\n    const size = d.metadata?.size ? (d.metadata.size / (1024*1024)).toFixed(1) + ' MB' : 'N/A';\n    const dataRaw = d.created_at || d.updated_at;\n    const data = dataRaw ? new Date(dataRaw).toLocaleDateString('pt-PT') : 'N/A';\n    \n    return {\n      json: {\n        '🎬 Ficheiro': d.name,\n        '📁 Tipo': 'Vídeo',\n        '📦 Tamanho': size,\n        '📅 Data': data,\n        '🔗 URL Pública': baseUrl + d.name,\n      }\n    };\n  });\n\nif (result.length === 0) {\n  return [{ json: { '🎬 Vídeos': 'Nenhum vídeo encontrado. Faça upload pelo Data Core!' } }];\n}\n\nreturn result;"
+      },
+      "id": "code-format-videos",
+      "name": "Formatar Vídeos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 420]
+    }
+  ],
+  "connections": {
+    "Abrir Galeria": {
+      "main": [
+        [
+          {
+            "node": "Listar Imagens",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Listar Vídeos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Imagens": {
+      "main": [
+        [
+          {
+            "node": "Formatar Imagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Vídeos": {
+      "main": [
+        [
+          {
+            "node": "Formatar Vídeos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Data Core"
+    },
+    {
+      "name": "Media"
+    }
+  ]
+}

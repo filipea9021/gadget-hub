@@ -1,0 +1,352 @@
+{
+  "timestamp": "2026-04-09T09:33:35.326Z",
+  "nicho": "smartwatches",
+  "testes": [
+    {
+      "id": 1,
+      "nome": "Config + Logger",
+      "status": "PASSOU",
+      "dados": {
+        "modo": "semi",
+        "isDemo": false,
+        "paths": {
+          "root": "/sessions/charming-great-gates/mnt/gadget-hub",
+          "data": "/sessions/charming-great-gates/mnt/gadget-hub/data",
+          "database": "/sessions/charming-great-gates/mnt/gadget-hub/data/gadgethub.db",
+          "relatorios": "/sessions/charming-great-gates/mnt/gadget-hub/data/relatorios",
+          "blenderOutput": "/sessions/charming-great-gates/mnt/gadget-hub/src/agentes/blender/output"
+        },
+        "shopifyConfigurado": false,
+        "cjConfigurado": true,
+        "blenderUrl": "http://localhost:8585"
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.396Z"
+    },
+    {
+      "id": 2,
+      "nome": "Agente CJ (simulação de busca)",
+      "status": "PASSOU",
+      "dados": {
+        "totalEncontrados": 3,
+        "totalValidados": 3,
+        "produtos": [
+          {
+            "nome": "SmartWatch Pro X7 — Fitness Tracker",
+            "precoCJ": "12.5€",
+            "precoVenda": "39.99€",
+            "margem": "68%",
+            "avaliacao": "4.6/5"
+          },
+          {
+            "nome": "SmartBand Fit Ultra — Monitor Saúde",
+            "precoCJ": "8.3€",
+            "precoVenda": "29.99€",
+            "margem": "72%",
+            "avaliacao": "4.3/5"
+          },
+          {
+            "nome": "Relógio GPS Sport Runner",
+            "precoCJ": "18.9€",
+            "precoVenda": "54.99€",
+            "margem": "65%",
+            "avaliacao": "4.7/5"
+          }
+        ]
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.402Z"
+    },
+    {
+      "id": 3,
+      "nome": "Agente Shopify (simulação de fila)",
+      "status": "PASSOU",
+      "dados": {
+        "produtosNaFila": 1,
+        "payloadGerado": {
+          "mutation": "productCreate",
+          "input": {
+            "title": "SmartWatch Pro X7 — Fitness Tracker",
+            "bodyHtml": "<p>Smartwatch com ecrã AMOLED 1.85\", monitorização cardíaca, GPS, resistência à água IP68</p>",
+            "vendor": "CJ Dropshipping",
+            "productType": "smartwatch",
+            "tags": [
+              "smartwatch",
+              "fitness",
+              "GPS",
+              "AMOLED"
+            ],
+            "variants": [
+              {
+                "price": "39.99",
+                "compareAtPrice": "59.99",
+                "sku": "SW-PRO-X7-001",
+                "inventoryManagement": "SHOPIFY"
+              }
+            ]
+          }
+        },
+        "loja": "gadget-hub-72955.myshopify.com"
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.412Z"
+    },
+    {
+      "id": 4,
+      "nome": "Agente Preços (análise pricing)",
+      "status": "PASSOU",
+      "dados": {
+        "produto": "SmartWatch Pro X7 — Fitness Tracker",
+        "custoCJ": 12.5,
+        "precoAtual": 39.99,
+        "precoCompare": 59.99,
+        "margemAtual": "68.7%",
+        "concorrentes": [
+          {
+            "nome": "AliExpress",
+            "preco": 42.99
+          },
+          {
+            "nome": "Amazon.es",
+            "preco": 49.99
+          },
+          {
+            "nome": "PCDiga",
+            "preco": 59.99
+          }
+        ],
+        "recomendacao": {
+          "precoRecomendado": 39.99,
+          "estrategia": "competitivo",
+          "motivo": "Preço abaixo de Amazon.es mantém margem de 68% — posição competitiva forte"
+        },
+        "margemLiquida": "61.2%"
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.417Z"
+    },
+    {
+      "id": 5,
+      "nome": "Agente Estoque (alertas)",
+      "status": "PASSOU",
+      "dados": {
+        "totalProdutos": 3,
+        "alertasCriticos": 1,
+        "detalhes": [
+          {
+            "sku": "SW-PRO-X7-001",
+            "nome": "SmartWatch Pro X7 — Fitness Tracker",
+            "stock": 3,
+            "nivel": "critico",
+            "acao": "PAUSAR CAMPANHAS + REABASTECER"
+          },
+          {
+            "sku": "SB-FIT-U-002",
+            "nome": "SmartBand Fit Ultra",
+            "stock": 15,
+            "nivel": "ok",
+            "acao": "OK"
+          },
+          {
+            "sku": "GPS-SR-003",
+            "nome": "Relógio GPS Sport",
+            "stock": 7,
+            "nivel": "ok",
+            "acao": "OK"
+          }
+        ]
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.426Z"
+    },
+    {
+      "id": 6,
+      "nome": "Agente Blender (renders + cinematográfico)",
+      "status": "PASSOU",
+      "dados": {
+        "rendersGerados": 5,
+        "renders": [
+          {
+            "tipo": "hero",
+            "arquivo": "renders/SW-PRO-X7-001_hero_1775727215432.png",
+            "resolucao": "1920x1080",
+            "engine": "CYCLES",
+            "samples": 256,
+            "tempoRender": "19.4s"
+          },
+          {
+            "tipo": "multiAngle",
+            "arquivo": "renders/SW-PRO-X7-001_multiAngle_1775727215432.png",
+            "resolucao": "1920x1080",
+            "engine": "CYCLES",
+            "samples": 256,
+            "tempoRender": "23.0s"
+          },
+          {
+            "tipo": "turntable",
+            "arquivo": "renders/SW-PRO-X7-001_turntable_1775727215432.png",
+            "resolucao": "1920x1080",
+            "engine": "CYCLES",
+            "samples": 256,
+            "tempoRender": "14.7s"
+          },
+          {
+            "tipo": "exploded",
+            "arquivo": "renders/SW-PRO-X7-001_exploded_1775727215432.png",
+            "resolucao": "1920x1080",
+            "engine": "CYCLES",
+            "samples": 256,
+            "tempoRender": "32.6s"
+          },
+          {
+            "tipo": "lifestyle",
+            "arquivo": "renders/SW-PRO-X7-001_lifestyle_1775727215432.png",
+            "resolucao": "1920x1080",
+            "engine": "CYCLES",
+            "samples": 256,
+            "tempoRender": "22.7s"
+          }
+        ],
+        "videoCinematico": {
+          "tipo": "cinematic_tech_blue",
+          "arquivo": "renders/SW-PRO-X7-001_cinematic_tech_blue_1775727215432.mp4",
+          "resolucao": "1920x1080",
+          "frames": 120,
+          "fps": 30,
+          "duracao": "4s",
+          "efeitos": [
+            "energy_core",
+            "particles_sparks",
+            "dual_tone_lighting"
+          ],
+          "paleta": {
+            "nome": "tech_blue",
+            "primary": "#00A8FF",
+            "secondary": "#0047AB",
+            "accent": "#00D4FF",
+            "glow": "#4DC9FF"
+          }
+        },
+        "templateUsado": "smartwatch_wrist",
+        "totalArquivos": 6
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.432Z"
+    },
+    {
+      "id": 7,
+      "nome": "Agente Automação",
+      "status": "FALHOU",
+      "dados": null,
+      "erro": "Error: Could not locate the bindings file. Tried:\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/Debug/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/Release/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/out/Debug/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/Debug/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/out/Release/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/Release/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/default/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/compiled/22.22.0/linux/x64/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/addon-build/release/install-root/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/addon-build/debug/install-root/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/addon-build/default/install-root/node_sqlite3.node\n → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/lib/binding/node-v127-linux-x64/node_sqlite3.node",
+      "timestamp": "2026-04-09T09:33:35.528Z"
+    },
+    {
+      "id": 8,
+      "nome": "Marketing (copy + estratégia smartwatches)",
+      "status": "PASSOU",
+      "dados": {
+        "canais": [
+          "TikTok Ads",
+          "Meta Ads (Instagram)"
+        ],
+        "orcamento": "20€/dia",
+        "plataformasVideo": [
+          "TikTok",
+          "Instagram Reels",
+          "YouTube Shorts"
+        ],
+        "ganchosGerados": 4,
+        "copyGerado": true
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.528Z"
+    },
+    {
+      "id": 9,
+      "nome": "Módulo AI (prompts gerados)",
+      "status": "PASSOU",
+      "dados": {
+        "promptsGerados": 7,
+        "systemPromptChars": 247,
+        "exemplos": {
+          "descricaoPrompt": "Gera uma descrição de produto para a Shopify em português europeu:\n\nProduto: SmartWatch Pro X7 — Fitness Tracker\nCategoria: smartwatch\nCaracterísticas...",
+          "copyPrompt": "Gera copy de anúncio para TikTok:\n\nProduto: SmartWatch Pro X7 — Fitness Tracker\nPreço: 39.99€\nCategoria: smartwatch\nPúblico: Portugal, 18-45 anos, tec..."
+        }
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.566Z"
+    },
+    {
+      "id": 10,
+      "nome": "LLM Client (modo demo)",
+      "status": "PASSOU",
+      "dados": {
+        "provider": "demo",
+        "modelo": "simulado",
+        "respostaPreview": "[DEMO] Resposta simulada para: \"Analisa este smartwatch para a loja...\"",
+        "stats": {
+          "totalRequests": 1,
+          "totalTokens": 0,
+          "erros": 0,
+          "provider": "anthropic",
+          "configurado": false
+        }
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.578Z"
+    },
+    {
+      "id": 11,
+      "nome": "Pipeline Completo (CJ→Blender→Shopify→Marketing)",
+      "status": "PASSOU",
+      "dados": {
+        "agentesEnvolvidos": 7,
+        "etapasCompletas": 8,
+        "produtoPublicado": true,
+        "campainhaCriada": true,
+        "videoGerado": true,
+        "emailEnviado": true,
+        "fluxoCompleto": true
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.584Z"
+    },
+    {
+      "id": 12,
+      "nome": "Vídeo Marketing (nicho smartwatches)",
+      "status": "PASSOU",
+      "dados": {
+        "videosPlaneados": 3,
+        "plataformas": [
+          "TikTok",
+          "Instagram Reels",
+          "YouTube Shorts"
+        ],
+        "paletasUsadas": [
+          "tech_blue",
+          "cyber_purple",
+          "energy_orange"
+        ],
+        "duracaoTotal": "90s",
+        "efeitosUnicos": [
+          "energy_core",
+          "particles_sparks",
+          "dual_tone_lighting",
+          "procedural_disassembly",
+          "internal_layers",
+          "particles_fragments",
+          "particles_dust"
+        ]
+      },
+      "erro": null,
+      "timestamp": "2026-04-09T09:33:35.590Z"
+    }
+  ],
+  "resumo": {
+    "total": 12,
+    "passou": 11,
+    "falhou": 1,
+    "parcial": 0
+  }
+}

@@ -1,0 +1,48 @@
+# Gadget Hub - Arquivos a ignorar
+
+# Ambiente
+.env
+.env.local
+.env.*.local
+
+# Dependências
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database SQLite
+agentes/data/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Logs
+agentes/logs/
+*.log
+logs/
+
+# Estados e caches
+agentes/estados/
+agentes/relatorios/
+agentes/eventos.json
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testes
+coverage/
+.nyc_output/
+
+# Build
+dist/
+build/

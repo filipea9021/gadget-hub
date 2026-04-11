@@ -1,0 +1,299 @@
+{
+  "name": "🚀 Pipeline Completo — Produto → Imagem → Memória → Loja",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pipeline/produto",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-produto",
+      "name": "1. Receber Produto",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 400],
+      "webhookId": "pipeline-produto"
+    },
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "1b. Teste Manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// DADOS DE TESTE (quando executado manualmente)\n// Substitui com dados reais quando usares o webhook\n// ═══════════════════════════════════════\n\nreturn [{\n  json: {\n    name: 'Fone Bluetooth TWS Pro',\n    price: 29.99,\n    cost: 8.50,\n    currency: 'EUR',\n    supplier: 'AliExpress',\n    supplier_url: 'https://aliexpress.com/item/exemplo123.html',\n    supplier_price: 8.50,\n    image_url: 'https://ae01.alicdn.com/kf/example-product.jpg',\n    category: 'tecnologia',\n    niche: 'gadgets-audio',\n    tags: ['bluetooth', 'wireless', 'earbuds', 'trending'],\n    trend_score: 85,\n    competition_score: 45,\n  }\n}];"
+      },
+      "id": "dados-teste",
+      "name": "Dados de Teste",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// ETAPA 2: Validar e enriquecer dados\n// ═══════════════════════════════════════\n\nconst input = $input.first().json.body || $input.first().json;\n\n// Validação\nif (!input.name) {\n  throw new Error('Campo obrigatório em falta: name');\n}\n\n// Calcular margem\nconst price = parseFloat(input.price) || 0;\nconst cost = parseFloat(input.cost) || parseFloat(input.supplier_price) || 0;\nconst margin = price > 0 && cost > 0 ? Math.round((price - cost) / price * 100 * 100) / 100 : 0;\n\n// Calcular viability score\nconst trendScore = parseInt(input.trend_score) || 50;\nconst competitionScore = parseInt(input.competition_score) || 50;\nconst marginScore = margin > 60 ? 90 : margin > 40 ? 70 : margin > 20 ? 50 : 30;\nconst viabilityScore = Math.round((trendScore * 0.4) + ((100 - competitionScore) * 0.3) + (marginScore * 0.3));\n\nconst produto = {\n  name: input.name,\n  description: input.description || '',\n  price: price,\n  cost: cost,\n  margin: margin,\n  currency: input.currency || 'EUR',\n  supplier: input.supplier || 'desconhecido',\n  supplier_url: input.supplier_url || '',\n  supplier_price: parseFloat(input.supplier_price) || cost,\n  image_url: input.image_url || '',\n  category: input.category || 'geral',\n  niche: input.niche || '',\n  tags: Array.isArray(input.tags) ? input.tags : [],\n  trend_score: trendScore,\n  competition_score: competitionScore,\n  viability_score: viabilityScore,\n  pipeline_status: 'novo',\n  origin_skill: 'n8n_pipeline',\n  metadata: {\n    pipeline_started: new Date().toISOString(),\n    source: 'webhook'\n  }\n};\n\nconsole.log(`✅ Produto validado: ${produto.name} | Margem: ${margin}% | Viabilidade: ${viabilityScore}`);\n\nreturn [{ json: produto }];"
+      },
+      "id": "validar-produto",
+      "name": "2. Validar Produto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/rest/v1/products",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ name: $json.name, description: $json.description, price: $json.price, cost: $json.cost, currency: $json.currency, supplier: $json.supplier, supplier_url: $json.supplier_url, supplier_price: $json.supplier_price, image_url: $json.image_url, category: $json.category, niche: $json.niche, tags: JSON.stringify($json.tags), trend_score: $json.trend_score, competition_score: $json.competition_score, viability_score: $json.viability_score, pipeline_status: 'novo', origin_skill: $json.origin_skill, metadata: JSON.stringify($json.metadata) }) }}",
+        "options": {}
+      },
+      "id": "guardar-produto",
+      "name": "3. Guardar Produto",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// ETAPA 4: Gerar descrição do produto\n// (Versão sem API de IA — template inteligente)\n// Quando tiveres API Anthropic/OpenAI, substitui por chamada ao LLM\n// ═══════════════════════════════════════\n\nconst produto = $input.first().json;\n// O Supabase retorna array, pegar primeiro item\nconst p = Array.isArray(produto) ? produto[0] : produto;\n\nconst nome = p.name || 'Produto';\nconst categoria = p.category || 'geral';\nconst preco = p.price || 0;\nconst margem = p.margin || 0;\nconst tags = p.tags ? (typeof p.tags === 'string' ? JSON.parse(p.tags) : p.tags) : [];\nconst productId = p.id;\n\n// Template de descrição profissional\nconst descricao = `${nome} — a escolha inteligente para quem procura qualidade e preço justo. `\n  + `Na categoria ${categoria}, este produto destaca-se pela sua relação qualidade-preço excecional. `\n  + (tags.length > 0 ? `Características: ${tags.join(', ')}. ` : '')\n  + `Disponível por apenas €${preco}. Envio rápido e seguro.`;\n\n// Template de título SEO\nconst tituloSEO = `${nome} | Comprar Online | Melhor Preço ${new Date().getFullYear()}`;\n\n// Template de ad copy\nconst adCopy = {\n  headline: `🔥 ${nome} — Oferta Limitada!`,\n  body: `Descobre o ${nome} por apenas €${preco}! ✅ Envio grátis ✅ Qualidade premium ✅ Satisfação garantida`,\n  cta: 'Comprar Agora →',\n  hashtags: tags.map(t => `#${t.replace(/\\s/g, '')}`).join(' '),\n};\n\n// Keywords SEO\nconst seoKeywords = [\n  nome.toLowerCase(),\n  `comprar ${nome.toLowerCase()}`,\n  `${nome.toLowerCase()} preço`,\n  `${nome.toLowerCase()} online`,\n  categoria.toLowerCase(),\n  ...tags.map(t => t.toLowerCase())\n];\n\nreturn [{\n  json: {\n    product_id: productId,\n    generated_title: tituloSEO,\n    generated_description: descricao,\n    ad_copy: adCopy,\n    seo_keywords: seoKeywords,\n    pipeline_status: 'descricao_gerada',\n  }\n}];"
+      },
+      "id": "gerar-descricao",
+      "name": "4. Gerar Descrição",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1140, 400]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://wbmujojscykyngkmzner.supabase.co/rest/v1/products?id=eq.{{ $json.product_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ generated_title: $json.generated_title, generated_description: $json.generated_description, ad_copy: JSON.stringify($json.ad_copy), seo_keywords: JSON.stringify($json.seo_keywords), pipeline_status: $json.pipeline_status }) }}",
+        "options": {}
+      },
+      "id": "atualizar-descricao",
+      "name": "5. Atualizar Produto",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1380, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wbmujojscykyngkmzner.supabase.co/rest/v1/action_logs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTQxNzMsImV4cCI6MjA5MTE3MDE3M30.4F-bOx0zh32Lg5G5pQDMTeHbe6PMGpCNA_9Mx-8NKNw"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndibXVqb2pzY3lreW5na216bmVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTU5NDE3MywiZXhwIjoyMDkxMTcwMTczfQ.OUENHXFyFRAu3rGlUKsfCWmkcWeOHhEWNnK2eRMw41g"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ title: '🚀 Pipeline completo — ' + ($('2. Validar Produto').first().json.name || 'Produto'), category: 'pipeline', description: 'Produto processado pelo pipeline automático. Status: descrição gerada. Margem: ' + ($('2. Validar Produto').first().json.margin || 0) + '%', origin_skill: 'n8n_pipeline', metadata: JSON.stringify({ pipeline: 'produto_completo', product_name: $('2. Validar Produto').first().json.name, viability_score: $('2. Validar Produto').first().json.viability_score }) }) }}",
+        "options": {}
+      },
+      "id": "log-memoria",
+      "name": "6. Registar na Memória",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1620, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════\n// ETAPA FINAL: Resumo do pipeline\n// ═══════════════════════════════════════\n\nconst produtoOriginal = $('2. Validar Produto').first().json;\nconst descricao = $('4. Gerar Descrição').first().json;\n\nreturn [{\n  json: {\n    '🚀 PIPELINE CONCLUÍDO': '════════════════════',\n    '📦 Produto': produtoOriginal.name,\n    '💰 Preço': `€${produtoOriginal.price}`,\n    '📊 Margem': `${produtoOriginal.margin}%`,\n    '🎯 Score Viabilidade': `${produtoOriginal.viability_score}/100`,\n    '📈 Score Tendência': `${produtoOriginal.trend_score}/100`,\n    '🏪 Fornecedor': produtoOriginal.supplier,\n    '': '',\n    '📝 Título SEO': descricao.generated_title,\n    '📄 Descrição': descricao.generated_description.substring(0, 120) + '...',\n    '📢 Headline Ad': descricao.ad_copy.headline,\n    ' ': '',\n    '✅ Status': descricao.pipeline_status,\n    '⏰ Processado em': new Date().toLocaleString('pt-PT'),\n  }\n}];"
+      },
+      "id": "resumo-final",
+      "name": "7. Resumo Final",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1860, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'success', message: 'Pipeline completo!', produto: $('2. Validar Produto').first().json.name, pipeline_status: $('4. Gerar Descrição').first().json.pipeline_status, viability_score: $('2. Validar Produto').first().json.viability_score }) }}"
+      },
+      "id": "response-webhook",
+      "name": "Resposta Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1860, 600]
+    }
+  ],
+  "connections": {
+    "1. Receber Produto": {
+      "main": [
+        [
+          {
+            "node": "2. Validar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1b. Teste Manual": {
+      "main": [
+        [
+          {
+            "node": "Dados de Teste",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados de Teste": {
+      "main": [
+        [
+          {
+            "node": "2. Validar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Validar Produto": {
+      "main": [
+        [
+          {
+            "node": "3. Guardar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Guardar Produto": {
+      "main": [
+        [
+          {
+            "node": "4. Gerar Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Gerar Descrição": {
+      "main": [
+        [
+          {
+            "node": "5. Atualizar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Atualizar Produto": {
+      "main": [
+        [
+          {
+            "node": "6. Registar na Memória",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Resposta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Registar na Memória": {
+      "main": [
+        [
+          {
+            "node": "7. Resumo Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Data Core"
+    },
+    {
+      "name": "Pipeline"
+    },
+    {
+      "name": "Automação"
+    }
+  ]
+}

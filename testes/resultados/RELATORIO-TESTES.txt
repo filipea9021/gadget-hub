@@ -1,0 +1,82 @@
+GADGET HUB — RELATÓRIO DE TESTES
+==================================================
+Data: 2026-04-09T09:33:35.621Z
+Nicho: Smartwatches
+
+RESUMO: 11/12 testes passaram
+
+[OK] Teste 1: Config + Logger
+   modo: semi
+   isDemo: false
+   shopifyConfigurado: false
+   cjConfigurado: true
+   blenderUrl: http://localhost:8585
+
+[OK] Teste 2: Agente CJ (simulação de busca)
+   totalEncontrados: 3
+   totalValidados: 3
+
+[OK] Teste 3: Agente Shopify (simulação de fila)
+   produtosNaFila: 1
+   loja: gadget-hub-72955.myshopify.com
+
+[OK] Teste 4: Agente Preços (análise pricing)
+   produto: SmartWatch Pro X7 — Fitness Tracker
+   custoCJ: 12.5
+   precoAtual: 39.99
+   precoCompare: 59.99
+   margemAtual: 68.7%
+   margemLiquida: 61.2%
+
+[OK] Teste 5: Agente Estoque (alertas)
+   totalProdutos: 3
+   alertasCriticos: 1
+
+[OK] Teste 6: Agente Blender (renders + cinematográfico)
+   rendersGerados: 5
+   templateUsado: smartwatch_wrist
+   totalArquivos: 6
+
+[ERRO] Teste 7: Agente Automação
+   Erro: Error: Could not locate the bindings file. Tried:
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/Debug/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/Release/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/out/Debug/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/Debug/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/out/Release/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/Release/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/build/default/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/compiled/22.22.0/linux/x64/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/addon-build/release/install-root/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/addon-build/debug/install-root/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/addon-build/default/install-root/node_sqlite3.node
+ → /sessions/charming-great-gates/mnt/gadget-hub/node_modules/sqlite3/lib/binding/node-v127-linux-x64/node_sqlite3.node
+
+[OK] Teste 8: Marketing (copy + estratégia smartwatches)
+   orcamento: 20€/dia
+   ganchosGerados: 4
+   copyGerado: true
+
+[OK] Teste 9: Módulo AI (prompts gerados)
+   promptsGerados: 7
+   systemPromptChars: 247
+
+[OK] Teste 10: LLM Client (modo demo)
+   provider: demo
+   modelo: simulado
+   respostaPreview: [DEMO] Resposta simulada para: "Analisa este smartwatch para a loja..."
+
+[OK] Teste 11: Pipeline Completo (CJ→Blender→Shopify→Marketing)
+   agentesEnvolvidos: 7
+   etapasCompletas: 8
+   produtoPublicado: true
+   campainhaCriada: true
+   videoGerado: true
+   emailEnviado: true
+   fluxoCompleto: true
+
+[OK] Teste 12: Vídeo Marketing (nicho smartwatches)
+   videosPlaneados: 3
+   duracaoTotal: 90s
+

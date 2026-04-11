@@ -1,0 +1,51 @@
+# =====================================================
+# DOCKER COMPOSE — Blender Render Server
+# =====================================================
+# Uso (rodar de dentro da pasta blender/):
+#   docker-compose -f docker/docker-compose.yml up -d
+#
+# Ou usar o setup.bat que faz tudo automatico.
+# =====================================================
+
+version: '3.8'
+
+services:
+  blender-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: gadgethub-blender
+    ports:
+      - "${BLENDER_PORT:-8585}:8585"
+    volumes:
+      # Output dos renders (acessível no Windows)
+      - ../output:/app/output
+      # Jobs temporários
+      - blender-jobs:/app/jobs
+    environment:
+      - MAX_CONCURRENT_JOBS=${MAX_CONCURRENT_JOBS:-2}
+      - BLENDER_API_KEY=${BLENDER_API_KEY:-}
+      - PORT=8585
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8585/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+volumes:
+  blender-jobs:

@@ -1,0 +1,451 @@
+{
+  "name": "Cérebro Centram — Fluxo Completo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cerebro-fluxo-completo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [220, 300],
+      "webhookId": "cerebro-fluxo-completo"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.cerebro_api_url || 'http://localhost:8000' }}/api/skills/pesquisa_produtos",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "comando",
+              "value": "={{ $json.comando || 'pesquisar produto trending' }}"
+            },
+            {
+              "name": "nicho",
+              "value": "={{ $json.nicho || 'gadgets tecnologia' }}"
+            },
+            {
+              "name": "max_resultados",
+              "value": "={{ $json.max_resultados || 5 }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "pesquisa-produtos",
+      "name": "1. Pesquisa de Produtos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300],
+      "notes": "Chama a skill pesquisa_produtos para encontrar produtos trending no nicho definido"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.status === 'sucesso' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-pesquisa",
+      "name": "Pesquisa OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Webhook Trigger'].json.cerebro_api_url || 'http://localhost:8000' }}/api/skills/content_generator",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "produto",
+              "value": "={{ JSON.stringify($json.dados.produto) }}"
+            },
+            {
+              "name": "tipo",
+              "value": "descricao_completa"
+            },
+            {
+              "name": "idioma",
+              "value": "={{ $node['Webhook Trigger'].json.idioma || 'pt-PT' }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "gerar-conteudo",
+      "name": "2. Gerar Conteúdo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [920, 200],
+      "notes": "Gera descrição do produto, título SEO, tags, e copy de marketing usando LLM"
+    },
+    {
+      "parameters": {
+        "url": "https://upsampler.com/api/v1/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.UPSAMPLER_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"professional product photo of {{ $node['2. Gerar Conteúdo'].json.dados.produto_nome }}, white background, high quality, 4k, studio lighting\",\n  \"style\": \"product_photo\"\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "gerar-imagem-produto",
+      "name": "3a. Gerar Imagem (Upsampler)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1180, 100],
+      "notes": "Gera imagem do produto via upsampler.com AI"
+    },
+    {
+      "parameters": {
+        "url": "https://upsampler.com/api/v1/upscale",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.UPSAMPLER_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_url\": \"{{ $json.dados.image_url }}\",\n  \"scale\": 4\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "upscale-imagem",
+      "name": "3b. Upscale 4x (Upsampler)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1440, 100],
+      "notes": "Faz upscale 4x da imagem gerada para qualidade máxima"
+    },
+    {
+      "parameters": {
+        "url": "https://upsampler.com/api/v1/remove-bg",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.UPSAMPLER_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_url\": \"{{ $json.dados.image_url }}\"\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "remover-fundo",
+      "name": "3c. Remover Fundo (Upsampler)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1700, 100],
+      "notes": "Remove fundo da imagem para uso em loja e anúncios"
+    },
+    {
+      "parameters": {
+        "url": "https://upsampler.com/api/v1/banner",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.UPSAMPLER_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $node['2. Gerar Conteúdo'].json.dados.headline }}\",\n  \"product_image\": \"{{ $node['3c. Remover Fundo (Upsampler)'].json.dados.image_url }}\",\n  \"size\": \"1200x628\"\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "criar-banner",
+      "name": "3d. Criar Banner (Upsampler)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1180, 300],
+      "notes": "Cria banner para Facebook/Instagram usando imagem sem fundo + headline"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Consolida todos os outputs de imagem num único objeto\nconst imagemGerada = $node['3b. Upscale 4x (Upsampler)'].json;\nconst imagemSemFundo = $node['3c. Remover Fundo (Upsampler)'].json;\nconst banner = $node['3d. Criar Banner (Upsampler)'].json;\nconst conteudo = $node['2. Gerar Conteúdo'].json;\n\nreturn [{\n  json: {\n    produto: conteudo.dados,\n    imagens: {\n      principal: imagemGerada.dados?.image_url || null,\n      sem_fundo: imagemSemFundo.dados?.image_url || null,\n      banner_facebook: banner.dados?.image_url || null\n    },\n    conteudo: {\n      titulo: conteudo.dados?.titulo || '',\n      descricao: conteudo.dados?.descricao || '',\n      tags: conteudo.dados?.tags || [],\n      headline: conteudo.dados?.headline || ''\n    }\n  }\n}];"
+      },
+      "id": "consolidar-assets",
+      "name": "4. Consolidar Assets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1960, 200],
+      "notes": "Junta todas as imagens e conteúdo num único payload para Shopify"
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Webhook Trigger'].json.cerebro_api_url || 'http://localhost:8000' }}/api/skills/shopify",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"criar_produto\",\n  \"produto\": {\n    \"titulo\": \"{{ $json.conteudo.titulo }}\",\n    \"descricao\": \"{{ $json.conteudo.descricao }}\",\n    \"tags\": {{ JSON.stringify($json.conteudo.tags) }},\n    \"imagens\": [\n      \"{{ $json.imagens.principal }}\",\n      \"{{ $json.imagens.sem_fundo }}\"\n    ],\n    \"preco\": {{ $node['1. Pesquisa de Produtos'].json.dados?.preco_sugerido || 29.99 }}\n  }\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "publicar-shopify",
+      "name": "5. Publicar no Shopify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2200, 200],
+      "notes": "Cria o produto na loja Shopify com imagens, descrição e preço"
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Webhook Trigger'].json.cerebro_api_url || 'http://localhost:8000' }}/api/skills/marketing",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"campanha_completa\",\n  \"produto\": {\n    \"nome\": \"{{ $json.conteudo.titulo }}\",\n    \"descricao\": \"{{ $json.conteudo.descricao }}\",\n    \"url_shopify\": \"{{ $node['5. Publicar no Shopify'].json.dados?.product_url || '' }}\",\n    \"banner_url\": \"{{ $node['4. Consolidar Assets'].json.imagens.banner_facebook }}\",\n    \"imagem_produto\": \"{{ $node['4. Consolidar Assets'].json.imagens.sem_fundo }}\"\n  },\n  \"plataformas\": [\"tiktok\", \"instagram\", \"facebook\"],\n  \"tipo_campanha\": \"lancamento\"\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "campanha-marketing",
+      "name": "6. Campanha de Marketing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2460, 200],
+      "notes": "Cria campanha de marketing em TikTok, Instagram e Facebook com copy e imagens"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Relatório final do fluxo completo\nconst pesquisa = $node['1. Pesquisa de Produtos'].json;\nconst conteudo = $node['2. Gerar Conteúdo'].json;\nconst shopify = $node['5. Publicar no Shopify'].json;\nconst marketing = $node['6. Campanha de Marketing'].json;\nconst assets = $node['4. Consolidar Assets'].json;\n\nreturn [{\n  json: {\n    status: 'fluxo_completo',\n    resumo: {\n      produto_pesquisado: pesquisa.dados?.produto_nome || 'N/A',\n      conteudo_gerado: !!conteudo.dados,\n      imagens: {\n        principal: !!assets.imagens?.principal,\n        sem_fundo: !!assets.imagens?.sem_fundo,\n        banner: !!assets.imagens?.banner_facebook\n      },\n      shopify_publicado: shopify.status === 'sucesso',\n      shopify_url: shopify.dados?.product_url || null,\n      campanha_criada: marketing.status === 'sucesso',\n      plataformas: ['tiktok', 'instagram', 'facebook']\n    },\n    timestamp: new Date().toISOString(),\n    mensagem: 'Fluxo completo executado: Pesquisa → Conteúdo → Imagens → Shopify → Marketing'\n  }\n}];"
+      },
+      "id": "relatorio-final",
+      "name": "7. Relatório Final",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2700, 200],
+      "notes": "Gera relatório completo do fluxo para retorno via webhook"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "erro"
+            },
+            {
+              "name": "mensagem",
+              "value": "Pesquisa de produtos falhou. Verifique os parâmetros e tente novamente."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "erro-pesquisa",
+      "name": "Erro na Pesquisa",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [920, 420]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "1. Pesquisa de Produtos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Pesquisa de Produtos": {
+      "main": [
+        [
+          {
+            "node": "Pesquisa OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pesquisa OK?": {
+      "main": [
+        [
+          {
+            "node": "2. Gerar Conteúdo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro na Pesquisa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Gerar Conteúdo": {
+      "main": [
+        [
+          {
+            "node": "3a. Gerar Imagem (Upsampler)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "3d. Criar Banner (Upsampler)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3a. Gerar Imagem (Upsampler)": {
+      "main": [
+        [
+          {
+            "node": "3b. Upscale 4x (Upsampler)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3b. Upscale 4x (Upsampler)": {
+      "main": [
+        [
+          {
+            "node": "3c. Remover Fundo (Upsampler)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3c. Remover Fundo (Upsampler)": {
+      "main": [
+        [
+          {
+            "node": "4. Consolidar Assets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3d. Criar Banner (Upsampler)": {
+      "main": [
+        [
+          {
+            "node": "4. Consolidar Assets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Consolidar Assets": {
+      "main": [
+        [
+          {
+            "node": "5. Publicar no Shopify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Publicar no Shopify": {
+      "main": [
+        [
+          {
+            "node": "6. Campanha de Marketing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Campanha de Marketing": {
+      "main": [
+        [
+          {
+            "node": "7. Relatório Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "cerebro-centram"
+    },
+    {
+      "name": "fluxo-completo"
+    },
+    {
+      "name": "automacao"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-07T00:00:00.000Z",
+  "versionId": "1"
+}

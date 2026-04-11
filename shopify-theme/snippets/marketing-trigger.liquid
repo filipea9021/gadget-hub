@@ -1,0 +1,81 @@
+{% comment %}
+  ============================================================
+  Gadget Hub — Gatilho de Marketing (Snippet)
+  Exibe banner pulsante de urgência/social proof no produto.
+
+  Como incluir em qualquer template:
+    {% render 'marketing-trigger', product: product %}
+
+  Metafields necessários (namespace: gadgethub):
+    orders        → número de pedidos (integer)
+    score         → score 0-100 (integer)
+    delivery_days → prazo de entrega (integer)
+  ============================================================
+{% endcomment %}
+
+{%- assign orders    = product.metafields.gadgethub.orders | times: 1 | default: 0 -%}
+{%- assign score     = product.metafields.gadgethub.score  | times: 1 | default: 0 -%}
+{%- assign delivery  = product.metafields.gadgethub.delivery_days | times: 1 | default: 99 -%}
+{%- assign price_compare = product.compare_at_price -%}
+{%- assign price_current = product.price -%}
+
+{%- comment %} Determinar o gatilho mais relevante {%- endcomment %}
+{%- assign trigger_text  = "" -%}
+{%- assign trigger_class = "" -%}
+
+{%- if orders > 5000 -%}
+  {%- assign trigger_text  = "🔥 Best-seller — " | append: orders | append: " vendidos!" -%}
+  {%- assign trigger_class = "gh-trigger--bestseller" -%}
+{%- elsif score >= 85 -%}
+  {%- assign trigger_text  = "⭐ Top Score — Produto verificado!" -%}
+  {%- assign trigger_class = "gh-trigger--topscore" -%}
+{%- elsif delivery <= 7 -%}
+  {%- assign trigger_text  = "⚡ Entrega express — até 7 dias!" -%}
+  {%- assign trigger_class = "gh-trigger--express" -%}
+{%- elsif price_compare > price_current -%}
+  {%- assign discount_pct  = price_compare | minus: price_current | times: 100 | divided_by: price_compare -%}
+  {%- assign trigger_text  = "💎 " | append: discount_pct | append: "% de desconto — Oferta limitada!" -%}
+  {%- assign trigger_class = "gh-trigger--discount" -%}
+{%- endif -%}
+
+{%- if trigger_text != "" -%}
+<div class="gh-trigger {{ trigger_class }}">
+  {{ trigger_text }}
+</div>
+{%- endif -%}
+
+<style>
+  .gh-trigger {
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin: 12px 0;
+    animation: ghTriggerPulse 2s ease-in-out infinite;
+  }
+  @keyframes ghTriggerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+  }
+  .gh-trigger--bestseller {
+    background: linear-gradient(90deg, #1a0505, #2a0a0a);
+    border: 1px solid #4a1010;
+    color: #ff6b6b;
+  }
+  .gh-trigger--topscore {
+    background: linear-gradient(90deg, #0a0a1a, #1a0a2e);
+    border: 1px solid #2a1a3e;
+    color: #a78bfa;
+  }
+  .gh-trigger--express {
+    background: linear-gradient(90deg, #0a1a0a, #0a2a1a);
+    border: 1px solid #1a3a1a;
+    color: #4ade80;
+  }
+  .gh-trigger--discount {
+    background: linear-gradient(90deg, #1a1a0a, #2a200a);
+    border: 1px solid #3a2a0a;
+    color: #fbbf24;
+  }
+</style>
